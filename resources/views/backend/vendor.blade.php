@@ -174,13 +174,11 @@
 	                </tr>
                 @foreach($vendors as $vendor)
 	                <tr>
-	                	
 	                  <td>{{$vendor->vendor_code}}</td>
 	                  <td>{{$vendor->first_name}} {{$vendor->last_name}}</td>
 	                  <td>{{$vendor->mobile}}</td>
 	                  <td><span class="label label-success">{{$vendor->joined_date}}</span></td>
 	                  <td>{{$vendor->address}}</td>
-
 	                </tr>
                 @endforeach
               </table>

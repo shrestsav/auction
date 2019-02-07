@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Vendor;
+use App\Buyer;
 
-class VendorController extends Controller
+class BuyerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,11 +14,9 @@ class VendorController extends Controller
      */
     public function index()
     {
-            
-        $vendors = Vendor::select('vendor_code','first_name','last_name','joined_date','address','mobile')->get();
+        $buyers = Buyer::select('buyer_code','first_name','last_name','address','mobile','comments')->get();
         // return $vendors;
-        return view('backend.vendor',compact('vendors'));
-        // return $datas;
+        return view('backend.buyer',compact('buyers'));
     }
 
     /**
@@ -28,7 +26,7 @@ class VendorController extends Controller
      */
     public function create()
     {
-        return "create";
+        //
     }
 
     /**
@@ -39,13 +37,7 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        // Generate Vendor Code
-        $id = Vendor::select('id')->get()->last()->id+1;
-
-        $request->merge(['vendor_code' => 'V'.$id]);
-        $vendor = Vendor::create($request->all());
-
-        return back();
+        //
     }
 
     /**
