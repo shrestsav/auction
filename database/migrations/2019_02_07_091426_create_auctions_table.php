@@ -18,7 +18,7 @@ class CreateAuctionsTable extends Migration
             $table->string('auction_no')->unique();
             $table->string('venue');
             $table->date('date');
-            $table->time('time');
+            $table->string('time');
             $table->timestamps();
         });
     }

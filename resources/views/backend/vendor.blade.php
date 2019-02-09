@@ -1,44 +1,35 @@
-@extends('backend.layouts.app')
+@extends('backend.layouts.app',['title'=>'Vendors'])
 
 @section('content')
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Vendors
-        <small>Control panel</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
-      </ol>
-    </section>
 
     <!-- Main content -->
     <section class="content">
       <!-- /.row -->
       <div class="row">
+
       	<div class="col-md-12">
           <!-- general form elements -->
-          <div class="box box-primary">
+          <div class="box box-success collapsed-box">
             <div class="box-header with-border">
               <h3 class="box-title">Add Vendor</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                </button>
+              </div>
             </div>
             <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form" method="POST" action="{{route('vendors.store')}}">
+            <div class="box-body">
+            	<form role="form" method="POST" action="{{route('vendors.store')}}">
             	@csrf
-	            <div class="box-body">
 	              	<div class="col-md-6">
 		                <div class="form-group">
-		                  <label for="v_first_name">First Name</label>
+		                  <label for="v_first_name">First Name *</label>
 		                  <input type="text" name="first_name" class="form-control" id="v_first_name" placeholder="Enter First Name" required>
 		                </div>
 		            </div>
 		            <div class="col-md-6">
 		                <div class="form-group">
-		                  <label for="v_last_name">Last Name</label>
+		                  <label for="v_last_name">Last Name *</label>
 		                  <input type="text" name="last_name" class="form-control" id="v_last_name" placeholder="Enter Last Name" required>
 		                </div>
 		            </div>
@@ -48,16 +39,25 @@
 		                  <input type="text" name="address" class="form-control" id="v_address" placeholder="Address" required>
 		                </div>
 		            </div>
-		            <div class="col-md-4">
+		            <div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="v_suburb">Suburb *</label>
 		                  <input type="text" name="suburb" class="form-control" id="v_suburb" placeholder="Suburb" required>
 		                </div>
 		            </div>
-		            <div class="col-md-4">
+		            <div class="col-md-2">
 		                <div class="form-group">
-		                  <label for="v_state">State *</label>
-		                  <input type="text" name="state" class="form-control" id="v_state" placeholder="State" required>
+		                  	<label for="v_state">State *</label>
+		                  	{{-- <input type="text" name="state" class="form-control" id="v_state" placeholder="State" required> --}}
+		                	<select name="state" class="form-control select2" id="v_state" style="width: 100%;" required>
+			                  <option selected="selected" disabled>Select State</option>
+			                  <option value="new york">New York</option>
+			                  <option value="Los Angelos">Los Angelos</option>
+			                  <option value="Chicago">Chicago</option>
+			                  <option value="Iowa">Iowa</option>
+			                  <option value="Minessota">Minessota</option>
+			                  <option value="Melbourne">Melbourne</option>
+			                </select>
 		                </div>
 		            </div>
 		            <div class="col-md-4">
@@ -116,14 +116,24 @@
 		            </div>
 		            <div class="col-md-3">
 		                <div class="form-group">
-		                  <label for="v_gst_status">GST Status *</label>
-		                  <input type="text" name="gst_status" class="form-control" id="v_gst_status" placeholder="GST Status" required>
+		                	<label for="v_gst_status">GST Status *</label>
+		                  	<select class="form-control" name="gst_status" id="v_gst_status">
+			                  <option selected="selected" value="inclusive">Inclusive</option>
+			                  <option value="exclusive">Exclusive</option>
+			                </select>
 		                </div>
 		            </div>
 		            <div class="col-md-3">
 		                <div class="form-group">
 		                  <label for="v_payment_method">Payment Method *</label>
-		                  <input type="text" name="payment_method" class="form-control" id="v_payment_method" placeholder="Payment Method" required>
+		                  <select class="form-control" name="payment_method" id="v_payment_method">
+			                  <option selected="selected" disabled> </option>
+			                  <option value="cash">Cash</option>
+			                  <option value="eftpos">Eftpos</option>
+			                  <option value="credit">Credit</option>
+			                  <option value="bank transfer">Bank Transfer</option>
+			              </select>
+		                  {{-- <input type="text" name="payment_method" class="form-control" id="v_payment_method" placeholder="Payment Method" required> --}}
 		                </div>
 		            </div>
 		            <div class="col-md-3">
@@ -138,17 +148,18 @@
 		                  <textarea type="text" name="comments" class="form-control" id="v_comments" placeholder="Comments"></textarea>
 		                </div>
 		            </div>
-	            </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-            </form>
+			        <div class="col-md-12">
+			        	<div class="box-footer">
+		              		<button type="submit" class="btn btn-primary">Submit</button>
+		            	</div>
+			        </div>    
+            	</form>
+            </div>
+            <!-- /.box-body -->
           </div>
         </div>
         <div class="col-xs-12">
-          <div class="box">
+          <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title">List of Vendors</h3>
 
@@ -191,8 +202,5 @@
     </section>
     <!-- /.content -->
 
-
-  </div>
-  <!-- /.content-wrapper -->
 
 @endsection

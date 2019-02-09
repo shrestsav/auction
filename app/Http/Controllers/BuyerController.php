@@ -15,7 +15,7 @@ class BuyerController extends Controller
     public function index()
     {
         $buyers = Buyer::select('buyer_code','first_name','last_name','address','mobile','comments')->get();
-        // return $vendors;
+
         return view('backend.buyer',compact('buyers'));
     }
 
@@ -37,7 +37,17 @@ class BuyerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    // Generate Buyer Code
+        $Ids = Buyer::all();
+        // return $request->buyers_premium;
+        if(count($Ids))
+            $id = $Ids->last()->id + 1;
+        else
+            $id = 1;
+        $request->merge(['buyer_code' => 'B'.$id]);
+        $buyer = Buyer::create($request->all());
+
+        return back();
     }
 
     /**

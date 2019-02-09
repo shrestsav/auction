@@ -3,25 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Vendor;
+use App\Auction;
 
-class VendorController extends Controller
+class AuctionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
-            
-        $vendors = Vendor::select('vendor_code','first_name','last_name','joined_date','address','mobile')->get();
-        return view('backend.vendor',compact('vendors'));
+        $auctions = Auction::select('auction_no','venue','date','time')->get();
+        return view('backend.auction',compact('auctions'));
     }
 
     /**
@@ -31,7 +25,7 @@ class VendorController extends Controller
      */
     public function create()
     {
-        return "create";
+        //
     }
 
     /**
@@ -42,15 +36,15 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        // Generate Vendor Code
-        $Ids = Vendor::all();
+        // Generate Auction Code
+        $Ids = Auction::all();
         
         if(count($Ids))
             $id = $Ids->last()->id + 1;
         else
             $id = 1;
-        $request->merge(['vendor_code' => 'V'.$id]);
-        $vendor = Vendor::create($request->all());
+        $request->merge(['auction_no' => 'A'.$id]);
+        $auction = Auction::create($request->all());
 
         return back();
     }
