@@ -23,4 +23,5 @@ Route::middleware(['auth'])->group(function () {
 	Route::resource('vendors','VendorController');
 	Route::resource('buyers','BuyerController');
 	Route::resource('auctions','AuctionController');
+	Route::resource('stocks','StockController');
 });

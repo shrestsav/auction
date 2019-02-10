@@ -21,7 +21,7 @@ class VendorController extends Controller
     {
             
         $vendors = Vendor::select('vendor_code','first_name','last_name','joined_date','address','mobile')->get();
-        return view('backend.vendor',compact('vendors'));
+        return view('backend.vendors',compact('vendors'));
     }
 
     /**

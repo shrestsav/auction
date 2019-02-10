@@ -40,8 +40,8 @@
                 <span>List All</span>
               </a>
             </li>
-            <li class="@if ($title === 'Vendors') active @endif">
-              <a href="{{route('vendors.index')}}"><i class="fa fa-circle-o text-red"></i> 
+            <li class="@if ($title === 'Stocks') active @endif">
+              <a href="{{route('stocks.index')}}"><i class="fa fa-circle-o text-red"></i> 
                 <span>Stock</span>
               </a>
             </li>

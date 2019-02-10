@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Vendor;
+use App\Stock;
+
 
 use Illuminate\Http\Request;
-use App\Auction;
 
-class AuctionController extends Controller
+class StockController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +16,9 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::select('auction_no','venue','date','time')->get();
-        return view('backend.auctions',compact('auctions'));
+        $vendors = Vendor::select('id','vendor_code','first_name','last_name')->get();
+        // return $vendors;
+        return view('backend.stocks',compact('vendors'));
     }
 
     /**
@@ -36,15 +39,9 @@ class AuctionController extends Controller
      */
     public function store(Request $request)
     {
-        // Generate Auction Code
-        $Ids = Auction::all();
-        
-        if(count($Ids))
-            $id = $Ids->last()->id + 1;
-        else
-            $id = 1;
-        $request->merge(['auction_no' => 'A'.$id]);
-        $auction = Auction::create($request->all());
+
+        $request->merge(['vendor_id' => $request->vendor_name]);
+         $stock = Stock::create($request->all());
 
         return back();
     }

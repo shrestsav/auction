@@ -8,6 +8,8 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="{{ asset('backend/css/bootstrap.min.css') }}">
+  {{-- Select 2 --}}
+  <link rel="stylesheet" href="{{ asset('backend/css/select2.min.css') }}">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('backend/css/font-awesome.min.css') }}">
   <!-- Theme style -->
@@ -15,7 +17,7 @@
   {{-- Theme Color CSS --}}
   <link rel="stylesheet" href="{{ asset('backend/css/skin-purple.min.css') }}">
 
-  <link rel="stylesheet" href="{{ asset('backend/css/select2.min.css') }}">
+  
 
   @stack('styles')
 
