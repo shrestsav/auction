@@ -3,25 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Auction;
+use App\Stock;
 use App\Vendor;
 
-class VendorController extends Controller
+class LottingController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
-            
-        $vendors = Vendor::select('vendor_code','first_name','last_name','joined_date','address','mobile')->get();
-        return view('backend.pages.vendors',compact('vendors'));
+        $auctions =  Auction::all();
+        $stocks = Stock::all();
+        $vendor_with_stocks_id = Stock::select('vendor_id')->get()->toArray();        
+        $vendors_with_stocks = Vendor::whereIn('id', $vendor_with_stocks_id)->get();
+        return view('backend.pages.lotting',compact('auctions','stocks','vendors_with_stocks'));
     }
 
     /**
@@ -31,7 +30,7 @@ class VendorController extends Controller
      */
     public function create()
     {
-        return "create";
+        //
     }
 
     /**
@@ -42,17 +41,7 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        // Generate Vendor Code
-        $Ids = Vendor::all();
-        
-        if(count($Ids))
-            $id = $Ids->last()->id + 1;
-        else
-            $id = 1;
-        $request->merge(['vendor_code' => 'V'.$id]);
-        $vendor = Vendor::create($request->all());
-
-        return back();
+        //
     }
 
     /**
@@ -99,4 +88,13 @@ class VendorController extends Controller
     {
         //
     }
+
+        public function ajax_get_vendor_stocks(Request $request)
+        {
+            $id = $request->id;
+            $vendor_stocks = Vendor::find($id)->stock;
+            return $vendor_stocks;
+            // return response()->json(array('msg'=> 'hey'), 200);
+        }
+
 }

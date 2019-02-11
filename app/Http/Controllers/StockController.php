@@ -18,7 +18,7 @@ class StockController extends Controller
     {
         $vendors = Vendor::select('id','vendor_code','first_name','last_name')->get();
         // return $vendors;
-        return view('backend.stocks',compact('vendors'));
+        return view('backend.pages.stocks',compact('vendors'));
     }
 
     /**

@@ -15,7 +15,7 @@ class AuctionController extends Controller
     public function index()
     {
         $auctions = Auction::select('auction_no','venue','date','time')->get();
-        return view('backend.auctions',compact('auctions'));
+        return view('backend.pages.auctions',compact('auctions'));
     }
 
     /**

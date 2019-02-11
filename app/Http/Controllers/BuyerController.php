@@ -16,7 +16,7 @@ class BuyerController extends Controller
     {
         $buyers = Buyer::select('buyer_code','first_name','last_name','address','mobile','comments')->get();
 
-        return view('backend.buyers',compact('buyers'));
+        return view('backend.pages.buyers',compact('buyers'));
     }
 
     /**
