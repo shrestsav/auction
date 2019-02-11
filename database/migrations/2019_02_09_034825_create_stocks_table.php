@@ -23,6 +23,7 @@ class CreateStocksTable extends Migration
             $table->integer('quantity');
             $table->string('description');
             $table->integer('reserve');
+            $table->integer('sold')->nullable();
             $table->date('date');
             $table->timestamps();
         });

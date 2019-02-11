@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::resource('buyers','BuyerController');
 	Route::resource('auctions','AuctionController');
 	Route::get('auction_event','AuctionController@auction_event')->name('auction_event.index');
+	Route::post('auction_event','AuctionController@auction_event')->name('auction_event.store');
 	Route::resource('stocks','StockController');
 	Route::resource('lotting','LottingController');
 	Route::post('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');

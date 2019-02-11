@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Auction;
 use App\Buyer;
+use App\Sale;
+use App\Stock;
 
 class AuctionController extends Controller
 {
@@ -95,8 +97,12 @@ class AuctionController extends Controller
         //
     }
 
-    public function auction_event()
+    public function auction_event(Request $request)
     {
+        if(count($request->all())){
+            $sales = Sale::create($request->all());
+            Stock::where('vendor_id',$request->vendor_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->update(['sold'=>$request->quantity]);
+        }
         $auctions = Auction::all();
         $buyers = Buyer::select('id','buyer_code','first_name','last_name')->get();
         return view('backend.pages.auction_events',compact('auctions','buyers'));

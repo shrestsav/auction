@@ -27,7 +27,7 @@
         <li class="header">MAIN NAVIGATION</li>
         <li class="@if ($title === 'Dashboard') active @endif"><a href="{{route('dashboard')}}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
         </li>
-        <li class="header">LABELS</li>
+        <li class="header">OPERATIONS</li>
         <li class="treeview">
           <a href="#"><i class="fa fa-user-circle-o text-green"></i><span>Vendors</span>
             <span class="pull-right-container">
