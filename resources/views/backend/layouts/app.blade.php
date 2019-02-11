@@ -7,6 +7,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="{{ asset('backend/css/bootstrap.min.css') }}">
   {{-- Select 2 --}}
@@ -25,7 +26,7 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-purple sidebar-mini">
+<body class="hold-transition skin-purple sidebar-mini {{Session::get('theme_sidebar')}}">
   <div class="wrapper">
 
     <header class="main-header">
@@ -79,14 +80,49 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 
-  $(function () {
-      $('.select2').select2();
-  });
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
+
+
+  // if(localStorage.getItem("sidebar_state")==null)
+  //   $('body').addClass('skin-purple sidebar-collapse sidebar-mini');
+  // else
+  //   $('body').addClass(localStorage.getItem("sidebar_state"));
+
+  
+
+  $(function () {
+      $('.select2').select2();
+  });
+
+
+  $('.sidebar-toggle').on('click',function(){
+    if($('body').hasClass("sidebar-collapse")){
+      sidebar_state='';
+    }
+    else{
+      sidebar_state='sidebar-collapse';
+    }
+    
+    $.ajax({
+      url: "{{ url('/set_sidebar') }}",
+      method: 'post',
+      data: {
+         id: '{{ Auth::user()->id }}',
+         theme_sidebar: sidebar_state
+      },
+      success: function(response){
+         console.log(response);
+      }
+    });
+
+
+
+  });
+
 </script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{ asset('backend/js/bootstrap.min.js') }}"></script>
