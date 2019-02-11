@@ -25,7 +25,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return session()->all();
         $UserSetting = UserSetting::where('user_id',Auth::user()->id)->get();
         if(count($UserSetting))
             $theme_sidebar = $UserSetting->first()->theme_sidebar;
@@ -37,7 +36,7 @@ class HomeController extends Controller
         return view('backend.pages.dashboard');
 
     }
-    
+
     public function ajax_set_sidebar(Request $request)
     {
         // Check if already exists

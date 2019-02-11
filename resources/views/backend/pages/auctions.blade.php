@@ -1,4 +1,4 @@
-@extends('backend.layouts.app',['title'=>'Auctions'])
+@extends('backend.layouts.app',['title'=>'Add Auction'])
 
 @push('styles')
   <!-- Bootstrap time Picker -->

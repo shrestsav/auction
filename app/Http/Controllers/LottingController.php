@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Auction;
 use App\Stock;
 use App\Vendor;
+use App\Lotting;
 
 class LottingController extends Controller
 {
@@ -41,7 +42,9 @@ class LottingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $lot = Lotting::create($request->all());
+
+        return back();
     }
 
     /**
@@ -89,12 +92,22 @@ class LottingController extends Controller
         //
     }
 
-        public function ajax_get_vendor_stocks(Request $request)
-        {
-            $id = $request->id;
-            $vendor_stocks = Vendor::find($id)->stock;
-            return $vendor_stocks;
-            // return response()->json(array('msg'=> 'hey'), 200);
-        }
+    public function ajax_get_vendor_stocks(Request $request)
+    {
+        $id = $request->id;
+        $vendor_stocks = Vendor::find($id)->stock;
+        return $vendor_stocks;
+        // return response()->json(array('msg'=> 'hey'), 200);
+    }
+
+    public function ajax_get_auction_stocks(Request $request)
+    {
+        $existing_stocks = Lotting::select('lottings.vendor_id','vendors.vendor_code','vendors.first_name','vendors.last_name','lottings.lot_no','lottings.form_no','lottings.item_no','lottings.description','lottings.quantity','lottings.reserve')
+                        ->where('auction_id',$request->auction_id)
+                        ->join('vendors','lottings.vendor_id','=','vendors.id')
+                        ->get();
+
+        return $existing_stocks;
+    }
 
 }

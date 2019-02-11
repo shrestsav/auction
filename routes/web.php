@@ -24,9 +24,11 @@ Route::middleware(['auth'])->group(function () {
 	Route::resource('vendors','VendorController');
 	Route::resource('buyers','BuyerController');
 	Route::resource('auctions','AuctionController');
+	Route::get('auction_event','AuctionController@auction_event')->name('auction_event.index');
 	Route::resource('stocks','StockController');
 	Route::resource('lotting','LottingController');
-
+	Route::post('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');
+	Route::post('get_auction_stocks','LottingController@ajax_get_auction_stocks');
 });
-Route::post('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');
+
 	// Route::get('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Auction;
+use App\Buyer;
 
 class AuctionController extends Controller
 {
@@ -92,5 +93,12 @@ class AuctionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function auction_event()
+    {
+        $auctions = Auction::all();
+        $buyers = Buyer::select('id','buyer_code','first_name','last_name')->get();
+        return view('backend.pages.auction_events',compact('auctions','buyers'));
     }
 }

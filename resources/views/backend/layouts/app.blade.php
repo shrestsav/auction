@@ -80,6 +80,7 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 
+// SET AJAX CSRF TOKEN
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

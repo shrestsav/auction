@@ -48,8 +48,19 @@
           </ul>
         </li>
         <li class="@if ($title === 'Buyers') active @endif"><a href="{{route('buyers.index')}}"><i class="fa fa-user-circle text-yellow"></i> <span>Buyers</span></a></li>
-        <li class="@if ($title === 'Auctions') active @endif"><a href="{{route('auctions.index')}}"><i class="fa fa-handshake-o text-aqua"></i> <span>Auction</span></a></li>
-        <li class="@if ($title === 'Lotting') active @endif"><a href="{{route('lotting.index')}}"><i class="fa fa-handshake-o text-aqua"></i> <span>Lotting</span></a></li>
+        <li class="treeview">
+          <a href="#"><i class="fa fa-gavel text-green"></i><span>Auction</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="@if ($title === 'Add Auction') active @endif"><a href="{{route('auctions.index')}}"><i class="fa fa-plus-circle text-aqua"></i><span> Add Auction</span></a></li>
+            <li class="@if ($title === 'Auction') active @endif"><a href="{{route('auction_event.index')}}"><i class="fa fa-handshake-o text-aqua"></i><span> Auction</span></a></li>
+          </ul>
+        </li>
+        
+        <li class="@if ($title === 'Lotting') active @endif"><a href="{{route('lotting.index')}}"><i class="fa fa-lock text-red"></i> <span>Lotting</span></a></li>
       </ul>
     </section>
     <!-- /.sidebar -->
