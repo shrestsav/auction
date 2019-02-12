@@ -140,15 +140,13 @@ class LottingController extends Controller
 
         // Check for Duplicate Entries
         $existing_lot = Lotting::where('auction_id','=',$request->auction_id)->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->get();
+        // If Entry already exists then throw 401 error
         if(count($existing_lot)){
             return response()->json(['error'=>'This Item Already Exists in this Auction, You may want to edit it instead'],401);
         }
 
-
-
-
-            $lot = Lotting::create($request->all());
-            return response()->json(['success'=>'Lotting has been added successfully']);
+        $lot = Lotting::create($request->all());
+        return response()->json(['success'=>'Lotting has been added successfully']);
     }
 
 }
