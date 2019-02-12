@@ -17,8 +17,10 @@ class StockController extends Controller
     public function index()
     {
         $vendors = Vendor::select('id','vendor_code','first_name','last_name')->get();
-        // return $vendors;
-        return view('backend.pages.stocks',compact('vendors'));
+        $stocks = Stock::join('vendors','stocks.vendor_id','=','vendors.id')
+                ->get();
+        // return $stocks;
+        return view('backend.pages.stocks',compact('vendors','stocks'));
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Auction;
 use App\Stock;
 use App\Vendor;
 use App\Lotting;
+use Validator;
 
 class LottingController extends Controller
 {
@@ -42,7 +43,9 @@ class LottingController extends Controller
      */
     public function store(Request $request)
     {
-        $lot = Lotting::create($request->all());
+        // This has been shifted to ajax_save_new_lot
+        return $request->all();
+        // $lot = Lotting::create($request->all());
 
         return back();
     }
@@ -102,12 +105,50 @@ class LottingController extends Controller
 
     public function ajax_get_auction_stocks(Request $request)
     {
-        $existing_stocks = Lotting::select('lottings.vendor_id','vendors.vendor_code','vendors.first_name','vendors.last_name','lottings.lot_no','lottings.form_no','lottings.item_no','lottings.description','lottings.quantity','lottings.reserve')
+        $existing_stocks = Lotting::select('lottings.vendor_id','vendors.vendor_code','vendors.first_name','vendors.last_name','lottings.lot_no','lottings.form_no','lottings.item_no','lottings.description','lottings.quantity','lottings.reserve','lottings.sold')
                         ->where('auction_id',$request->auction_id)
                         ->join('vendors','lottings.vendor_id','=','vendors.id')
                         ->get();
 
         return $existing_stocks;
+    }
+    public function ajax_save_new_lot(Request $request)
+    {
+        // return $request->all();
+        $rule = ['auction_id' => 'bail|required',
+                'vendor_id' => 'required',
+                'form_no' => 'required',
+                'item_no' => 'required',
+                'lot_no' => 'required',
+                'quantity' => 'required',
+                'reserve' => 'required',
+                'description' => 'required'
+                ];
+        $msg = ['auction_id.required' => 'Please select Auction First',
+                'vendor_id.required' => 'Please Select Item',
+                'form_no.required' => 'Please select Item',
+                'item_no.required' => 'Please select Item',
+                'description.required' => 'Please select Item',
+                'lot_no.required' => 'Please Enter Lot Number',
+                'quantity.required' => 'Please Enter Quantity',
+                'reserve.required' => 'Please Enter Reserve',
+                ];
+        $validate = Validator::make($request->all(), $rule, $msg);
+        if($validate->fails()){
+            return response($validate->errors(),401);
+        }
+
+        // Check for Duplicate Entries
+        $existing_lot = Lotting::where('auction_id','=',$request->auction_id)->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->get();
+        if(count($existing_lot)){
+            return response()->json(['error'=>'This Item Already Exists in this Auction, You may want to edit it instead'],401);
+        }
+
+
+
+
+            $lot = Lotting::create($request->all());
+            return response()->json(['success'=>'Lotting has been added successfully']);
     }
 
 }

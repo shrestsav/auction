@@ -30,6 +30,10 @@ Route::middleware(['auth'])->group(function () {
 	Route::resource('lotting','LottingController');
 	Route::post('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');
 	Route::post('get_auction_stocks','LottingController@ajax_get_auction_stocks');
+	Route::post('save_new_lot','LottingController@ajax_save_new_lot');
+
+	Route::get('adjustments','AdjustmentController@index')->name('adjustments.index');
+	Route::post('adjustments','AdjustmentController@set_state')->name('adjustments.store');
 });
 
 	// Route::get('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');

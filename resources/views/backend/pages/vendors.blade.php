@@ -8,6 +8,15 @@
       <div class="row">
 
       	<div class="col-md-12">
+      	  @if ($errors->any())
+		    <div class="alert alert-danger">
+		        <ul>
+		            @foreach ($errors->all() as $error)
+		                <li>{{ $error }}</li>
+		            @endforeach
+		        </ul>
+		    </div>
+		  @endif
           <!-- general form elements -->
           <div class="box box-success collapsed-box">
             <div class="box-header with-border">
@@ -50,13 +59,10 @@
 		                  	<label for="v_state">State *</label>
 		                  	{{-- <input type="text" name="state" class="form-control" id="v_state" placeholder="State" required> --}}
 		                	<select name="state" class="form-control select2" id="v_state" style="width: 100%;" required>
-			                  <option selected="selected" disabled>Select State</option>
-			                  <option value="new york">New York</option>
-			                  <option value="Los Angelos">Los Angelos</option>
-			                  <option value="Chicago">Chicago</option>
-			                  <option value="Iowa">Iowa</option>
-			                  <option value="Minessota">Minessota</option>
-			                  <option value="Melbourne">Melbourne</option>
+			                  <option hidden disabled selected value>Select State</option>
+			                  @foreach($states as $state)
+				                  <option value="{{$state->name}}">{{$state->name}}</option>
+				              @endforeach
 			                </select>
 		                </div>
 		            </div>
@@ -117,7 +123,7 @@
 		            <div class="col-md-3">
 		                <div class="form-group">
 		                	<label for="v_gst_status">GST Status *</label>
-		                  	<select class="form-control" name="gst_status" id="v_gst_status">
+		                  	<select class="form-control" name="gst_status" id="v_gst_status" required>
 			                  <option selected="selected" value="inclusive">Inclusive</option>
 			                  <option value="exclusive">Exclusive</option>
 			                </select>
@@ -126,7 +132,7 @@
 		            <div class="col-md-3">
 		                <div class="form-group">
 		                  <label for="v_payment_method">Payment Method *</label>
-		                  <select class="form-control" name="payment_method" id="v_payment_method">
+		                  <select class="form-control" name="payment_method" id="v_payment_method" required>
 			                  <option selected="selected" disabled> </option>
 			                  <option value="cash">Cash</option>
 			                  <option value="eftpos">Eftpos</option>
@@ -181,7 +187,8 @@
 	                  <th>Vendor Name</th>
 	                  <th>Mobile</th>
 	                  <th>Joined Date</th>
-	                  <th>Reason</th>
+	                  <th>Address</th>
+	                  <th>Action</th>
 	                </tr>
                 @foreach($vendors as $vendor)
 	                <tr>
@@ -190,6 +197,11 @@
 	                  <td>{{$vendor->mobile}}</td>
 	                  <td><span class="label label-success">{{$vendor->joined_date}}</span></td>
 	                  <td>{{$vendor->address}}</td>
+	                  <td>
+	                  	<a href="#" data-toggle="modal" data-target="#vendor_stocks_{{$vendor->id}}">
+	                  		<i class="fa fa-dot-circle-o"></i>
+	                  	</a>
+	                  </td>
 	                </tr>
                 @endforeach
               </table>
@@ -202,5 +214,56 @@
     </section>
     <!-- /.content -->
 
+ @foreach($vendors_with_stocks as $vendor_with_stock)
+ 	<?php $vendor_id = $vendor_with_stock->vendor_id; ?>
+ 	<?php $count=1; ?>
+	<div class="modal fade vendor_stocks" id="vendor_stocks_{{$vendor_id}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Stocks</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-hover">
+                <tr>
+                	<th>S.No</th>
+	                <th>Form No</th>
+	                <th>Item No</th>
+	                <th>Description</th>
+	                <th>Quantity</th>
+	                <th>Reserve</th>
+	                <th>Sold</th>
+	                <th>Action</th>
+                </tr>
+            
+            @foreach($stocks as $stock)
+            	@if($stock->vendor_id==$vendor_id)
+	                <tr>
+	                  <td>{{$count}}</td>
+	                  <td>{{$stock->form_no}}</td>
+	                  <td>{{$stock->item_no}}</td>
+	                  <td>{{$stock->description}}</td>
+	                  <td>{{$stock->quantity}}</td>
+	                  <td>{{$stock->reserve}}</td>
+	                  <td>{{$stock->sold}}</td>
+	                  <td><i class="fa fa-pencil"></i> &nbsp; &nbsp; <i class="fa fa-remove"></i></td>
+	                </tr>
+	            @endif
+	        <?php  $count++; ?>
+            @endforeach
 
+          </table>
+          </div>
+          {{-- <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> --}}
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+ @endforeach
 @endsection

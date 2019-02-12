@@ -70,7 +70,7 @@
 		           		<div class="col-md-2">
 			                <div class="form-group">
 			                  <label for="a_invoice_no">Invoice No</label>
-			                  <input type="text" name="invoice_id" class="form-control" id="a_invoice_no" placeholder="Invoice No" required>
+			                  <input type="number" name="invoice_id" class="form-control" id="a_invoice_no" placeholder="Invoice No" required>
 			                </div>
 			            </div>
 			            <div class="col-md-2">
@@ -233,9 +233,9 @@
 		       success:function(data) {
 		       		$(".items_div").show();
 		            $(".items_body").remove();
-		       	var row_id=1;
+		       		var row_id=1;
 		       		data.forEach(rows =>{
-		       			$('.items_table').append('<tr class="items_body" data-vendor-id="'+rows["vendor_id"]+'"><td data-row-id="'+row_id+'">'+row_id+'</td><td class="lot_no">'+rows["lot_no"]+'</td><td class="vendor_code">'+rows["vendor_code"]+'</td><td class="form_no">'+rows["form_no"]+'</td><td class="item_no">'+rows["item_no"]+'</td><td class="description">'+rows["description"]+'</td><td class="quantity">'+rows["quantity"]+'</td><td class="sold">sold</td><td><div class="add_items"><i class="fa fa-plus-circle" aria-hidden="true"></i></div></td></tr>');
+		       			$('.items_table').append('<tr class="items_body" data-vendor-id="'+rows["vendor_id"]+'"><td data-row-id="'+row_id+'">'+row_id+'</td><td class="lot_no">'+rows["lot_no"]+'</td><td class="vendor_code">'+rows["vendor_code"]+'</td><td class="form_no">'+rows["form_no"]+'</td><td class="item_no">'+rows["item_no"]+'</td><td class="description">'+rows["description"]+'</td><td class="quantity">'+rows["quantity"]+'</td><td class="sold">' + (rows["sold"] == null ? '--': rows["sold"]) +'</td><td><div class="add_items"><i class="fa fa-plus-circle" aria-hidden="true"></i></div></td></tr>');
 		       			row_id++;
 		       		});
 		       }

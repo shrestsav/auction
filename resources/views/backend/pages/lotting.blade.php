@@ -22,7 +22,8 @@
     <section class="content">
       <!-- /.row -->
       <div class="row">
-
+      	<div class="alert alert-danger" style="display: none;"></div>
+      	<div class="alert alert-success" style="display: none;"></div>
       	<div class="col-md-12">
           <!-- general form elements -->
           <div class="box box-success">
@@ -35,13 +36,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-            	<form role="form" method="POST" action="{{route('lotting.store')}}">
+            	<form >
             		@csrf
             		<div class="col-md-2">
 		                <div class="form-group">
 		                  	<label for="l_auction_id">Auction</label>
-		                	<select name="auction_id" class="form-control select2" id="l_auction_id" style="width: 100%;" required>
-		                		<option selected="selected" disabled>Select Auction</option>
+		                	<select class="form-control select2" id="l_auction_id" style="width: 100%;" required>
+		                		<option hidden disabled selected value>Select Auction</option>
 				                 @foreach ($auctions as $auction)
 				                  	<option value="{{$auction->id}}" data-auction-venue="{{$auction->venue}}" data-auction-date="{{$auction->date}}" data-auction-time="{{$auction->time}}">{{$auction->auction_no}}</option>
 				                 @endforeach
@@ -51,19 +52,19 @@
 	              	<div class="col-md-4">
 		                <div class="form-group">
 		                  <label for="l_venue">Venue</label>
-		                  <input type="text" name="first_name" class="form-control" id="l_venue" placeholder="Venue" disabled>
+		                  <input type="text" class="form-control" id="l_venue" placeholder="Venue" disabled>
 		                </div>
 		            </div>
 		            <div class="col-md-3">
 		                <div class="form-group">
 		                  <label for="l_date">Date</label>
-		                  <input type="text" name="last_name" class="form-control" id="l_date" placeholder="Date" disabled>
+		                  <input type="text" class="form-control" id="l_date" placeholder="Date" disabled>
 		                </div>
 		            </div>
 		            <div class="col-md-3">
 		                <div class="form-group">
 		                  <label for="l_time">Time</label>
-		                  <input type="text" name="address" class="form-control" id="l_time" placeholder="Address" disabled>
+		                  <input type="text" class="form-control" id="l_time" placeholder="Address" disabled>
 		                </div>
 		            </div>
 		            <div class="sysauction row">
@@ -83,7 +84,7 @@
 			                <div class="form-group">
 			                  <label for="s_vendor_name">Vendor</label>
 			                  <select class="form-control select2" id="s_vendor_name" style="width: 100%;" required>
-				                  <option selected="selected" disabled>Select Vendor</option>
+				                  <option hidden disabled selected value>Select Vendor</option>
 				                  @foreach($vendors_with_stocks as $vendor)
 				                  	<option value="{{$vendor->id}}">{{$vendor->first_name}} {{$vendor->last_name}}</option>
 				                  @endforeach
@@ -112,53 +113,54 @@
 		                </div>
 		            </div>
 		            <hr>
-		            {{-- For Sending Vendor Id not Vendor Code to database --}}
-		            <input type="hidden" name="vendor_id" value="test" id="l_vendor_id" >
+		            {{-- For Storing Temporary Vendor Id not Vendor Code to database --}}
+		            <input type="hidden" id="l_vendor_id" >
+		            <input type="hidden" id="l_vendor_name" >
 		            <div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="l_vendor_code">Vendor Code</label>
-		                  <input type="text" name="vendor_code" class="form-control" id="l_vendor_code" placeholder="Vendor Code" required disabled>
+		                  <input type="text" class="form-control" id="l_vendor_code" placeholder="Vendor Code" required disabled>
 		                </div>
 		            </div>
 		            <div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="l_form_no">Form No</label>
-		                  <input type="text" name="form_no" class="form-control" id="l_form_no" placeholder="Form No" required readonly>
+		                  <input type="text" class="form-control" id="l_form_no" placeholder="Form No" required readonly>
 		                </div>
 		            </div>
 		            <div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="l_item_no">Item No</label>
-		                  <input type="text" name="item_no" class="form-control" id="l_item_no" placeholder="Item No" required readonly>
+		                  <input type="text" class="form-control" id="l_item_no" placeholder="Item No" required readonly>
 		                </div>
 		            </div>
 		            <div class="col-md-4">
 		                <div class="form-group">
 		                  <label for="l_description">Description</label>
-		                  <input type="text" name="description" class="form-control" id="l_description" placeholder="Description" required readonly>
+		                  <input type="text" class="form-control" id="l_description" placeholder="Description" required readonly>
 		                </div>
 		            </div>
 		            <div class="col-md-1">
 		                <div class="form-group">
 		                  <label for="l_quantity">Quantity</label>
-		                  <input type="number" name="quantity" class="form-control" id="l_quantity" placeholder="Quantity" required>
+		                  <input type="number" class="form-control" id="l_quantity" placeholder="Quantity" required disabled>
 		                </div>
 		            </div>
 		            <div class="col-md-1">
 		                <div class="form-group">
 		                  <label for="l_reserve">Reserve</label>
-		                  <input type="number" name="reserve" class="form-control" id="l_reserve" placeholder="Reserve" required>
+		                  <input type="number" class="form-control" id="l_reserve" placeholder="Reserve" required disabled>
 		                </div>
 		            </div>
 		            <div class="col-md-4">
 		                <div class="form-group">
 		                  <label for="l_lot_no">Lot No</label>
-		                  <input type="number" name="lot_no" class="form-control" id="l_lot_no" placeholder="Lot No" required>
+		                  <input type="number" class="form-control" id="l_lot_no" placeholder="Lot No" required disabled>
 		                </div>
 		            </div>
 		            <div class="col-md-2">
 			            <div class="btn-group-vertical">
-			            	<button type="button" class="btn bg-olive btn-flat margin add_lot">Add</button>
+			            	<button type="button" class="btn bg-olive btn-flat margin add_lot" disabled>Add</button>
 			            </div>
 			        </div>
 		            <div class="col-md-12 lot_div" style="display: none;">
@@ -181,23 +183,20 @@
 				            </div>
 		                </div>
 		            </div>
-			        <div class="col-md-12">
+			        {{-- <div class="col-md-12">
 			        	<div class="box-footer">
 		              		<button type="submit" class="btn btn-primary">Save</button>
 		            	</div>
-			        </div>    
+			        </div>    --}} 
             	</form>
             </div>
             <!-- /.box-body -->
           </div>
         </div>
 
-    
       </div>
     </section>
-
     <!-- /.content -->
-
 
 @endsection
 @push('scripts')
@@ -224,7 +223,7 @@
 		       	var row_id=1;
 		       		data.forEach(rows =>{
 		       			console.log(rows);
-		       			$('.lot_table').append('<tr class="lotting_body" data-vendor-id="'+rows["vendor_id"]+'"><td data-row-id="'+row_id+'">'+row_id+'</td><td class="vendor_name">'+rows["first_name"]+' '+rows["last_name"]+'</td><td class="lot_no">'+rows["lot_no"]+'</td><td class="form_no">'+rows["form_no"]+'</td><td class="item_no">'+rows["item_no"]+'</td><td class="description">'+rows["description"]+'</td><td class="quantity">'+rows["quantity"]+'</td><td class="reserve">'+rows["reserve"]+'</td></tr>');
+		       			$('.lot_table').append('<tr class="lotting_body" data-vendor-id="'+rows["vendor_id"]+'"><td class="vendor_code" data-row-id="'+row_id+'">'+rows["vendor_code"]+'</td><td class="vendor_name">'+rows["first_name"]+' '+rows["last_name"]+'</td><td class="lot_no">'+rows["lot_no"]+'</td><td class="form_no">'+rows["form_no"]+'</td><td class="item_no">'+rows["item_no"]+'</td><td class="description">'+rows["description"]+'</td><td class="quantity">'+rows["quantity"]+'</td><td class="reserve">'+rows["reserve"]+'</td></tr>');
 		       			row_id++;
 		       		});
 		       }
@@ -265,12 +264,60 @@
 		});
 
 		$('.add_lot').on('click',function(){
-			alert('clc');
+			var auction_id = $('#l_auction_id').val();
+			var vendor_id = $('#l_vendor_id').val();
+	    	var vendor_code = $('#l_vendor_code').val();
+	    	var vendor_name = $('#l_vendor_name').val();
+	    	var lot_no = $('#l_lot_no').val();
+	    	var form_no = $('#l_form_no').val();
+	    	var item_no = $('#l_item_no').val();
+	    	var description = $('#l_description').val();
+	    	var quantity = $('#l_quantity').val();
+	    	var reserve = $('#l_reserve').val();
+	    	$.ajax({
+               type:'post',
+               url:'/save_new_lot',
+               dataType: 'json',
+               data:{
+					auction_id: auction_id,
+					vendor_id: vendor_id,
+					lot_no: lot_no,
+					form_no: form_no,
+					item_no: item_no,
+					description: description,
+					quantity: quantity,
+					reserve: reserve                
+              	},
+               success:function(response) {
+               		console.log(response);
+               		$('.alert-danger').hide();
+               		$('.alert-success').show().html('LOT ADDED SUCCESSFULLY');
+               		$('.lot_table').append('<tr class="lotting_body"><td class="vendor_code">'+vendor_code+'</td><td class="vendor_name">'+vendor_name+'</td><td class="lot_no">'+lot_no+'</td><td class="form_no">'+form_no+'</td><td class="item_no">'+item_no+'</td><td class="description">'+description+'</td><td class="quantity">'+quantity+'</td><td class="reserve">'+reserve+'</td></tr>');
+				},
+				error: function(response){
+					$.each(response.responseJSON, function(index, val){
+						console.log(index+":"+val);
+						$('.alert-danger').show().html(val);
+					});
+					// console.log(response);
+				}
+            });	
+			
 		});
+		$('#l_quantity').on('change',function(e){
+			e.preventDefault();
+			$('#l_lot_no').prop("disabled", false);
 
+		});
+		$('#l_lot_no').on('change keyup',function(e){
+			e.preventDefault();
+			$('.add_lot').prop("disabled", false);
+
+		});
 	  	$('body').on('click','.add_stock',function(){
 	    	const vendor_id = $(this).parents('.stocks_body').data('vendor-id');
 	    	const vendor_code = $('#s_vendor_code option[value="'+vendor_id+'"]').text();
+	    	const vendor_name = $('#s_vendor_name option[value="'+vendor_id+'"]').text();
 	    	const row_id = $(this).parents('.stocks_body td').data('row-id');
 	    	const form_no = $(this).closest('tr').children('td.form_no').text();
 	    	const item_no = $(this).closest('tr').children('td.item_no').text();
@@ -279,11 +326,16 @@
 	    	const reserve = $(this).closest('tr').children('td.reserve').text();
 	    	$('#l_vendor_id').val(vendor_id);
 	    	$('#l_vendor_code').val(vendor_code);
+	    	$('#l_vendor_name').val(vendor_name);
 	    	$('#l_form_no').val(form_no);
 	    	$('#l_item_no').val(item_no);
 	    	$('#l_quantity').val(quantity);
 	    	$('#l_description').val(description);
 	    	$('#l_reserve').val(reserve);
+
+	    	$('#l_quantity').prop("disabled", false).trigger('change');
+	    	$('#l_reserve').prop("disabled", false);
+
 		});
 	</script>
 @endpush

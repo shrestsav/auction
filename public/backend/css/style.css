@@ -1,0 +1,7 @@
+.vendor_stocks .modal-dialog{
+	width:65% !important;
+}
+.modal-title{
+	text-align: center;
+	font-weight: 600;
+}

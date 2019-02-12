@@ -7,6 +7,7 @@ use App\Auction;
 use App\Buyer;
 use App\Sale;
 use App\Stock;
+use App\Lotting;
 
 class AuctionController extends Controller
 {
@@ -39,6 +40,11 @@ class AuctionController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+        'venue' => 'required',
+        'date' => 'required',
+        'time' => 'required',
+        ]);
         // Generate Auction Code
         $Ids = Auction::all();
         
@@ -102,6 +108,7 @@ class AuctionController extends Controller
         if(count($request->all())){
             $sales = Sale::create($request->all());
             Stock::where('vendor_id',$request->vendor_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->update(['sold'=>$request->quantity]);
+            Lotting::where('vendor_id',$request->vendor_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->update(['sold'=>$request->quantity]);
         }
         $auctions = Auction::all();
         $buyers = Buyer::select('id','buyer_code','first_name','last_name')->get();

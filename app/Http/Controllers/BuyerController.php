@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Buyer;
+use App\State;
 
 class BuyerController extends Controller
 {
@@ -15,8 +16,9 @@ class BuyerController extends Controller
     public function index()
     {
         $buyers = Buyer::select('buyer_code','first_name','last_name','address','mobile','comments')->get();
+        $states = State::all();
 
-        return view('backend.pages.buyers',compact('buyers'));
+        return view('backend.pages.buyers',compact('buyers','states'));
     }
 
     /**
@@ -37,7 +39,16 @@ class BuyerController extends Controller
      */
     public function store(Request $request)
     {
-    // Generate Buyer Code
+        $validatedData = $request->validate([
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'buyers_premium' => 'required',
+        'address' => 'required',
+        'suburb' => 'required',
+        'state' => 'required',
+        'postcode' => 'required',
+        ]);
+        // Generate Buyer Code
         $Ids = Buyer::all();
         // return $request->buyers_premium;
         if(count($Ids))

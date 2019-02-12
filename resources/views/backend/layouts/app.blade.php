@@ -18,6 +18,8 @@
   <link rel="stylesheet" href="{{ asset('backend/css/AdminLTE.min.css') }}">
   {{-- Theme Color CSS --}}
   <link rel="stylesheet" href="{{ asset('backend/css/skin-purple.min.css') }}">
+  {{-- CUSTOM CSS BY SHRESTSAV --}}
+  <link rel="stylesheet" href="{{ asset('backend/css/style.css') }}">
 
   
 

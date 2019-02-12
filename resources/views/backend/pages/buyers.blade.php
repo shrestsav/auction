@@ -8,6 +8,15 @@
       <div class="row">
       	<div class="col-md-12">
           <!-- general form elements -->
+          @if ($errors->any())
+		    <div class="alert alert-danger">
+		        <ul>
+		            @foreach ($errors->all() as $error)
+		                <li>{{ $error }}</li>
+		            @endforeach
+		        </ul>
+		    </div>
+		  @endif
           <div class="box box-success collapsed-box">
             <div class="box-header with-border">
               <h3 class="box-title">Add Buyer</h3>
@@ -36,7 +45,7 @@
 		            <div class="col-md-4">
 		                <div class="form-group">
 		                  <label for="b_contact_type">Contact Type</label>
-		                  <input type="text" name="contact_type" class="form-control" id="b_contact_type" placeholder="Contact Type" required>
+		                  <input type="text" name="contact_type" class="form-control" id="b_contact_type" placeholder="Contact Type">
 		                </div>
 		            </div>
 		            <div class="col-md-2">
@@ -77,13 +86,10 @@
 		                  <label for="b_state">State *</label>
 		                  {{-- <input type="text" name="state" class="form-control" id="b_state" placeholder="State" required> --}}
 		                  <select name="state" class="form-control select2" id="b_state" style="width: 100%;" required>
-			                  <option selected="selected" disabled>Select State</option>
-			                  <option value="new york">New York</option>
-			                  <option value="Los Angelos">Los Angelos</option>
-			                  <option value="Chicago">Chicago</option>
-			                  <option value="Iowa">Iowa</option>
-			                  <option value="Minessota">Minessota</option>
-			                  <option value="Melbourne">Melbourne</option>
+			                  <option hidden disabled selected value>Select State</option>
+			                  @foreach($states as $state)
+				                  <option value="{{$state->name}}">{{$state->name}}</option>
+				              @endforeach
 			                </select>
 		                </div>
 		            </div>
