@@ -22,7 +22,10 @@ class LottingController extends Controller
         $stocks = Stock::all();
         $vendor_with_stocks_id = Stock::select('vendor_id')->get()->toArray();        
         $vendors_with_stocks = Vendor::whereIn('id', $vendor_with_stocks_id)->get();
-        return view('backend.pages.lotting',compact('auctions','stocks','vendors_with_stocks'));
+
+        //Stocks which are already added in auctions
+        $added_stocks = Lotting::pluck('stock_id')->toArray();
+        return view('backend.pages.lotting',compact('auctions','stocks','vendors_with_stocks','added_stocks'));
     }
 
     /**
@@ -99,23 +102,34 @@ class LottingController extends Controller
     {
         $id = $request->id;
         $vendor_stocks = Vendor::find($id)->stock;
-        return $vendor_stocks;
-        // return response()->json(array('msg'=> 'hey'), 200);
+        // return $vendor_stocks;
+        $added_stocks = Lotting::pluck('stock_id')->toArray();
+        return response()->json(['vendor_stocks'=>$vendor_stocks, 'added_stocks'=>$added_stocks]);
     }
 
     public function ajax_get_auction_stocks(Request $request)
     {
-        $existing_stocks = Lotting::select('lottings.vendor_id','vendors.vendor_code','vendors.first_name','vendors.last_name','lottings.lot_no','lottings.form_no','lottings.item_no','lottings.description','lottings.quantity','lottings.reserve','lottings.sold')
+        $existing_stocks = Lotting::select('lottings.id','lottings.vendor_id','vendors.vendor_code','vendors.first_name','vendors.last_name','lottings.lot_no','lottings.form_no','lottings.item_no','lottings.description','lottings.quantity','lottings.reserve','lottings.sold')
                         ->where('auction_id',$request->auction_id)
                         ->join('vendors','lottings.vendor_id','=','vendors.id')
                         ->get();
-
-        return $existing_stocks;
+        if(count($existing_stocks))
+            return $existing_stocks;
+        return response()->json(['error'=>'No Stocks in Auction'],401);
     }
+
+    public function ajax_remove_lot_from_auction(Request $request)
+    {
+        $Remove_lot = Lotting::where('vendor_id',$request->vendor_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->delete();
+        if($Remove_lot)
+            return json_encode('Deleted');
+        return response()->json(['error'=>'Data Could Not be deleted'],401);
+    }
+
     public function ajax_save_new_lot(Request $request)
     {
-        // return $request->all();
-        $rule = ['auction_id' => 'bail|required',
+        $rule = ['auction_id' => 'required',
+                'stock_id' => 'required',
                 'vendor_id' => 'required',
                 'form_no' => 'required',
                 'item_no' => 'required',
@@ -126,6 +140,7 @@ class LottingController extends Controller
                 ];
         $msg = ['auction_id.required' => 'Please select Auction First',
                 'vendor_id.required' => 'Please Select Item',
+                'stock_id.required' => 'Please Select Item',
                 'form_no.required' => 'Please select Item',
                 'item_no.required' => 'Please select Item',
                 'description.required' => 'Please select Item',
@@ -144,6 +159,12 @@ class LottingController extends Controller
         if(count($existing_lot)){
             return response()->json(['error'=>'This Item Already Exists in this Auction, You may want to edit it instead'],401);
         }
+
+        // Check if Quantity is greater than available stocks
+        $check_stock_quantity = Stock::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->pluck('quantity')->toArray();
+        if($request->quantity > $check_stock_quantity[0])
+            return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
+
 
         $lot = Lotting::create($request->all());
         return response()->json(['success'=>'Lotting has been added successfully']);

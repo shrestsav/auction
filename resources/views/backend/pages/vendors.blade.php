@@ -198,9 +198,13 @@
 	                  <td><span class="label label-success">{{$vendor->joined_date}}</span></td>
 	                  <td>{{$vendor->address}}</td>
 	                  <td>
-	                  	<a href="#" data-toggle="modal" data-target="#vendor_stocks_{{$vendor->id}}">
-	                  		<i class="fa fa-dot-circle-o"></i>
-	                  	</a>
+	                  	@foreach($vendors_with_stocks as $vendor_with_stock)
+		                  	@if($vendor_with_stock->vendor_id==$vendor->id)
+			                  	<a href="#" data-toggle="modal" data-target="#vendor_stocks_{{$vendor->id}}">
+			                  		<i class="fa fa-dot-circle-o"></i>
+			                  	</a>
+		                  	@endif
+	                  	@endforeach
 	                  </td>
 	                </tr>
                 @endforeach
@@ -215,9 +219,9 @@
     <!-- /.content -->
 
  @foreach($vendors_with_stocks as $vendor_with_stock)
- 	<?php $vendor_id = $vendor_with_stock->vendor_id; ?>
- 	<?php $count=1; ?>
-	<div class="modal fade vendor_stocks" id="vendor_stocks_{{$vendor_id}}">
+ 	<?php $vendorId = $vendor_with_stock->vendor_id; ?>
+ 	
+	<div class="modal fade vendor_stocks" id="vendor_stocks_{{$vendorId}}">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -237,9 +241,9 @@
 	                <th>Sold</th>
 	                <th>Action</th>
                 </tr>
-            
+            <?php $count=1; ?>
             @foreach($stocks as $stock)
-            	@if($stock->vendor_id==$vendor_id)
+            	@if($stock->vendor_id==$vendorId)
 	                <tr>
 	                  <td>{{$count}}</td>
 	                  <td>{{$stock->form_no}}</td>

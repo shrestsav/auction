@@ -26,11 +26,13 @@ Route::middleware(['auth'])->group(function () {
 	Route::resource('auctions','AuctionController');
 	Route::get('auction_event','AuctionController@auction_event')->name('auction_event.index');
 	Route::post('auction_event','AuctionController@auction_event')->name('auction_event.store');
+	Route::post('save_new_sale','AuctionController@ajax_save_new_sale');
 	Route::resource('stocks','StockController');
 	Route::resource('lotting','LottingController');
 	Route::post('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');
 	Route::post('get_auction_stocks','LottingController@ajax_get_auction_stocks');
 	Route::post('save_new_lot','LottingController@ajax_save_new_lot');
+	Route::post('remove_lot_from_auction','LottingController@ajax_remove_lot_from_auction');
 
 	Route::get('adjustments','AdjustmentController@index')->name('adjustments.index');
 	Route::post('adjustments','AdjustmentController@set_state')->name('adjustments.store');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Buyer;
 use App\State;
+use App\Sale;
 
 class BuyerController extends Controller
 {
@@ -15,10 +16,13 @@ class BuyerController extends Controller
      */
     public function index()
     {
-        $buyers = Buyer::select('buyer_code','first_name','last_name','address','mobile','comments')->get();
+        // return 'fasdf';
+        $buyers = Buyer::select('id','buyer_code','first_name','last_name','address','mobile','comments')->get();
         $states = State::all();
-
-        return view('backend.pages.buyers',compact('buyers','states'));
+        $purchases = Sale::join('lottings','lottings.id','sales.lotting_id')->orderBy('buyer_id')->get();
+        // return $purchases;
+        $buyers_with_purchases = Sale::select('buyer_id')->groupBy('buyer_id')->get();
+        return view('backend.pages.buyers',compact('buyers','states','purchases','buyers_with_purchases'));
     }
 
     /**

@@ -15,6 +15,7 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('lotting_id')->unsigned()->index();
             $table->integer('auction_id')->unsigned()->index();
             $table->integer('vendor_id')->unsigned()->index();
             $table->integer('buyer_id')->unsigned()->index();

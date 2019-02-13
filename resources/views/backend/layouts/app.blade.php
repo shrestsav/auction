@@ -78,6 +78,7 @@
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('backend/js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('backend/js/select2.full.min.js') }}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);
@@ -88,12 +89,6 @@
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
-
-
-  // if(localStorage.getItem("sidebar_state")==null)
-  //   $('body').addClass('skin-purple sidebar-collapse sidebar-mini');
-  // else
-  //   $('body').addClass(localStorage.getItem("sidebar_state"));
 
   
 

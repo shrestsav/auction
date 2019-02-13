@@ -15,6 +15,7 @@ class CreateLottingsTable extends Migration
     {
         Schema::create('lottings', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('stock_id')->unsigned()->index();
             $table->integer('auction_id')->unsigned()->index();
             $table->integer('vendor_id')->unsigned()->index();
             $table->integer('lot_no')->unsigned();

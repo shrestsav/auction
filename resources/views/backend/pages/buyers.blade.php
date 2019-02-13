@@ -163,6 +163,8 @@
 	                  <th>Address</th>
 	                  <th>Mobile</th>
 	                  <th>comments</th>
+	                  <th>Action</th>
+
 	                </tr>
                 @foreach($buyers as $buyer)
 	                <tr>
@@ -171,6 +173,16 @@
 	                  <td>{{$buyer->address}}</td>
 	                  <td><span class="label label-success">{{$buyer->mobile}}</span></td>
 	                  <td>{{$buyer->comments}}</td>
+	                  <td>
+
+	                  	@foreach($buyers_with_purchases as $buyers_with_purchase)
+		                  	@if($buyers_with_purchase->buyer_id==$buyer->id)
+			                  	<a href="#" data-toggle="modal" data-target="#buyer_purchases_{{$buyer->id}}">
+			                  		<i class="fa fa-dot-circle-o"></i>
+			                  	</a>
+		                  	@endif
+	                  	@endforeach
+	                  </td>
 	                </tr>
                 @endforeach
               </table>
@@ -182,6 +194,65 @@
       </div>
     </section>
     <!-- /.content -->
+
+
+ @foreach($buyers_with_purchases as $buyers_with_purchase)
+ 	<?php $BuyerId = $buyers_with_purchase->buyer_id; ?>
+ 	
+	<div class="modal fade vendor_stocks" id="buyer_purchases_{{$BuyerId}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Purchases</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-hover">
+                <tr>
+                	<th>S.No</th>
+	                <th>Invoice No</th>
+	                <th>Form No</th>
+	                <th>Item No</th>
+	                <th>Description</th>
+	                <th>Rate</th>
+	                <th>Quantity</th>
+	                <th>Discount</th>
+	                <th>BP Amount</th>
+	                <th>Action</th>
+                </tr>
+            <?php $count=1; ?>
+            @foreach($purchases as $purchase)
+            	@if($purchase->buyer_id==$BuyerId)
+	                <tr>
+	                  <td>{{$count}}</td>
+	                  <td>{{$purchase->invoice_id}}</td>
+	                  <td>{{$purchase->form_no}}</td>
+	                  <td>{{$purchase->item_no}}</td>
+	                  <td>{{$purchase->lot_no}}</td>
+	                  <td>{{$purchase->rate}}</td>
+	                  <td>{{$purchase->quantity}}</td>
+	                  <td>{{$purchase->discount}}</td>
+	                  <td>{{$purchase->buyers_premium_amount}}</td>
+	                  <td><i class="fa fa-pencil"></i> &nbsp; &nbsp; <i class="fa fa-remove"></i></td>
+	                </tr>
+	            @endif
+	        <?php  $count++; ?>
+            @endforeach
+
+          </table>
+          </div>
+          {{-- <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> --}}
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+ @endforeach
+
 
 @endsection
 @push('scripts')
