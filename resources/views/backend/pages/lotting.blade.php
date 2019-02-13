@@ -22,8 +22,10 @@
     <section class="content">
       <!-- /.row -->
       <div class="row">
-      	<div class="alert alert-danger" style="display: none;"></div>
-      	<div class="alert alert-success" style="display: none;"></div>
+      	<div class="col-md-12">
+	      	<div class="alert alert-danger" style="display: none;"></div>
+	      	<div class="alert alert-success" style="display: none;"></div>
+	    </div>
       	<div class="col-md-12">
           <!-- general form elements -->
           <div class="box box-success">
@@ -140,13 +142,13 @@
 		                  <input type="text" class="form-control" id="l_description" placeholder="Description" required readonly>
 		                </div>
 		            </div>
-		            <div class="col-md-1">
+		            <div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="l_quantity">Quantity</label>
 		                  <input type="number" class="form-control" id="l_quantity" placeholder="Quantity" required disabled>
 		                </div>
 		            </div>
-		            <div class="col-md-1">
+		            <div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="l_reserve">Reserve</label>
 		                  <input type="number" class="form-control" id="l_reserve" placeholder="Reserve" required disabled>
@@ -297,7 +299,9 @@
 				error: function(response){
 					$.each(response.responseJSON, function(index, val){
 						console.log(index+":"+val);
+						$('.alert-success').hide();
 						$('.alert-danger').show().html(val);
+						
 					});
 					// console.log(response);
 				}
