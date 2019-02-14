@@ -20,7 +20,11 @@
   <link rel="stylesheet" href="{{ asset('backend/css/skin-purple.min.css') }}">
   {{-- CUSTOM CSS BY SHRESTSAV --}}
   <link rel="stylesheet" href="{{ asset('backend/css/style.css') }}">
-
+  <style type="text/css" media="print">
+    .printer{
+      display:none;
+      }
+  </style>
   
 
   @stack('styles')
@@ -29,7 +33,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-purple sidebar-mini {{Session::get('theme_sidebar')}}">
-  <div class="wrapper">
+  <div class="wrapper printer">
 
     <header class="main-header">
       @include('backend.layouts.includes.header')
@@ -73,12 +77,15 @@
   </div>
   <!-- ./wrapper -->
 
+    @stack('modals')
+    
 <!-- jQuery 3 -->
 <script src="{{ asset('backend/js/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('backend/js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('backend/js/select2.full.min.js') }}"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{{ asset('backend/js/sweetalert.min.js') }}"></script>
+{{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);

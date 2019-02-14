@@ -106,17 +106,33 @@ class AuctionController extends Controller
 
     public function auction_event(Request $request)
     {
-        // return $request->all();
-        // if(count($request->all())){
-        //     $sales = Sale::create($request->all());
-        //     Stock::where('vendor_id',$request->vendor_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->update(['sold'=>$request->quantity]);
-        //     Lotting::where('vendor_id',$request->vendor_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->update(['sold'=>$request->quantity]);
-        // }
         $auctions = Auction::all();
         $buyers = Buyer::select('id','buyer_code','first_name','last_name')->get();
         return view('backend.pages.auction_events',compact('auctions','buyers'));
     }
-    public function ajax_save_new_sale(Request $request){
+
+    public function ajax_remove_sale(Request $request)
+    {
+        $remove_sale = Sale::where('buyer_id',$request->buyer_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->where('invoice_id',$request->invoice_id)->delete();
+
+        //ReUpdate Sold attributes in Stocks and Lottings table
+        $stocks = Stock::where('vendor_id',$request->vendor_id)
+                            ->where('form_no',$request->form_no)
+                            ->where('item_no',$request->item_no)
+                            ->decrement('sold',$request->quantity);
+        $lottings = Lotting::where('vendor_id',$request->vendor_id)
+                            ->where('form_no',$request->form_no)
+                            ->where('item_no',$request->item_no)
+                            ->decrement('sold',$request->quantity);
+
+        if($remove_sale)
+            return json_encode('Deleted');
+        return response()->json(['error'=>'Data Could Not be deleted'],401);
+    }
+
+
+    public function ajax_save_new_sale(Request $request)
+    {
         $rule = ['lotting_id' => 'required',
                 'auction_id' => 'required',
                 'vendor_id' => 'required',
@@ -126,22 +142,24 @@ class AuctionController extends Controller
                 'item_no' => 'required',
                 'lot_no' => 'required',
                 'rate' => 'required',
-                'quantity' => 'required',
+                'quantity' => 'bail|required|numeric|min:1',
                 'discount' => 'required',
-                'buyers_premium_amount' => 'required'
+                'buyers_premium_amount' => 'bail|required|numeric|min:0'
                 ];
         $msg = ['lotting_id.required' => 'Something is not right',
                 'auction_id.required' => 'Please select Auction First',
                 'vendor_id.required' => 'Something is not right',
-                'buyer_id.required' => 'Something is not right',
+                'buyer_id.required' => 'Please Select Buyer First',
                 'invoice_id.required' => 'Enter Invoice Number',
                 'form_no.required' => 'Something is not right',
                 'item_no.required' => 'Something is not right',
                 'lot_no.required' => 'Something is not right',
                 'rate.required' => 'Please Enter Rate',
                 'quantity.required' => 'Please Enter Quantity',
+                'quantity.min' => 'Please Enter Quantity greater than 0',
                 'discount.required' => 'Please Enter Discount',
                 'buyers_premium_amount.required' => 'Please Enter BP AMOUNT',
+                'buyers_premium_amount.min' => 'BP AMOUNT Negative',
                 ];
 
         $validate = Validator::make($request->all(), $rule, $msg);
@@ -157,11 +175,6 @@ class AuctionController extends Controller
             return response()->json(['error'=>'You have already added the item, You may want to edit it instead'],401);
         }
 
-        
-
-        // Check if Quantity is greater than available stocks in auction
-        // $check_stock_quantity = Lotting::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->pluck('quantity')->toArray();
-
         // Check for Left Item
         $stocks = Lotting::select('quantity','sold')->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->get()->toArray();
         $left_stocks = $stocks[0]['quantity'] - $stocks[0]['sold'];
@@ -171,14 +184,24 @@ class AuctionController extends Controller
             return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
 
         // Update Stocks Sold Attribute in Stock and Lotting Table
-        Stock::where('vendor_id',$request->vendor_id)
-                ->where('form_no',$request->form_no)
-                ->where('item_no',$request->item_no)
-                ->increment('sold',$request->quantity);
-        Lotting::where('vendor_id',$request->vendor_id)
-                ->where('form_no',$request->form_no)
-                ->where('item_no',$request->item_no)
-                ->increment('sold',$request->quantity);
+        $stocks = Stock::where('vendor_id',$request->vendor_id)
+                            ->where('form_no',$request->form_no)
+                            ->where('item_no',$request->item_no);
+        $lottings = Lotting::where('vendor_id',$request->vendor_id)
+                            ->where('form_no',$request->form_no)
+                            ->where('item_no',$request->item_no);
+        $stocks_sold = $stocks->first()->sold;
+        $lottings_sold = $lottings->first()->sold;
+        if($stocks_sold)
+            $stocks->increment('sold',$request->quantity);
+        else
+            $stocks->update(['sold'=>$request->quantity]);
+
+        if($lottings_sold)
+            $lottings->increment('sold',$request->quantity);
+        else
+            $lottings->update(['sold'=>$request->quantity]);
+
         $item = Sale::create($request->all());
         return response()->json(['success'=>'Item has been added successfully']);
     }

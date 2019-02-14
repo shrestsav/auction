@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('auction_event','AuctionController@auction_event')->name('auction_event.index');
 	Route::post('auction_event','AuctionController@auction_event')->name('auction_event.store');
 	Route::post('save_new_sale','AuctionController@ajax_save_new_sale');
+	Route::post('remove_sale','AuctionController@ajax_remove_sale');
 	Route::resource('stocks','StockController');
 	Route::resource('lotting','LottingController');
 	Route::post('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');
@@ -36,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
 
 	Route::get('adjustments','AdjustmentController@index')->name('adjustments.index');
 	Route::post('adjustments','AdjustmentController@set_state')->name('adjustments.store');
+
+	Route::get('total_sales','ReportController@total_sales')->name('reports.sales');
 });
 
 	// Route::get('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');

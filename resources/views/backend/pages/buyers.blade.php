@@ -208,7 +208,7 @@
             <h4 class="modal-title">Purchases</h4>
           </div>
           <div class="modal-body">
-            <table class="table table-hover">
+            <table class="table table-hover buyer_purchases_table" data-buyer-id="{{$BuyerId}}">
                 <tr>
                 	<th>S.No</th>
 	                <th>Invoice No</th>
@@ -224,17 +224,17 @@
             <?php $count=1; ?>
             @foreach($purchases as $purchase)
             	@if($purchase->buyer_id==$BuyerId)
-	                <tr>
+	                <tr data-vendor-id="{{$purchase->vendor_id}}">
 	                  <td>{{$count}}</td>
-	                  <td>{{$purchase->invoice_id}}</td>
-	                  <td>{{$purchase->form_no}}</td>
-	                  <td>{{$purchase->item_no}}</td>
-	                  <td>{{$purchase->lot_no}}</td>
-	                  <td>{{$purchase->rate}}</td>
-	                  <td>{{$purchase->quantity}}</td>
-	                  <td>{{$purchase->discount}}</td>
-	                  <td>{{$purchase->buyers_premium_amount}}</td>
-	                  <td><i class="fa fa-pencil"></i> &nbsp; &nbsp; <i class="fa fa-remove"></i></td>
+	                  <td class="invoice_id">{{$purchase->invoice_id}}</td>
+	                  <td class="form_no">{{$purchase->form_no}}</td>
+	                  <td class="item_no">{{$purchase->item_no}}</td>
+	                  <td class="lot_no">{{$purchase->lot_no}}</td>
+	                  <td class="rate">{{$purchase->rate}}</td>
+	                  <td class="quantity">{{$purchase->quantity}}</td>
+	                  <td class="discount">{{$purchase->discount}}</td>
+	                  <td class="buyers_premium_amount">{{$purchase->buyers_premium_amount}}</td>
+	                  <td><a href="#"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp; <a href="#" class="remove_purchase"><i class="fa fa-remove"></i></a></td>
 	                </tr>
 	            @endif
 	        <?php  $count++; ?>
@@ -263,6 +263,58 @@
 		  function hide1(){
 		    $('.b_buyers_premium_rate').hide();
 		  }
-		  
+		
+		  	$('.remove_purchase').on('click',function(){
+		  		
+			  });
+			  	
+		  $('body').on('click','.remove_purchase',function(e){
+			e.preventDefault();
+			swal({
+			  title: "Are you sure?",
+			  text: "Once deleted, you will not be able to recover this data",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+			  	const current_row = $(this).closest('tr');
+			  	const invoice_id = $(this).closest('tr').children('td.invoice_id').text();
+		  		const buyer_id = $(this).parents('.buyer_purchases_table').data('buyer-id');
+		  		const form_no = $(this).closest('tr').children('td.form_no').text();
+		  		const item_no = $(this).closest('tr').children('td.item_no').text();
+		  		const quantity = $(this).closest('tr').children('td.quantity').text();
+		  		const vendor_id = $(this).closest('tr').data('vendor-id');
+				$.ajax({
+				       type:'post',
+				       url:'/remove_sale',
+				       dataType: 'json',
+				       data:{
+							buyer_id: buyer_id,
+							vendor_id: vendor_id,
+							invoice_id: invoice_id,
+							form_no: form_no,
+							item_no: item_no,     
+							quantity: quantity     
+				      	},
+				       success:function(data) {
+				       		console.log(data);
+				       		$('#a_auction_id').trigger('change');
+				       		current_row.remove();
+				       		$('.added_items_table').sumtr({sumCells : '.price'});
+		 				},
+						error: function(response){
+							$.each(response.responseJSON, function(index, val){
+								console.log(index+":"+val);	
+							});
+						}
+				    });
+			    swal("Deleted!", {
+			      icon: "success",
+			    });
+			  } 
+			});
+		});
     </script>
 @endpush

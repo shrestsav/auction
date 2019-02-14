@@ -54,6 +54,7 @@
         
         <li class="@if ($title === 'Lotting') active @endif"><a href="{{route('lotting.index')}}"><i class="fa fa-lock text-red"></i> <span>Lotting</span></a></li>
         <li class="@if ($title === 'Auction') active @endif"><a href="{{route('auction_event.index')}}"><i class="fa fa-gavel text-aqua"></i><span> Sale</span></a></li>
+        <li class="@if ($title === 'Total Sale') active @endif"><a href="{{route('reports.sales')}}"><i class="fa fa-shopping-cart text-yellow"></i><span>Total Sale</span></a></li>
         
       </ul>
     </section>
