@@ -155,7 +155,7 @@
 		                  <input type="number" class="form-control" id="a_quantity" placeholder="Quantity" required readonly>
 		                </div>
 		            </div>
-		            <div class="col-md-1">
+		            <div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="a_rate">Rate</label>
 		                  <input type="number" class="form-control" id="a_rate" placeholder="Rate" required readonly>
@@ -167,7 +167,7 @@
 		                  <input type="number" class="form-control" id="a_total" placeholder="Total" required readonly>
 		                </div>
 		            </div>
-		            <div class="col-md-1">
+		            <div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="a_discount">Discount</label>
 		                  <input type="number" class="form-control" id="a_discount" placeholder="Discount" required readonly>
@@ -187,7 +187,7 @@
 		            </div>
 		            <div class="col-md-2">
 		                <div class="form-group">
-		                  <label for="a_buyers_premium_amount">Buyers Premium Amount</label>
+		                  <label for="a_buyers_premium_amount">BP Amount</label>
 		                  <input type="number" class="form-control" id="a_buyers_premium_amount" placeholder="Buyers Premium Amount" required readonly>
 		                </div>
 		            </div>

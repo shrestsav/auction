@@ -345,7 +345,7 @@
 	               		$('.confirm_input').val('');
 	               		$('.alert-danger').hide();
 	               		$('.alert-success').show().html('LOT ADDED SUCCESSFULLY');
-	               		$('.lot_table').append('<tr class="lotting_body"><td class="vendor_code">'+vendor_code+'</td><td class="vendor_name">'+vendor_name+'</td><td class="lot_no">'+lot_no+'</td><td class="form_no">'+form_no+'</td><td class="item_no">'+item_no+'</td><td class="description">'+description+'</td><td class="quantity">'+quantity+'</td><td class="reserve">'+reserve+'</td><td><div class="remove_lot"><i class="fa fa-trash" aria-hidden="true"></i></div></td></tr>');
+	               		$('.lot_table').append('<tr class="lotting_body" data-vendor-id="'+vendor_id+'"><td class="vendor_code">'+vendor_code+'</td><td class="vendor_name">'+vendor_name+'</td><td class="lot_no">'+lot_no+'</td><td class="form_no">'+form_no+'</td><td class="item_no">'+item_no+'</td><td class="description">'+description+'</td><td class="quantity">'+quantity+'</td><td class="reserve">'+reserve+'</td><td><div class="remove_lot"><i class="fa fa-trash" aria-hidden="true"></i></div></td></tr>');
 					},
 					error: function(response){
 						$.each(response.responseJSON, function(index, val){
@@ -357,12 +357,7 @@
 					}
 	            });	
 			  } 
-			});
-
-
-
-
-			
+			});			
 		});
 
 		// Remove Disabled Property from Lot No when Quantity Input has been triggered
