@@ -60,8 +60,12 @@
 						<th>
 							<a href="#" data-toggle="modal" data-target="#invoice_{{$invoice_sum->invoice_id}}">
 		                  		<i class="fa fa-eye"></i>
-		                  	</a>&nbsp;&nbsp;<i class="fa fa-print text-aqua"></i></th>
+		                  	</a>
+		                  	&nbsp;&nbsp;
+		                  	<?php $id = ["invoice_id"=>$invoice_sum->invoice_id]; ?>
+		                  	<a href="{{route('reports.print_invoice', $id)}}" target="_blank"><i class="fa fa-print"></i></a></th>
 					</tr>
+					
 					<?php $count++; ?>
 					@endforeach
 				</tbody>
