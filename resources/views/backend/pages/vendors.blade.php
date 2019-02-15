@@ -254,8 +254,9 @@
 	                  <td>{{$stock->sold}}</td>
 	                  <td><i class="fa fa-pencil"></i> &nbsp; &nbsp; <i class="fa fa-remove"></i></td>
 	                </tr>
+	            <?php  $count++; ?>
 	            @endif
-	        <?php  $count++; ?>
+	       
             @endforeach
 
           </table>

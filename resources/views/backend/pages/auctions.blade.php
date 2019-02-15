@@ -96,14 +96,21 @@
 	                  <th>Auction No</th>
 	                  <th>Venue</th>
 	                  <th>Date</th>
-	                  <th>Time</th>
+                    <th>Time</th>
+	                  <th>Stocks</th>
 	                </tr>
                 @foreach($auctions as $auction)
 	                <tr>
 	                  <td>{{$auction->auction_no}}</td>
 	                  <td>{{$auction->venue}}</td>
 	                  <td>{{$auction->date}}</td>
-	                  <td><span class="label label-success">{{$auction->time}}</span></td>
+                    <td><span class="label label-success">{{$auction->time}}</span></td>
+	                  <td>
+                        @if(in_array($auction->id, $auction_with_stocks))
+                          <a href="#" data-toggle="modal" data-target="#auction_stocks_{{$auction->id}}">
+                            <i class="fa fa-dot-circle-o"></i>
+                          </a>
+                        @endif
 	                </tr>
                 @endforeach
               </table>
@@ -115,6 +122,62 @@
       </div>
     </section>
     <!-- /.content -->
+
+ @foreach($auctions as $auction)
+  @if(in_array($auction->id, $auction_with_stocks))
+  <div class="modal fade vendor_stocks" id="auction_stocks_{{$auction->id}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{$auction->auction_no}} Stocks</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-hover buyer_purchases_table" data-buyer-id="{{$auction->id}}">
+                <tr>
+                  <th>S.No</th>
+                  <th>Vendor Code</th>
+                  <th>Form No</th>
+                  <th>Item No</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Sold</th>
+                  <th>Available</th>
+                </tr>
+                <?php $count=1; ?>
+            @foreach($stocks as $stock)
+              @if($auction->id==$stock->auction_id)
+                  <tr>
+                    <td>{{$count}}</td>
+                    <td class="invoice_id">{{$stock->vendor_code}}</td>
+                    <td class="form_no">{{$stock->form_no}}</td>
+                    <td class="item_no">{{$stock->item_no}}</td>
+                    <td class="description">{{$stock->description}}</td>
+                    <td class="quantity">{{$stock->quantity}}</td>
+                    <td class="quantity">{{$stock->sold}}</td>
+                    <td class="quantity">{{$stock->quantity - $stock->sold}}</td>
+                  </tr>
+                  <?php $count++; ?>
+              @endif
+              
+            @endforeach
+
+          </table>
+          </div>
+          {{-- <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> --}}
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+  @endif
+ @endforeach
+
+
 
 @endsection
 @push('scripts')

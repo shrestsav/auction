@@ -19,8 +19,11 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::select('auction_no','venue','date','time')->get();
-        return view('backend.pages.auctions',compact('auctions'));
+        $auctions = Auction::select('id','auction_no','venue','date','time')->get();
+        $auction_with_stocks = Lotting::groupBy('auction_id')->pluck('auction_id')->toArray();
+        $stocks = Lotting::join('vendors','vendors.id','lottings.vendor_id')->orderBy('auction_id')->get();
+        // return($stocks);
+        return view('backend.pages.auctions',compact('auctions','auction_with_stocks','stocks'));
     }
 
     /**
@@ -183,6 +186,7 @@ class AuctionController extends Controller
         if($request->quantity > $left_stocks)
             return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
 
+        $item = Sale::create($request->all());
         // Update Stocks Sold Attribute in Stock and Lotting Table
         $stocks = Stock::where('vendor_id',$request->vendor_id)
                             ->where('form_no',$request->form_no)
@@ -201,8 +205,6 @@ class AuctionController extends Controller
             $lottings->increment('sold',$request->quantity);
         else
             $lottings->update(['sold'=>$request->quantity]);
-
-        $item = Sale::create($request->all());
         return response()->json(['success'=>'Item has been added successfully']);
     }
 

@@ -1,5 +1,11 @@
 @extends('backend.layouts.app',['title'=>'Total Sales'])
-
+@push('styles')
+	<style type="text/css">
+		tr>td, tr>th{
+			text-align: center;
+		}
+	</style>
+@endpush
 @section('content')
 
    <!-- Main content -->
@@ -9,7 +15,7 @@
         <div class="col-xs-12">
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title">List of buyers</h3>
+              <h3 class="box-title">All Sales by Items</h3>
 
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -26,6 +32,7 @@
               <table class="table table-hover">
               	<thead>
 	                <tr>
+					  <th>Invoice No</th>
 					  <th>Auction No</th>
 					  <th>Buyer Code</th>
 					  <th>Vendor Code</th>
@@ -42,6 +49,7 @@
 				<tbody>
 					@foreach($all_sales as $all_sale)
 					<tr>
+						<td>{{$all_sale->invoice_id}}</td>
 						<td>{{$all_sale->auction_no}}</td>
 						<td>{{$all_sale->buyer_code}}</td>
 						<td>{{$all_sale->vendor_code}}</td>
@@ -49,11 +57,11 @@
 						<td>{{$all_sale->item_no}}</td>
 						<td>{{$all_sale->description}}</td>
 						<td>{{$all_sale->quantity}}</td>
-						<td>{{$all_sale->rate}}</td>
-						<td>{{$all_sale->discount}}</td>
-						<td>{{$all_sale->buyers_premium_amount}}</td>
+						<td>$ {{$all_sale->rate}}</td>
+						<td>$ {{$all_sale->discount}}</td>
+						<td>$ <?php echo floatval($all_sale->buyers_premium_amount); ?></td>
 						<?php $grand_total = ($all_sale->quantity * $all_sale->rate)-$all_sale->discount+$all_sale->buyers_premium_amount ?>
-						<td>{{$grand_total}}</td>
+						<td>$ {{$grand_total}}</td>
 					</tr>
 					@endforeach
 				</tbody>

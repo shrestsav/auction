@@ -15,9 +15,7 @@
 		.sysauction.row{
 			margin-left: 0px;
 		}
-		tr>td, tr>th{
-			text-align: center;
-		}
+
 		.invoice_table tr>td{
 			text-align: unset;
 		}
@@ -544,10 +542,6 @@
 							$('.alert-danger').show().html(val);	
 						});
 					}
-			    });
-
-			    swal("Done", {
-			      icon: "success",
 			    });
 			  } 
 			});

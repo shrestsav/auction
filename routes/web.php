@@ -38,7 +38,9 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('adjustments','AdjustmentController@index')->name('adjustments.index');
 	Route::post('adjustments','AdjustmentController@set_state')->name('adjustments.store');
 
+	//REPORTS
 	Route::get('total_sales','ReportController@total_sales')->name('reports.sales');
+	Route::get('invoices','ReportController@invoices')->name('reports.invoices');
 });
 
 	// Route::get('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');

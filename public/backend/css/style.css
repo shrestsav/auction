@@ -8,3 +8,6 @@
 tfoot tr td{
 	font-weight: 600;
 }
+tr>td, tr>th{
+	text-align: center;
+}

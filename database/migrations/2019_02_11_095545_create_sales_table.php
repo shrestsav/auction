@@ -26,7 +26,7 @@ class CreateSalesTable extends Migration
             $table->integer('rate')->unsigned();
             $table->integer('quantity')->unsigned();
             $table->integer('discount')->unsigned();
-            $table->integer('buyers_premium_amount')->unsigned();
+            $table->decimal('buyers_premium_amount',50,25)->unsigned();
             $table->timestamps();
         });
     }

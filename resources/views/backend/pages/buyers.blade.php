@@ -236,8 +236,9 @@
 	                  <td class="buyers_premium_amount">{{$purchase->buyers_premium_amount}}</td>
 	                  <td><a href="#"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp; <a href="#" class="remove_purchase"><i class="fa fa-remove"></i></a></td>
 	                </tr>
+	                <?php  $count++; ?>
 	            @endif
-	        <?php  $count++; ?>
+	        
             @endforeach
 
           </table>

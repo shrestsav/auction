@@ -24,11 +24,15 @@
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
+
         <li class="header">MAIN NAVIGATION</li>
+
         <li class="@if ($title === 'Dashboard') active @endif"><a href="{{route('dashboard')}}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
         </li>
         <li class="@if ($title === 'Settings') active @endif"><a href="{{route('adjustments.index')}}"><i class="fa fa-cog text-white"></i><span> Adjustments</span></a></li>
+
         <li class="header">OPERATIONS</li>
+
         <li class="treeview">
           <a href="#"><i class="fa fa-user-circle-o text-green"></i><span>Vendors</span>
             <span class="pull-right-container">
@@ -54,8 +58,11 @@
         
         <li class="@if ($title === 'Lotting') active @endif"><a href="{{route('lotting.index')}}"><i class="fa fa-lock text-red"></i> <span>Lotting</span></a></li>
         <li class="@if ($title === 'Auction') active @endif"><a href="{{route('auction_event.index')}}"><i class="fa fa-gavel text-aqua"></i><span> Sale</span></a></li>
-        <li class="@if ($title === 'Total Sale') active @endif"><a href="{{route('reports.sales')}}"><i class="fa fa-shopping-cart text-yellow"></i><span>Total Sale</span></a></li>
         
+        <li class="header">REPORTS</li>
+
+        <li class="@if ($title === 'Total Sale') active @endif"><a href="{{route('reports.sales')}}"><i class="fa fa-shopping-cart text-yellow"></i><span>Total Sale</span></a></li>
+        <li class="@if ($title === 'Invoices') active @endif"><a href="{{route('reports.invoices')}}"><i class="fa fa-print text-aqua"></i><span>Invoices</span></a></li>
       </ul>
     </section>
     <!-- /.sidebar -->
