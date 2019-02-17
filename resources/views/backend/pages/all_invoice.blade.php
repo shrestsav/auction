@@ -81,7 +81,7 @@
     <!-- /.content -->
 
   @foreach($unique_invoices as $unique_invoice)  
-	<div class="modal fade vendor_stocks" id="invoice_{{$unique_invoice->invoice_id}}">
+	<div class="modal fade invoice_details_modal" id="invoice_{{$unique_invoice->invoice_id}}">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">

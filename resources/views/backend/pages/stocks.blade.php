@@ -6,10 +6,20 @@
     <section class="content">
       <!-- /.row -->
       <div class="row">
-
+      	<div class="col-md-12">
+          @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+          @endif
+        </div>
       	<div class="col-md-12">
           <!-- general form elements -->
-          <div class="box box-success ">
+          <div class="box box-success collapsed-box">
             <div class="box-header with-border">
               <h3 class="box-title">Add Stock</h3>
               <div class="box-tools pull-right">
@@ -24,7 +34,7 @@
             		<div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="s_vendor_code">Vendor Code</label>
-		                  <select name="vendor_code" class="form-control select2" id="s_vendor_code" style="width: 100%;" required>
+		                  <select name="vendor_id" class="form-control select2" id="s_vendor_code" style="width: 100%;" required>
 			                  <option selected="selected" disabled>Vendor Code</option>
 			                  @foreach($vendors as $vendor)
 			                  	<option value="{{$vendor->id}}">{{$vendor->vendor_code}}</option>
@@ -36,7 +46,7 @@
 	              	<div class="col-md-5">
 		                <div class="form-group">
 		                  <label for="s_vendor_name">Vendor</label>
-		                  <select name="vendor_name" class="form-control select2" id="s_vendor_name" style="width: 100%;" required>
+		                  <select class="form-control select2" id="s_vendor_name" style="width: 100%;" required>
 			                  <option selected="selected" disabled>Select Vendor</option>
 			                  @foreach($vendors as $vendor)
 			                  	<option value="{{$vendor->id}}">{{$vendor->first_name}} {{$vendor->last_name}}</option>

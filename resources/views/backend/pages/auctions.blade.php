@@ -125,7 +125,7 @@
 
  @foreach($auctions as $auction)
   @if(in_array($auction->id, $auction_with_stocks))
-  <div class="modal fade vendor_stocks" id="auction_stocks_{{$auction->id}}">
+  <div class="modal fade auction_stocks_modal" id="auction_stocks_{{$auction->id}}">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">

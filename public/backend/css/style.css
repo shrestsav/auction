@@ -1,5 +1,14 @@
-.vendor_stocks .modal-dialog{
+.vendor_stocks_modal .modal-dialog{
 	width:65% !important;
+}
+.buyer_purchases_modal .modal-dialog{
+	width:75% !important;
+}
+.auction_stocks_modal .modal-dialog{
+	width:75% !important;
+}
+.invoice_details_modal .modal-dialog{
+	width:96% !important;
 }
 .modal-title{
 	text-align: center;

@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 use App;
 use App\Sale;
+use App\Vendor;
+use App\Buyer;
 
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
     public function total_sales(Request $request){
+
+        $vendors = Vendor::select('id','vendor_code','first_name','last_name')->get();
+        $buyers = Buyer::select('id','buyer_code','first_name','last_name')->get();
+
     	$all_sales = Sale::select('sales.form_no as form_no',
 					    		'sales.item_no as item_no',
 					    		'sales.invoice_id',
@@ -25,8 +31,8 @@ class ReportController extends Controller
     						->join('auctions','auctions.id','=','sales.auction_id')
     						->join('lottings','lottings.id','=','sales.lotting_id')
     						->get();
-    						// return $all_sales;
-    	return view('backend.pages.total_sales',compact('all_sales'));
+                            
+    	return view('backend.pages.total_sales',compact('all_sales','vendors','buyers'));
     }
     public function invoices(Request $request){
 

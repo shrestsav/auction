@@ -376,7 +376,7 @@
 			$('#a_time').val(auction_time);
 			$.ajax({
 		       type:'post',
-		       url:'/get_auction_stocks',
+		       url:'{{ url("/get_auction_stocks") }}',
 		       dataType: 'json',
 		       data:{
 					auction_id:auction_id                 
@@ -506,7 +506,7 @@
 
 				$.ajax({
 			       type:'post',
-			       url:'/save_new_sale',
+			       url:'{{ url("/save_new_sale") }}',
 			       dataType: 'json',
 			       data:{
 						lotting_id: lotting_id,
@@ -569,7 +569,7 @@
 
 					$.ajax({
 					       type:'post',
-					       url:'/remove_sale',
+					       url:'{{ url("/remove_sale") }}',
 					       dataType: 'json',
 					       data:{
 								buyer_id: buyer_id,

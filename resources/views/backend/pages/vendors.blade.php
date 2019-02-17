@@ -221,7 +221,7 @@
  @foreach($vendors_with_stocks as $vendor_with_stock)
  	<?php $vendorId = $vendor_with_stock->vendor_id; ?>
  	
-	<div class="modal fade vendor_stocks" id="vendor_stocks_{{$vendorId}}">
+	<div class="modal fade vendor_stocks_modal" id="vendor_stocks_{{$vendorId}}">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -239,7 +239,7 @@
 	                <th>Quantity</th>
 	                <th>Reserve</th>
 	                <th>Sold</th>
-	                <th>Action</th>
+	                {{-- <th>Action</th> --}}
                 </tr>
             <?php $count=1; ?>
             @foreach($stocks as $stock)
@@ -252,7 +252,7 @@
 	                  <td>{{$stock->quantity}}</td>
 	                  <td>{{$stock->reserve}}</td>
 	                  <td>{{$stock->sold}}</td>
-	                  <td><i class="fa fa-pencil"></i> &nbsp; &nbsp; <i class="fa fa-remove"></i></td>
+	                  {{-- <td><i class="fa fa-pencil"></i> &nbsp; &nbsp; <i class="fa fa-remove"></i></td> --}}
 	                </tr>
 	            <?php  $count++; ?>
 	            @endif

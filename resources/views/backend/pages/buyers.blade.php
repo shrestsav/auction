@@ -199,7 +199,7 @@
  @foreach($buyers_with_purchases as $buyers_with_purchase)
  	<?php $BuyerId = $buyers_with_purchase->buyer_id; ?>
  	
-	<div class="modal fade vendor_stocks" id="buyer_purchases_{{$BuyerId}}">
+	<div class="modal fade buyer_purchases_modal" id="buyer_purchases_{{$BuyerId}}">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -233,8 +233,12 @@
 	                  <td class="rate">{{$purchase->rate}}</td>
 	                  <td class="quantity">{{$purchase->quantity}}</td>
 	                  <td class="discount">{{$purchase->discount}}</td>
-	                  <td class="buyers_premium_amount">{{$purchase->buyers_premium_amount}}</td>
-	                  <td><a href="#"><i class="fa fa-pencil"></i></a> &nbsp; &nbsp; <a href="#" class="remove_purchase"><i class="fa fa-remove"></i></a></td>
+	                  <td class="buyers_premium_amount">{{round($purchase->buyers_premium_amount,6)}}</td>
+	                  <td>
+	                  	{{-- <a href="#"><i class="fa fa-pencil"></i></a>  --}}
+	                  	&nbsp; &nbsp; 
+	                  	<a href="#" class="remove_purchase"><i class="fa fa-remove"></i></a>
+	                  </td>
 	                </tr>
 	                <?php  $count++; ?>
 	            @endif
@@ -289,7 +293,7 @@
 		  		const vendor_id = $(this).closest('tr').data('vendor-id');
 				$.ajax({
 				       type:'post',
-				       url:'/remove_sale',
+				       url:'{{ url("/remove_sale") }}',
 				       dataType: 'json',
 				       data:{
 							buyer_id: buyer_id,

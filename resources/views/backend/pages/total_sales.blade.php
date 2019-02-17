@@ -12,6 +12,74 @@
     <section class="content">
       <!-- /.row -->
       <div class="row">
+      	      	<div class="col-md-12">
+          <!-- general form elements -->
+          <div class="box box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Sales Report</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            	<div class="col-md-4">
+            		<button type="button" class="btn btn-success" id="toggle_vendor">Vendor</button>
+            		<button type="button" class="btn btn-success" id="toggle_buyer">Buyer</button>
+            	</div>
+            	<br><br><br>
+            	<form role="form" method="POST" action="{{route('stocks.store')}}">
+            	@csrf
+            		<div class="col-md-2 vendor_section" style="display:none;">
+		                <div class="form-group">
+		                  <label for="ts_vendor_code">Vendor Code</label>
+		                  <select name="vendor_id" class="form-control select2" id="ts_vendor_code" style="width: 100%;" required>
+			                  <option selected="selected" disabled>Vendor Code</option>
+			                  @foreach($vendors as $vendor)
+			                  	<option value="{{$vendor->id}}">{{$vendor->vendor_code}}</option>
+			                  @endforeach
+			                </select>
+		                </div>
+		            </div>
+	              	<div class="col-md-5 vendor_section" style="display:none;">
+		                <div class="form-group">
+		                  <label for="ts_vendor_name">Vendor</label>
+		                  <select class="form-control select2" id="ts_vendor_name" style="width: 100%;" required>
+			                  <option selected="selected" disabled>Select Vendor</option>
+			                  @foreach($vendors as $vendor)
+			                  	<option value="{{$vendor->id}}">{{$vendor->first_name}} {{$vendor->last_name}}</option>
+			                  @endforeach
+			              </select>
+		                </div>
+		            </div>
+		            <div class="col-md-2 buyer_section" style="display:none;">
+		                <div class="form-group">
+		                  <label for="ts_buyer_code">Buyer Code</label>
+		                  <select name="buyer_id" class="form-control select2" id="ts_buyer_code" style="width: 100%;" required>
+			                  <option selected="selected" disabled>Buyer Code</option>
+			                  @foreach($buyers as $buyer)
+			                  	<option value="{{$buyer->id}}">{{$buyer->buyer_code}}</option>
+			                  @endforeach
+			                </select>
+		                </div>
+		            </div>
+	              	<div class="col-md-5 buyer_section" style="display:none;">
+		                <div class="form-group">
+		                  <label for="ts_buyer_name">Buyer</label>
+		                  <select class="form-control select2" id="ts_buyer_name" style="width: 100%;" required>
+			                  <option selected="selected" disabled>Select Buyer</option>
+			                  @foreach($buyers as $buyer)
+			                  	<option value="{{$buyer->id}}">{{$buyer->first_name}} {{$buyer->last_name}}</option>
+			                  @endforeach
+			              </select>
+		                </div>
+		            </div>
+            	</form>
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
         <div class="col-xs-12">
           <div class="box box-primary">
             <div class="box-header">
@@ -78,5 +146,44 @@
 
 @endsection
 @push('scripts')
+	<script type="text/javascript">
+		//Toggle Vendor or Buyer
+		$('#toggle_vendor').on('click',function(){
+			$('.vendor_section').show();
+			$('.buyer_section').hide();
+		});
+		$('#toggle_buyer').on('click',function(){
+			$('.buyer_section').show();
+			$('.vendor_section').hide();
+		})
 
+		//Drop down vendor
+		$('#ts_vendor_code').on('change', function() {
+			var oldval = $('#ts_vendor_name').val();
+			var newval = this.value;
+			if(oldval!=newval)
+		  		$('#ts_vendor_name').val(this.value).trigger('change');
+		});
+		$('#ts_vendor_name').on('change', function() {
+			var oldval = $('#ts_vendor_code').val();
+			var newval = this.value;
+			if(oldval!=newval)
+		  		$('#ts_vendor_code').val(this.value).trigger('change');
+		});
+		//Drop down Buyer
+		$('#ts_buyer_code').on('change', function() {
+			var oldval = $('#ts_buyer_name').val();
+			var newval = this.value;
+			if(oldval!=newval)
+		  		$('#ts_buyer_name').val(this.value).trigger('change');
+		});
+		$('#ts_buyer_name').on('change', function() {
+			var oldval = $('#ts_buyer_code').val();
+			var newval = this.value;
+			if(oldval!=newval)
+		  		$('#ts_buyer_code').val(this.value).trigger('change');
+		});
+
+
+	</script>
 @endpush

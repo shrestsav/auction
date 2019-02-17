@@ -219,7 +219,7 @@
 			$('#l_time').val(auction_time);
 			$.ajax({
 		       type:'post',
-		       url:'/get_auction_stocks',
+		       url:'{{ url("/get_auction_stocks") }}',
 		       dataType: 'json',
 		       data:{
 					auction_id:auction_id                 
@@ -251,7 +251,7 @@
 		  		$('#s_vendor_name').val(this.value).trigger('change');
 			$.ajax({
                type:'post',
-               url:'/get_vendor_stocks',
+               url:'{{ url("/get_vendor_stocks") }}',
                dataType: 'json',
                data:{
 					id:newval                 
@@ -326,7 +326,7 @@
 		    	var reserve = $('#l_reserve').val();
 		    	$.ajax({
 	               type:'post',
-	               url:'/save_new_lot',
+	               url:'{{ url("/save_new_lot") }}',
 	               dataType: 'json',
 	               data:{
 						auction_id: auction_id,
@@ -388,7 +388,7 @@
 				const item_no = $(this).closest('tr').children('td.item_no').text();
 				$.ajax({
 	               type:'post',
-	               url:'/remove_lot_from_auction',
+	               url:'{{ url("/remove_lot_from_auction") }}',
 	               dataType: 'json',
 	               data:{
 						vendor_id: vendor_id,

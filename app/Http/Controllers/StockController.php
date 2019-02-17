@@ -19,7 +19,6 @@ class StockController extends Controller
         $vendors = Vendor::select('id','vendor_code','first_name','last_name')->get();
         $stocks = Stock::join('vendors','stocks.vendor_id','=','vendors.id')
                 ->get();
-        // return $stocks;
         return view('backend.pages.stocks',compact('vendors','stocks'));
     }
 
@@ -40,10 +39,25 @@ class StockController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        $validatedData = $request->validate([
+            'vendor_id' => 'required',
+            'commission' => 'required',
+            'form_no' => 'required',
+            'item_no' => 'required',
+            'quantity' => 'required',
+            'description' => 'required',
+            'reserve' => 'required',
+            'date' => 'required',
+        ]);
 
-        $request->merge(['vendor_id' => $request->vendor_name]);
-         $stock = Stock::create($request->all());
+        //Check for Existing form_no and item_no
+        $exists_forms_with_items = Stock::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->exists();
+        
+        if($exists_forms_with_items)
+            return back()->withErrors('Form no and Item no exists already');
+        
+        $stock = Stock::create($request->all());
 
         return back();
     }

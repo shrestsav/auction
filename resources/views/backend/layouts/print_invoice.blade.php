@@ -97,7 +97,7 @@
 
         aside h1 { border: none; border-width: 0 0 1px; margin: 0 0 1em; }
         aside h1 { border-color: #999; border-bottom-style: solid; }
-
+        
         @media print {
           * { -webkit-print-color-adjust: exact; }
           html { background: none; padding: 0; }
