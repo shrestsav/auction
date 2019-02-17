@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace SYSAuction\Http\Controllers;
 use App;
-use App\Sale;
-use App\Vendor;
-use App\Buyer;
+use SYSAuction\Sale;
+use SYSAuction\Vendor;
+use SYSAuction\Buyer;
 
 use Illuminate\Http\Request;
 

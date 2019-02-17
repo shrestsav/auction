@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace SYSAuction\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Buyer;
-use App\State;
-use App\Sale;
+use SYSAuction\Buyer;
+use SYSAuction\State;
+use SYSAuction\Sale;
 
 class BuyerController extends Controller
 {

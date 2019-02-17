@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace SYSAuction\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Auction;
-use App\Stock;
-use App\Vendor;
-use App\Lotting;
+use SYSAuction\Auction;
+use SYSAuction\Stock;
+use SYSAuction\Vendor;
+use SYSAuction\Lotting;
 use Validator;
 
 class LottingController extends Controller

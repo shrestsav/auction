@@ -43,5 +43,3 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('invoices','ReportController@invoices')->name('reports.invoices');
 	Route::get('print_invoice','ReportController@print_invoice')->name('reports.print_invoice');
 });
-
-	// Route::get('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');

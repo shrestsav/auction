@@ -20,21 +20,21 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="https://dummyimage.com/200x200/000/fff.png" class="user-image" alt="User Image">
+              <img src="{{ asset('backend/img/user_default.png') }}" class="user-image" alt="User Image">
               <span class="hidden-xs">{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="https://dummyimage.com/200x200/000/fff.png" class="img-circle" alt="User Image">
+                <img src="{{ asset('backend/img/user_default.png') }}" class="img-circle" alt="User Image">
 
                 <p>
-                  System Manager
+                  System Admin
                   <small></small>
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
+              {{-- <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
                     <a href="#">Profile</a>
@@ -46,8 +46,7 @@
                     <a href="#">Something</a>
                   </div>
                 </div>
-                <!-- /.row -->
-              </li>
+              </li> --}}
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">

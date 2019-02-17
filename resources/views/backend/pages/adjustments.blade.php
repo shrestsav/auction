@@ -4,6 +4,10 @@
 	.modal-title{
 		text-align: center;
 	}
+  .show_states a:hover h5{
+    color: green !important;
+    cursor: pointer;
+  }
 </style>
 @endpush
 @section('content')
@@ -18,12 +22,16 @@
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header bg-yellow">
               <div class="widget-user-image">
-                <img class="img-circle" src="https://dummyimage.com/200x200/000/fff.png" alt="User Avatar">
+                <img class="img-circle" src="{{ asset('backend/img/globe.png') }}" alt="User Avatar">
               </div>
               <!-- /.widget-user-image -->
+              <div class="show_states">
+                <a data-toggle="modal" data-target="#show_states"><h5 class="pull-right" style="float: left; color: white;">Show All</h5></a>
+              </div>
               <h3 class="widget-user-username">State</h3>
+
               <h5 class="widget-user-desc">Add New</h5>
-              <a data-toggle="modal" data-target="#show_states"><h5 class="pull-right" style="float: left;">Show All</h4></a>
+              
             {{--   <div class="box-tools pull-right">
 
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>

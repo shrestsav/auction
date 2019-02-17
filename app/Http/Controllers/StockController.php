@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
-use App\Vendor;
-use App\Stock;
+namespace SYSAuction\Http\Controllers;
+use SYSAuction\Vendor;
+use SYSAuction\Stock;
 
 
 use Illuminate\Http\Request;

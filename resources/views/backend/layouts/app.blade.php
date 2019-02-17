@@ -85,7 +85,6 @@
 <script src="{{ asset('backend/js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('backend/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('backend/js/sweetalert.min.js') }}"></script>
-{{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace SYSAuction\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\UserSetting;
+use SYSAuction\UserSetting;
 use Auth;
 
 class HomeController extends Controller
