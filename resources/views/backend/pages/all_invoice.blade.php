@@ -65,7 +65,6 @@
 		                  	<?php $id = ["invoice_id"=>$invoice_sum->invoice_id]; ?>
 		                  	<a href="{{route('reports.print_invoice', $id)}}" target="_blank"><i class="fa fa-print"></i></a></th>
 					</tr>
-					
 					<?php $count++; ?>
 					@endforeach
 				</tbody>

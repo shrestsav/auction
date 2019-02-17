@@ -17,6 +17,5 @@ class AdjustmentController extends Controller
     	]);
     	$state = State::Create($request->all());
     	return back();
-    }
-
+	}
 }
