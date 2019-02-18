@@ -1,5 +1,4 @@
-# auction
-Auction Management System in Laravel
+# Auction Management System in Laravel
 
 Instructions
 
