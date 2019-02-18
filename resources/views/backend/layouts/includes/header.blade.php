@@ -1,7 +1,7 @@
     <!-- Logo -->
     <a href="{{url('/')}}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>CN</span>
+      <span class="logo-mini"><b>SA</b>TA</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>SYS</b>Auction</span>
     </a>
