@@ -5,6 +5,9 @@ namespace SYSAuction\Http\Controllers;
 use Illuminate\Http\Request;
 use SYSAuction\UserSetting;
 use Auth;
+use SYSAuction\Vendor;
+use SYSAuction\Buyer;
+use SYSAuction\Auction;
 
 class HomeController extends Controller
 {
@@ -33,7 +36,13 @@ class HomeController extends Controller
         
         session(['theme_sidebar' => $theme_sidebar]);
 
-        return view('backend.pages.dashboard');
+
+        // Charts Data on Dashboard
+
+        $buyers = Buyer::all()->count();
+        $vendors = Vendor::all()->count();
+        $auctions = Auction::all()->count();
+        return view('backend.pages.dashboard',compact('buyers','auctions','vendors'));
 
     }
 

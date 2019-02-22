@@ -272,96 +272,17 @@
 
 @endsection
 
-@push('modals')
-	<div class="modal fade vendor_stocks" id="generate_invoice">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Invoice</h4>
-          </div>
-          <div class="modal-body">
-          	<div class="box-body">
-	          	<div class="col-md-2">
-	                <div class="form-group">
-	                  <label for="g_invoice_no">Invoice No</label>
-	                  <input type="number" class="form-control" id="g_invoice_no" placeholder="">
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="form-group">
-	                  <label for="g_buyer_code">Buyer Code</label>
-	                  <input type="text" class="form-control" id="g_buyer_code" placeholder="">
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="form-group">
-	                  <label for="g_buyer_name">Name</label>
-	                  <input type="text" class="form-control" id="g_buyer_name" placeholder="">
-	                </div>
-	            </div>
-	            <div class="col-md-4" style="margin: 60px 0px 0px 0px;">
-		            <table class="table table-hover invoice_table">
-					    <tr>
-					    	<td>Total</td>
-					    	<td class="g_total"></td>
-					    </tr>
-					    <tr>
-					    	<td>Discount</td>
-					    	<td class="g_discount"></td>
-					    </tr>
-					    <tr>
-					    	<td>Net Total</td>
-					    	<td class="g_net_total"></td>
-					    </tr>
-					    <tr>
-					    	<td>Buyers Premium Amount</td>
-					    	<td class="g_buyers_premium_amount"></td>
-					    </tr>
-					    <tr>
-					    	<td>Grand Total</td>
-					    	<td class="g_grand_total"></td>
-					    </tr>
-		            </table>
-	            </div>
-	        </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="window.print()">Print Invoice</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-@endpush
-
 @push('scripts')
 
 <script src="{{ asset('backend/js/jquery.sumtr.js') }}"></script>
 	<script type="text/javascript">
+
 		//CSRF TOKEN HAS BEEN SENT IN HEADER FILE IN APP BLADE
+
 		$('body').on('click','.generate_invoice',function(e){
 			e.preventDefault();
-			$(".added_items_div").show();
 			var g_invoice_no = $('#a_invoice_no').val();
-			var g_buyer_name = $('#a_buyer_name option:selected').text();
-			var g_buyer_code = $('#a_buyer_code option:selected').text();
-			var g_total = $('.total_total').text();
-			var g_discount = $('.total_discount').text();
-			var g_net_total = $('.total_net_total').text();
-			var g_buyers_premium_amount = $('.total_buyers_premium_amount').text();
-			var g_grand_total = $('.total_grand_total').text();
-			$('.modal-body #g_invoice_no').val(g_invoice_no);
-			$('.modal-body #g_buyer_name').val(g_buyer_name);
-			$('.modal-body #g_buyer_code').val(g_buyer_code);
-			$('.modal-body .g_total').text(g_total);
-			$('.modal-body .g_discount').text(g_discount);
-			$('.modal-body .g_net_total').text(g_net_total);
-			$('.modal-body .g_buyers_premium_amount').text(g_buyers_premium_amount);
-			$('.modal-body .g_grand_total').text(g_grand_total);
-			$('#generate_invoice').modal('show');
+        	window.open("{{route('reports.print_invoice')}}?invoice_id="+g_invoice_no,"_blank","toolbar,scrollbars,resizable,top=60,left=100,width=950,height=600");
 		});
 
 
