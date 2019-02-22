@@ -1,10 +1,10 @@
 <?php
 
-namespace SYSAuction\Http\Controllers;
+namespace App\Http\Controllers;
 use App;
-use SYSAuction\Sale;
-use SYSAuction\Vendor;
-use SYSAuction\Buyer;
+use App\Sale;
+use App\Vendor;
+use App\Buyer;
 
 use Illuminate\Http\Request;
 
@@ -70,7 +70,7 @@ class ReportController extends Controller
 
     public function print_invoice(Request $request){
 
-        $buyer_info = Sale::select('buyers.buyer_code','buyers.first_name','buyers.last_name','buyers.address'                      ,'buyers.state','buyers.mobile')
+        $buyer_info = Sale::select('buyers.buyer_code','buyers.first_name','buyers.last_name','buyers.address','buyers.state','buyers.mobile')
                             ->join('buyers','buyers.id','sales.buyer_id')
                             ->where('invoice_id',$request->invoice_id)
                             ->groupBy('buyer_code')

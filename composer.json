@@ -33,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SYSAuction\\": "app/"
+            "App\\": "app/"
         },
         "classmap": [
             "database/seeds",

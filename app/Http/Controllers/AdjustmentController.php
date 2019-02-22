@@ -1,9 +1,9 @@
 <?php
 
-namespace SYSAuction\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use SYSAuction\State;
+use App\State;
 
 class AdjustmentController extends Controller
 {

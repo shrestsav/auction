@@ -1,13 +1,13 @@
 <?php
 
-namespace SYSAuction\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use SYSAuction\UserSetting;
+use App\UserSetting;
 use Auth;
-use SYSAuction\Vendor;
-use SYSAuction\Buyer;
-use SYSAuction\Auction;
+use App\Vendor;
+use App\Buyer;
+use App\Auction;
 
 class HomeController extends Controller
 {

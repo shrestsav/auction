@@ -1,11 +1,11 @@
 <?php
 
-namespace SYSAuction\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use SYSAuction\Vendor;
-use SYSAuction\State;
-use SYSAuction\Stock;
+use App\Vendor;
+use App\State;
+use App\Stock;
 
 class VendorController extends Controller
 {
