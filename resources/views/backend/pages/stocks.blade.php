@@ -16,6 +16,11 @@
                 </ul>
             </div>
           @endif
+		  @if (\Session::has('message'))
+	        <div class="alert alert-success custom_success_msg">
+	            {{ \Session::get('message') }}
+	        </div>
+	      @endif
         </div>
       	<div class="col-md-12">
           <!-- general form elements -->
@@ -136,6 +141,7 @@
 		                <th>Reserve</th>
 		                <th>Sold</th>
 		                <th>Date</th>
+		                <th>Action</th>
 	                </tr>
 	            <?php $count=1; ?>
                 @foreach($stocks as $stock)
@@ -149,6 +155,14 @@
 	                  <td>{{$stock->reserve}}</td>
 	                  <td>{{$stock->sold}}</td>
 	                  <td>{{$stock->date}}</td>
+	                  <td>
+						<form role="form" method="destroy" action="{{route('stocks.destroy',$stock->id)}}">
+							<button type="submit"><i class="fa fa-pencil"></i></button>
+						</form>
+							
+							&nbsp; &nbsp; 
+							<i class="fa fa-remove"></i>
+					   </td>
 	                </tr>
 	              <?php $count++; ?>
                 @endforeach

@@ -44,6 +44,7 @@ class BuyerController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+        'buyer_code' => 'required|unique:buyers',
         'first_name' => 'required',
         'last_name' => 'required',
         'buyers_premium' => 'required',
@@ -52,17 +53,10 @@ class BuyerController extends Controller
         'state' => 'required',
         'postcode' => 'required',
         ]);
-        // Generate Buyer Code
-        $Ids = Buyer::all();
-        // return $request->buyers_premium;
-        if(count($Ids))
-            $id = $Ids->last()->id + 1;
-        else
-            $id = 1;
-        $request->merge(['buyer_code' => 'B'.$id]);
+
         $buyer = Buyer::create($request->all());
 
-        return back();
+        return back()->with('message','Buyer Added Successfully');
     }
 
     /**

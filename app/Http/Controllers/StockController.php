@@ -59,7 +59,7 @@ class StockController extends Controller
         
         $stock = Stock::create($request->all());
 
-        return back();
+        return back()->with('message','Stocks Added Successfully');
     }
 
     /**
@@ -70,7 +70,7 @@ class StockController extends Controller
      */
     public function show($id)
     {
-        //
+        return 'show';
     }
 
     /**
@@ -81,7 +81,7 @@ class StockController extends Controller
      */
     public function edit($id)
     {
-        //
+        return 'edit';
     }
 
     /**
@@ -93,7 +93,7 @@ class StockController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return 'update';
     }
 
     /**
@@ -104,6 +104,6 @@ class StockController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return 'destroy';
     }
 }

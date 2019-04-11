@@ -48,6 +48,7 @@ class VendorController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+        'vendor_code' => 'required|unique:vendors',
         'first_name' => 'required',
         'last_name' => 'required',
         'joined_date' => 'required',
@@ -59,17 +60,10 @@ class VendorController extends Controller
         'state' => 'required',
         'postcode' => 'required',
         ]);
-        // Generate Vendor Code
-        $Ids = Vendor::all();
         
-        if(count($Ids))
-            $id = $Ids->last()->id + 1;
-        else
-            $id = 1;
-        $request->merge(['vendor_code' => 'V'.$id]);
         $vendor = Vendor::create($request->all());
 
-        return back();
+        return back()->with('message','Vendor Added Successfully');
     }
 
     /**

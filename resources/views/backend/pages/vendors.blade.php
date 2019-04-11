@@ -17,6 +17,11 @@
 		        </ul>
 		    </div>
 		  @endif
+		  @if (\Session::has('message'))
+	        <div class="alert alert-success custom_success_msg">
+	            {{ \Session::get('message') }}
+	        </div>
+	      @endif
           <!-- general form elements -->
           <div class="box box-success collapsed-box">
             <div class="box-header with-border">
@@ -30,13 +35,19 @@
             <div class="box-body">
             	<form role="form" method="POST" action="{{route('vendors.store')}}">
             	@csrf
-	              	<div class="col-md-6">
+	              	<div class="col-md-2">
+		                <div class="form-group">
+		                  <label for="v_vendor_code">Vendor Code *</label>
+		                  <input type="text" name="vendor_code" class="form-control" id="v_vendor_code" placeholder="Enter Vendor Code" required>
+		                </div>
+		            </div>
+		            <div class="col-md-5">
 		                <div class="form-group">
 		                  <label for="v_first_name">First Name *</label>
 		                  <input type="text" name="first_name" class="form-control" id="v_first_name" placeholder="Enter First Name" required>
 		                </div>
 		            </div>
-		            <div class="col-md-6">
+		            <div class="col-md-5">
 		                <div class="form-group">
 		                  <label for="v_last_name">Last Name *</label>
 		                  <input type="text" name="last_name" class="form-control" id="v_last_name" placeholder="Enter Last Name" required>

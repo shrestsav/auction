@@ -17,6 +17,11 @@
 		        </ul>
 		    </div>
 		  @endif
+		  @if (\Session::has('message'))
+	        <div class="alert alert-success custom_success_msg">
+	            {{ \Session::get('message') }}
+	        </div>
+	      @endif
           <div class="box box-success collapsed-box">
             <div class="box-header with-border">
               <h3 class="box-title">Add Buyer</h3>
@@ -30,13 +35,19 @@
 	            <!-- form start -->
 	            <form role="form" method="POST" action="{{route('buyers.store')}}">
 	            	@csrf
-	              	<div class="col-md-6">
+	              	<div class="col-md-2">
+		                <div class="form-group">
+		                  <label for="b_buyer_code">Buyer Code *</label>
+		                  <input type="text" name="buyer_code" class="form-control" id="b_buyer_code" placeholder="Enter Buyer Code" required>
+		                </div>
+		            </div>
+		            <div class="col-md-5">
 		                <div class="form-group">
 		                  <label for="b_first_name">First Name *</label>
 		                  <input type="text" name="first_name" class="form-control" id="b_first_name" placeholder="Enter First Name" required>
 		                </div>
 		            </div>
-		            <div class="col-md-6">
+		            <div class="col-md-5">
 		                <div class="form-group">
 		                  <label for="b_last_name">Last Name *</label>
 		                  <input type="text" name="last_name" class="form-control" id="b_last_name" placeholder="Enter Last Name" required>
