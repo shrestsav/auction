@@ -17,8 +17,18 @@ class StockController extends Controller
     public function index()
     {
         $vendors = Vendor::select('id','vendor_code','first_name','last_name')->get();
-        $stocks = Stock::join('vendors','stocks.vendor_id','=','vendors.id')
-                ->get();
+        $stocks = Stock::select(
+                                'stocks.id',
+                                'stocks.form_no',
+                                'stocks.item_no',
+                                'stocks.description',
+                                'stocks.quantity',
+                                'stocks.reserve',
+                                'stocks.sold',
+                                'stocks.date',
+                                'vendors.vendor_code')
+                            ->join('vendors','stocks.vendor_id','=','vendors.id')
+                            ->get();
         return view('backend.pages.stocks',compact('vendors','stocks'));
     }
 
@@ -81,7 +91,23 @@ class StockController extends Controller
      */
     public function edit($id)
     {
-        return 'edit';
+        
+       $stocks = Stock::select(
+                                'stocks.id',
+                                'stocks.form_no',
+                                'stocks.item_no',
+                                'stocks.description',
+                                'stocks.commission',
+                                'stocks.quantity',
+                                'stocks.reserve',
+                                'stocks.sold',
+                                'stocks.date',
+                                'vendors.vendor_code')
+                            ->join('vendors','stocks.vendor_id','=','vendors.id')
+                            ->first();
+
+        return view('backend.pages.stocks.edit_stocks',compact('stocks'));
+
     }
 
     /**
@@ -93,7 +119,25 @@ class StockController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return 'update';
+        $validatedData = $request->validate([
+            'date' => 'required',
+            'form_no' => 'required',
+            'item_no' => 'required',
+            'commission' => 'required',
+            'quantity' => 'required',
+            'reserve' => 'required',
+            'description' => 'required'
+        ]);
+        $stocks = Stock::where('id',$id)
+                       ->update(['date' => $request->date, 
+                                'form_no' => $request->form_no,
+                                'item_no' => $request->item_no,
+                                'commission' => $request->commission,
+                                'quantity' => $request->quantity,
+                                'reserve' => $request->reserve,
+                                'description' => $request->description,
+                                 ]);
+        return redirect(route('stocks.index'))->with('message','Stocks Updated Successfully');
     }
 
     /**

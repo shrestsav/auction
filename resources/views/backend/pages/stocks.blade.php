@@ -146,23 +146,18 @@
 	            <?php $count=1; ?>
                 @foreach($stocks as $stock)
 	                <tr>
-	                  <td>{{$count}}</td>
-	                  <td>{{$stock->vendor_code}}</td>
-	                  <td>{{$stock->form_no}}</td>
-	                  <td>{{$stock->item_no}}</td>
-	                  <td>{{$stock->description}}</td>
-	                  <td>{{$stock->quantity}}</td>
-	                  <td>{{$stock->reserve}}</td>
-	                  <td>{{$stock->sold}}</td>
-	                  <td>{{$stock->date}}</td>
-	                  <td>
-						<form role="form" method="destroy" action="{{route('stocks.destroy',$stock->id)}}">
-							<button type="submit"><i class="fa fa-pencil"></i></button>
-						</form>
-							
-							&nbsp; &nbsp; 
-							<i class="fa fa-remove"></i>
-					   </td>
+                		<td>{{$count}}</td>
+                		<td>{{$stock->vendor_code}}</td>
+                		<td>{{$stock->form_no}}</td>
+                		<td>{{$stock->item_no}}</td>
+                		<td>{{$stock->description}}</td>
+                		<td>{{$stock->quantity}}</td>
+                		<td>{{$stock->reserve}}</td>
+                		<td>{{$stock->sold}}</td>
+                		<td>{{$stock->date}}</td>
+                		<td>		
+							<a href="{{url('stocks/'.$stock->id.'/edit')}}"><i class="fa fa-pencil"></i></a>
+						</td>
 	                </tr>
 	              <?php $count++; ?>
                 @endforeach
