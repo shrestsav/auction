@@ -78,7 +78,7 @@
 		           		<div class="col-md-2">
 			                <div class="form-group">
 			                  <label for="a_invoice_no">Invoice No</label>
-			                  <input type="number" class="form-control" id="a_invoice_no" placeholder="Invoice No" required>
+			                  <input type="number" class="form-control" id="a_invoice_no" placeholder="Invoice No" required readonly>
 			                </div>
 			            </div>
 			            <div class="col-md-2">
@@ -351,6 +351,8 @@
 			var newval = this.value;
 			if(oldval!=newval)
 		  		$('#a_buyer_name').val(this.value).trigger('change');
+		  	$("#a_invoice_no").prop("readonly", false);
+
 		});
 		$('#a_buyer_name').on('change', function(e) {
 			e.preventDefault();
@@ -358,6 +360,39 @@
 			var newval = this.value;
 			if(oldval!=newval)
 		  		$('#a_buyer_code').val(this.value).trigger('change');
+		});
+
+		//Check if Invoice Number already exists in database
+		$("#a_invoice_no").on('change',function(e){
+			e.preventDefault();
+			var buyer_id = $('#a_buyer_code').val();
+			var invoice_id = $(this).val();
+			$.ajax({
+			       type:'post',
+			       url:'{{ url("/check_invoice") }}',
+			       dataType: 'json',
+			       data:{
+						buyer_id: buyer_id,
+						invoice_id: invoice_id
+			      	},
+			       success:function(data) {
+			       		console.log(data['success']);
+			       		if(data['success']){
+				       		$('.alert-danger').hide();
+							$('.alert-success').show().html(data['success']);
+						}
+						if(data==false){
+							$('.alert-success').hide();
+							$('.alert-danger').hide();
+						}	
+	 				},
+					error: function(response){
+						$.each(response.responseJSON, function(index, val){
+							$('.alert-success').hide();
+							$('.alert-danger').show().html(val);	
+						});
+					}
+			    });
 		});
 
 		// Calculations

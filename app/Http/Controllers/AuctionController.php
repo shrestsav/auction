@@ -178,6 +178,11 @@ class AuctionController extends Controller
             return response()->json(['error'=>'You have already added the item, You may want to edit it instead'],401);
         }
 
+        $existing_invoice = Sale::where('invoice_id','=',$request->invoice_id)->where('buyer_id','!=',$request->buyer_id);
+
+        if($existing_invoice->exists())
+            return response()->json(['error'=>'You cannot Used this invoice number'],401);
+
         // Check for Left Item
         $stocks = Lotting::select('quantity','sold')->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->get()->toArray();
         $left_stocks = $stocks[0]['quantity'] - $stocks[0]['sold'];
@@ -187,6 +192,7 @@ class AuctionController extends Controller
             return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
 
         $item = Sale::create($request->all());
+        
         // Update Stocks Sold Attribute in Stock and Lotting Table
         $stocks = Stock::where('vendor_id',$request->vendor_id)
                             ->where('form_no',$request->form_no)
@@ -206,6 +212,18 @@ class AuctionController extends Controller
         else
             $lottings->update(['sold'=>$request->quantity]);
         return response()->json(['success'=>'Item has been added successfully']);
+    }
+
+    public function ajax_check_invoice(Request $request){
+        $invoice = Sale::where('invoice_id','=',$request->invoice_id);
+        if($invoice->exists()){
+            $invoice_buyer = $invoice->where('buyer_id','=',$request->buyer_id);
+            if($invoice_buyer->exists()){
+                return response()->json(['success'=>'Invoice number for selected buyer already exists, you can continue using the same invoice number or change it']);
+            }
+            return response()->json(['error'=>'You cannot use this invoice number, it already exists'],401);
+        }
+        return response()->json(false);
     }
 
 }
