@@ -5,6 +5,7 @@ use App;
 use App\Sale;
 use App\Vendor;
 use App\Buyer;
+use Validator;
 
 use Illuminate\Http\Request;
 
@@ -73,7 +74,7 @@ class ReportController extends Controller
         $buyer_info = Sale::select('buyers.buyer_code','buyers.first_name','buyers.last_name','buyers.address','buyers.state','buyers.mobile')
                             ->join('buyers','buyers.id','sales.buyer_id')
                             ->where('invoice_id',$request->invoice_id)
-                            ->groupBy('buyer_code')
+                            ->groupBy('buyers.buyer_code','buyers.first_name','buyers.last_name','buyers.address','buyers.state','buyers.mobile')
                             ->get();
 
         $invoice_id = $request->invoice_id;
@@ -89,5 +90,46 @@ class ReportController extends Controller
 
         return view('backend.layouts.print_invoice',compact('invoices','buyer_info','invoice_id'));
         
+    }
+    public function ajax_invoice_report(Request $request){
+        $rule = [
+                'type' => 'required'
+                ];
+        $msg = [
+                'type.required' => 'Type not Defined'
+               ];
+
+        $validate = Validator::make($request->all(), $rule, $msg);
+        if($validate->fails()){
+            return response($validate->errors(),401);
+        }
+
+        $report = Sale::select('sales.form_no as form_no',
+                            'sales.item_no as item_no',
+                            'sales.invoice_id',
+                            'sales.rate as rate',
+                            'sales.quantity as quantity',
+                            'sales.discount as discount',
+                            'sales.buyers_premium_amount as buyers_premium_amount',
+                            'vendors.vendor_code',
+                            'auctions.auction_no',
+                            'buyers.buyer_code',
+                            'stocks.commission',
+                            'lottings.description as description')
+                        ->join('vendors','vendors.id','=','sales.vendor_id')
+                        ->join('buyers','buyers.id','=','sales.buyer_id')
+                        ->join('auctions','auctions.id','=','sales.auction_id')
+                        ->join('lottings','lottings.id','=','sales.lotting_id')
+                        ->join('stocks','lottings.stock_id','=','stocks.id');
+                        
+        if($request->type=='vendor_report'){
+            $report = $report->where('sales.vendor_id','=',$request->vendor_id)
+                             ->get();
+        }
+        elseif($request->type=='buyer_report'){
+            $report = $report->where('sales.buyer_id','=',$request->buyer_id)
+                             ->get();
+        }
+        return response()->json($report);
     }
 }

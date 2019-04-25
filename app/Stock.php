@@ -12,4 +12,9 @@ class Stock extends Model
     {
     	return $this->belongsTo(Vendor::class);
     }
+
+    public function lotting()
+    {
+    	return $this->hasMany(Lotting::class);
+    }
 }

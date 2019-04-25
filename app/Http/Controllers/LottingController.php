@@ -17,7 +17,7 @@ class LottingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
         $auctions =  Auction::all();
         $stocks = Stock::all();
         $vendor_with_stocks_id = Stock::select('vendor_id')->get()->toArray();        
@@ -101,18 +101,35 @@ class LottingController extends Controller
     public function ajax_get_vendor_stocks(Request $request)
     {
         $id = $request->id;
-        $vendor_stocks = Vendor::find($id)->stock;
-        // return $vendor_stocks;
-        $added_stocks = Lotting::pluck('stock_id')->toArray();
-        return response()->json(['vendor_stocks'=>$vendor_stocks, 'added_stocks'=>$added_stocks]);
+        $auction_id = $request->auction_id;
+        $vendor_stocks = Stock::where('stocks.vendor_id','=',$id)
+                              ->with(['lotting','lotting.sale'])
+                              ->get();
+        $added_stocks = Lotting::where('auction_id',$auction_id)->pluck('stock_id')->toArray();
+        return response()->json([
+                                'vendor_stocks'=>$vendor_stocks, 
+                                'added_stocks'=>$added_stocks,
+                                'test'=>$request->all()]);
     }
 
     public function ajax_get_auction_stocks(Request $request)
     {
-        $existing_stocks = Lotting::select('lottings.id','lottings.vendor_id','vendors.vendor_code','vendors.first_name','vendors.last_name','lottings.lot_no','lottings.form_no','lottings.item_no','lottings.description','lottings.quantity','lottings.reserve','lottings.sold')
-                        ->where('auction_id',$request->auction_id)
-                        ->join('vendors','lottings.vendor_id','=','vendors.id')
-                        ->get();
+        $existing_stocks = Lotting::select('lottings.id',
+                                       'lottings.vendor_id',
+                                       'vendors.vendor_code',
+                                       'vendors.first_name',
+                                       'vendors.last_name',
+                                       'lottings.lot_no',
+                                       'lottings.form_no',
+                                       'lottings.item_no',
+                                       'lottings.description',
+                                       'lottings.quantity',
+                                       'lottings.reserve',
+                                       'lottings.sold')
+                                    ->where('auction_id',$request->auction_id)
+                                    ->join('vendors','lottings.vendor_id','=','vendors.id')
+                                    ->with(['sale'])
+                                    ->get();
         if(count($existing_stocks))
             return $existing_stocks;
         return response()->json(['error'=>'No Stocks in Auction'],401);

@@ -18,8 +18,8 @@ class CreateStocksTable extends Migration
             $table->integer('vendor_id')->unsigned()->index();
             $table->integer('commission');
             $table->string('form_no');
-            $table->string('lot_no')->nullable(); // Confusion
             $table->string('item_no');
+            $table->string('lot_no')->nullable(); // Confusion
             $table->integer('quantity');
             $table->string('description');
             $table->integer('reserve');

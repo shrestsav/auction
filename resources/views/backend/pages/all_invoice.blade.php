@@ -8,26 +8,13 @@
 @endpush
 @section('content')
 
-   <!-- Main content -->
     <section class="content">
-      <!-- /.row -->
       <div class="row">
         <div class="col-xs-12">
           <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title">List of Invoices</h3>
-
-              {{-- <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div> --}}
             </div>
-            <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
               	<thead>
@@ -55,14 +42,16 @@
 						<th>$ {{$invoice_sum->total_sum}}</th>
 						<th>$ {{$invoice_sum->discount_sum}}</th>
 						<th>$ {{$invoice_sum->net_total_sum}}</th>
-						<th>$ <?php echo round($invoice_sum->buyers_premium_amount_sum,6); ?></th>
-						<th>$ <?php echo round($invoice_sum->grand_total_sum,6); ?></th>
+						<th>$ {{round($invoice_sum->buyers_premium_amount_sum,6)}}</th>
+						<th>$ {{round($invoice_sum->grand_total_sum,6)}}</th>
 						<th>
 							<a href="#" data-toggle="modal" data-target="#invoice_{{$invoice_sum->invoice_id}}">
 		                  		<i class="fa fa-eye"></i>
 		                  	</a>
 		                  	&nbsp;&nbsp;
-		                  	<?php $id = ["invoice_id"=>$invoice_sum->invoice_id]; ?>
+		                  	@php 
+		                  		$id = ["invoice_id"=>$invoice_sum->invoice_id]; 
+		                  	@endphp
 		                  	<a href="{{route('reports.print_invoice', $id)}}" target="_blank"><i class="fa fa-print"></i></a></th>
 					</tr>
 					<?php $count++; ?>
@@ -71,13 +60,10 @@
 				
 			  </table>
             </div>
-            <!-- /.box-body -->
           </div>
-          <!-- /.box -->
         </div>
       </div>
     </section>
-    <!-- /.content -->
 
   @foreach($unique_invoices as $unique_invoice)  
 	<div class="modal fade invoice_details_modal" id="invoice_{{$unique_invoice->invoice_id}}">
@@ -136,9 +122,7 @@
             </div>
           </div>
         </div>
-        <!-- /.modal-content -->
       </div>
-      <!-- /.modal-dialog -->
     </div>
 @endforeach
 

@@ -49,4 +49,5 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('total_sales','ReportController@total_sales')->name('reports.sales');
 	Route::get('invoices','ReportController@invoices')->name('reports.invoices');
 	Route::get('print_invoice','ReportController@print_invoice')->name('reports.print_invoice');
+	Route::post('ajax_invoice_report','ReportController@ajax_invoice_report')->name('reports.ajax_invoice_report');
 });

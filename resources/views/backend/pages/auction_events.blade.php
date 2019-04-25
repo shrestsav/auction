@@ -486,9 +486,24 @@
 			       		$('.added_items_div').show();
 	               		$('.alert-success').show().html('ITEM ADDED SUCCESSFULLY');
 	               		console.log(data);
-	               		$('.added_items_table tbody').append('<tr class="added_items_body" data-buyer-id="'+buyer_id+'" data-vendor-id="'+vendor_id+'" data-invoice-id="'+invoice_id+'"><td class="vendor_code">S.No</td><td class="invoice_id">'+invoice_id+'</td><td class="vendor_code">'+vendor_code+'</td><td class="item_no">'+item_no+'</td><td class="form_no">'+form_no+'</td><td class="description">'+description+'</td><td class="rate">'+rate+'</td><td class="quantity">'+quantity+'</td><td class="total price">'+total+'</td><td class="discount price">'+discount+'</td><td class="net_total price">'+net_total+'</td><td class="buyers_premium_amount price">'+buyers_premium_amount+'</td><td class="grand_total price">'+grand_total+'</td><td><div class="remove_item"><i class="fa fa-window-close text-red" aria-hidden="true"></i></div></td></tr>');
-	             
-	               		
+	               		var row = '';
+	               		row += '<tr class="added_items_body" data-buyer-id="'+buyer_id+'" data-vendor-id="'+vendor_id+'" data-invoice-id="'+invoice_id+'">';
+	               		row += '<td class="vendor_code">S.No</td>';
+	               		row += '<td class="invoice_id">'+invoice_id+'</td>';
+	               		row += '<td class="vendor_code">'+vendor_code+'</td>';
+	               		row += '<td class="item_no">'+item_no+'</td>';
+	               		row += '<td class="form_no">'+form_no+'</td>';
+	               		row += '<td class="description">'+description+'</td>';
+	               		row += '<td class="rate">'+rate+'</td>';
+	               		row += '<td class="quantity">'+quantity+'</td>';
+	               		row += '<td class="total price">'+total+'</td>';
+	               		row += '<td class="discount price">'+discount+'</td>';
+	               		row += '<td class="net_total price">'+net_total+'</td>';
+	               		row += '<td class="buyers_premium_amount price">'+buyers_premium_amount+'</td>';
+	               		row += '<td class="grand_total price">'+grand_total+'</td>';
+	               		row += '<td><div class="remove_item"><i class="fa fa-window-close text-red" aria-hidden="true"></i></div></td>';
+	               		row += '</tr>';
+	               		$('.added_items_table tbody').append(row);
 	               		$('.added_items_table').sumtr({sumCells : '.price'});
 	 				},
 					error: function(response){
