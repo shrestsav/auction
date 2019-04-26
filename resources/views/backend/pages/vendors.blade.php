@@ -179,18 +179,7 @@
           <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title">List of Vendors</h3>
-
-             {{--  <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div> --}}
             </div>
-            <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
 	                <tr>
@@ -209,77 +198,69 @@
 	                  <td><span class="label label-success">{{$vendor->joined_date}}</span></td>
 	                  <td>{{$vendor->address}}</td>
 	                  <td>
-	                  	@foreach($vendors_with_stocks as $vendor_with_stock)
-		                  	@if($vendor_with_stock->vendor_id==$vendor->id)
-			                  	<a href="#" data-toggle="modal" data-target="#vendor_stocks_{{$vendor->id}}">
-			                  		<i class="fa fa-dot-circle-o"></i>
-			                  	</a>
-		                  	@endif
-	                  	@endforeach
+	                  	@if(count($vendor->stock))
+	                  		<a href="#" data-toggle="modal" data-target="#vendor_stocks_{{$vendor->id}}">
+			                  	<i class="fa fa-dot-circle-o"></i>
+			                </a>
+
+						 	
+							<div class="modal fade vendor_stocks_modal" id="vendor_stocks_{{$vendor->id}}">
+						      <div class="modal-dialog">
+						        <div class="modal-content">
+						          <div class="modal-header">
+						            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						              <span aria-hidden="true">&times;</span></button>
+						            <h4 class="modal-title">Stocks</h4>
+						          </div>
+						          <div class="modal-body">
+						            <table class="table table-hover">
+						                <tr>
+						                	<th>S.No</th>
+							                <th>Form No</th>
+							                <th>Item No</th>
+							                <th>Description</th>
+							                <th>Quantity</th>
+							                <th>Reserve</th>
+							                <th>Sold</th>
+						                </tr>
+						            @php $count = 1; @endphp
+						            @foreach($vendor->stock as $stock)
+						            	@php $total_sales = 0; @endphp
+						            	@if(count($stock->lotting))
+						            		@foreach($stock->lotting as $lotting)
+						            			@if(count($lotting->sale))
+						            				@foreach($lotting->sale as $sale)
+						            					@php $total_sales += $sale->quantity; @endphp
+						            				@endforeach
+						            			@endif
+						            		@endforeach
+						            	@endif
+						                <tr>
+						                  <td>{{$count}}</td>
+						                  <td>{{$stock->form_no}}</td>
+						                  <td>{{$stock->item_no}}</td>
+						                  <td>{{$stock->description}}</td>
+						                  <td>{{$stock->quantity}}</td>
+						                  <td>{{$stock->reserve}}</td>
+						                  <td>{{$total_sales}}</td>
+						                </tr>
+							         @php  $count++; @endphp
+						            @endforeach
+						          </table>
+						          </div>
+						        </div>
+						      </div>
+						    </div>
+	                  	@endif
 	                  </td>
 	                </tr>
                 @endforeach
               </table>
             </div>
-            <!-- /.box-body -->
           </div>
-          <!-- /.box -->
         </div>
       </div>
     </section>
-    <!-- /.content -->
 
- @foreach($vendors_with_stocks as $vendor_with_stock)
- 	<?php $vendorId = $vendor_with_stock->vendor_id; ?>
- 	
-	<div class="modal fade vendor_stocks_modal" id="vendor_stocks_{{$vendorId}}">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Stocks</h4>
-          </div>
-          <div class="modal-body">
-            <table class="table table-hover">
-                <tr>
-                	<th>S.No</th>
-	                <th>Form No</th>
-	                <th>Item No</th>
-	                <th>Description</th>
-	                <th>Quantity</th>
-	                <th>Reserve</th>
-	                <th>Sold</th>
-	                {{-- <th>Action</th> --}}
-                </tr>
-            <?php $count=1; ?>
-            @foreach($stocks as $stock)
-            	@if($stock->vendor_id==$vendorId)
-	                <tr>
-	                  <td>{{$count}}</td>
-	                  <td>{{$stock->form_no}}</td>
-	                  <td>{{$stock->item_no}}</td>
-	                  <td>{{$stock->description}}</td>
-	                  <td>{{$stock->quantity}}</td>
-	                  <td>{{$stock->reserve}}</td>
-	                  <td>{{$stock->sold}}</td>
-	                  {{-- <td><i class="fa fa-pencil"></i> &nbsp; &nbsp; <i class="fa fa-remove"></i></td> --}}
-	                </tr>
-	            <?php  $count++; ?>
-	            @endif
-	       
-            @endforeach
 
-          </table>
-          </div>
-          {{-- <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div> --}}
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
- @endforeach
 @endsection

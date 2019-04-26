@@ -20,13 +20,10 @@ class VendorController extends Controller
     }
 
     public function index()
-    {
-            
-        $vendors = Vendor::select('id','vendor_code','first_name','last_name','joined_date','address','mobile')->get();
+    {   
+        $vendors = Vendor::with(['stock.lotting.sale'])->get();
         $states = State::all();
-        $stocks = Stock::orderBy('vendor_id')->get();
-        $vendors_with_stocks = Stock::select('vendor_id')->groupBy('vendor_id')->get();
-        return view('backend.pages.vendors',compact('vendors','states','stocks','vendors_with_stocks'));
+        return view('backend.pages.vendors',compact('vendors','states'));
     }
 
     /**

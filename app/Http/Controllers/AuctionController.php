@@ -118,6 +118,7 @@ class AuctionController extends Controller
     {
         $remove_sale = Sale::where('buyer_id',$request->buyer_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->where('invoice_id',$request->invoice_id)->delete();
 
+        //This is useless
         //ReUpdate Sold attributes in Stocks and Lottings table
         $stocks = Stock::where('vendor_id',$request->vendor_id)
                             ->where('form_no',$request->form_no)
@@ -184,11 +185,16 @@ class AuctionController extends Controller
             return response()->json(['error'=>'You cannot Used this invoice number'],401);
 
         // Check for Left Item
-        $stocks = Lotting::select('quantity','sold')->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->get()->toArray();
-        $stocks = Lotting::select('quantity')->where('id','=',$request->lotting_id)->with(['sale'])->first();
-        $left_stocks = $stocks[0]['quantity'] - $stocks[0]['sold'];
+        // $stocks = Lotting::select('quantity','sold')->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->get()->toArray();
+        $stocks = Lotting::select('id','quantity')->where('id','=',$request->lotting_id)->with(['sale'])->first();
+        $total_sale = 0;
+        if(count($stocks->sale)){
+            foreach($stocks->sale as $sale){
+                $total_sale += $sale->quantity;
+            }
+        }
+        $left_stocks = $stocks->quantity - $total_sale;
 
-        return json_encode($stocks);
         // Check if Quantity is greater than available stocks in auction
         if($request->quantity > $left_stocks)
             return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);

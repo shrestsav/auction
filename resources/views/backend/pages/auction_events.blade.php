@@ -308,14 +308,36 @@
 					auction_id:auction_id                 
 		      	},
 		       success:function(data) {
+		       	console.log(data);
 		       		$(".items_div").show();
 		            $(".items_body").remove();
 		       		var row_id=1;
+		       		var content = '';
 		       		data.forEach(rows =>{
-		       			var available_quantity = rows["quantity"] - rows["sold"];
-		       			$('.items_table').append('<tr class="items_body" data-vendor-id="'+rows["vendor_id"]+'"><input type="hidden" class="lotting_id" value="'+rows["id"]+'"></input><td data-row-id="'+row_id+'">'+row_id+'</td><td class="lot_no">'+rows["lot_no"]+'</td><td class="vendor_code">'+rows["vendor_code"]+'</td><td class="form_no">'+rows["form_no"]+'</td><td class="item_no">'+rows["item_no"]+'</td><td class="description">'+rows["description"]+'</td><td class="quantity">'+rows["quantity"]+'</td><td class="sold">' + (rows["sold"] == null ? '--': rows["sold"]) +'</td><td class="available_quantity">'+available_quantity+'</td><td><div class="add_items"><i class="fa fa-plus-circle" aria-hidden="true"></i></div></td></tr>');
+		       			
+		       			var total_sale = 0;
+		       			if (Array.isArray(rows['sale']) || rows['sale'].length) {
+						  	rows['sale'].forEach(sale =>{
+						  		total_sale += sale['quantity'];
+						  	});
+						}
+						var available_quantity = rows["quantity"] - total_sale;
+		       			content += '<tr class="items_body" data-vendor-id="'+rows["vendor_id"]+'">';
+		       			content += '<input type="hidden" class="lotting_id" value="'+rows["id"]+'"></input>';
+		       			content += '<td data-row-id="'+row_id+'">'+row_id+'</td>';
+		       			content += '<td class="lot_no">'+rows["lot_no"]+'</td>';
+		       			content += '<td class="vendor_code">'+rows["vendor_code"]+'</td>';
+		       			content += '<td class="form_no">'+rows["form_no"]+'</td>';
+		       			content += '<td class="item_no">'+rows["item_no"]+'</td>';
+		       			content += '<td class="description">'+rows["description"]+'</td>';
+		       			content += '<td class="quantity">'+rows["quantity"]+'</td>';
+		       			content += '<td class="sold">' + total_sale +'</td>';
+		       			content += '<td class="available_quantity">'+available_quantity+'</td>';
+		       			content += '<td><div class="add_items"><i class="fa fa-plus-circle" aria-hidden="true"></i></div></td>';
+		       			content += '</tr>';
 		       			row_id++;
 		       		});
+		       		$('.items_table').append(content);
 		       },
 				error: function(response){
 					$(".items_body").remove();
