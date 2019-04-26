@@ -185,14 +185,18 @@ class AuctionController extends Controller
 
         // Check for Left Item
         $stocks = Lotting::select('quantity','sold')->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->get()->toArray();
+        $stocks = Lotting::select('quantity')->where('id','=',$request->lotting_id)->with(['sale'])->first();
         $left_stocks = $stocks[0]['quantity'] - $stocks[0]['sold'];
 
+        return json_encode($stocks);
         // Check if Quantity is greater than available stocks in auction
         if($request->quantity > $left_stocks)
             return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
 
         $item = Sale::create($request->all());
         
+
+        //Thinking of removing this because it is covered by sales table where quantity is sale
         // Update Stocks Sold Attribute in Stock and Lotting Table
         $stocks = Stock::where('vendor_id',$request->vendor_id)
                             ->where('form_no',$request->form_no)

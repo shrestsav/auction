@@ -56,16 +56,20 @@ class ReportController extends Controller
                             ->join('auctions','auctions.id','=','sales.auction_id')
                             ->join('lottings','lottings.id','=','sales.lotting_id')
                             ->get();
-
+        
         $invoices_sum = Sale::select(
                         \DB::raw('sum(quantity) as quantity_sum'),
                         \DB::raw('sum(quantity*rate) as total_sum'),
                         \DB::raw('sum(discount) as discount_sum'),
                         \DB::raw('sum((quantity*rate)-discount) as net_total_sum'),
                         \DB::raw('sum(buyers_premium_amount) as buyers_premium_amount_sum'),
-                        \DB::raw('sum((quantity*rate)-discount+buyers_premium_amount) as grand_total_sum'),'invoice_id')
-                       ->groupBy('invoice_id')
+                        \DB::raw('sum((quantity*rate)-discount+buyers_premium_amount) as grand_total_sum'),
+                        'sales.invoice_id',
+                        'buyers.buyer_code')
+                       ->join('buyers','buyers.id','=','sales.buyer_id')
+                       ->groupBy('sales.invoice_id','buyers.buyer_code')
                        ->get();  
+        // return $invoices_sum;
     	return view('backend.pages.all_invoice',compact('invoices','unique_invoices','invoices_sum'));
     }
 

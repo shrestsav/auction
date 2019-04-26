@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::post('get_vendor_stocks','LottingController@ajax_get_vendor_stocks');
 	Route::post('get_auction_stocks','LottingController@ajax_get_auction_stocks');
 	Route::post('save_new_lot','LottingController@ajax_save_new_lot');
+	Route::post('update_lot','LottingController@ajax_update_lot');
 	Route::post('remove_lot_from_auction','LottingController@ajax_remove_lot_from_auction');
 
 	Route::get('adjustments','AdjustmentController@index')->name('adjustments.index');

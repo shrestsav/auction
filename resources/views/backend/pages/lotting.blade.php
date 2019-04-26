@@ -5,10 +5,10 @@
 			cursor: pointer;
 			color: green;
 		}
-		.add_lot{
+		.add_lot, .update_lot{
 			margin:23px 10px 0px 10px;
 		}
-		.remove_lot:hover{
+		.remove_lot:hover, .edit_lot:hover{
 			cursor: pointer;
 			color: red;
 		}
@@ -22,16 +22,13 @@
 @endpush
 @section('content')
 
-    <!-- Main content -->
     <section class="content">
-      <!-- /.row -->
       <div class="row">
       	<div class="col-md-12">
 	      	<div class="alert alert-danger" style="display: none;"></div>
 	      	<div class="alert alert-success" style="display: none;"></div>
 	    </div>
       	<div class="col-md-12">
-          <!-- general form elements -->
           <div class="box box-success">
             <div class="box-header with-border">
               <h3 class="box-title">Add Lotting</h3>
@@ -40,7 +37,6 @@
                 </button>
               </div>
             </div>
-            <!-- /.box-header -->
             <div class="box-body">
             	<form >
             		@csrf
@@ -109,7 +105,7 @@
 					                  <th>Item No</th>
 					                  <th>Description</th>
 					                  <th>Quantity</th>
-					                  <th>Sold</th>
+					                  <th>Added in Auctions</th>
 					                  <th>Available</th>
 					                  <th>Commission</th>
 					                  <th>Reserve</th>
@@ -185,6 +181,7 @@
 					                  <th>Item No</th>
 					                  <th>Description</th>
 					                  <th>Quantity</th>
+					                  <th>Left Quantity</th>
 					                  <th>Reserve</th>
 					                  <th>Sold</th>
 					                  <th>Action</th>
@@ -196,13 +193,11 @@
 		            </div>
             	</form>
             </div>
-            <!-- /.box-body -->
           </div>
         </div>
 
       </div>
     </section>
-    <!-- /.content -->
 
 @endsection
 
@@ -210,10 +205,32 @@
 
 <script type="text/javascript">
 
+	//Experimental Feature
+	var lotting = {
+					'auction_id':null,
+					'vendor_id':null,
+					'vendor_code':null,
+					'form_no':null,
+					'item_no':null,
+					'description':null,
+					'quantity':null,
+					'reserve':null,
+					'lot_no':null,
+					'description':null,
+				  };
+
 	//CSRF TOKEN HAS BEEN SENT IN HEADER FILE IN APP BLADE
 	$('body').on('change','#l_auction_id',function(){
-		$('#s_vendor_code, #s_vendor_name').prop("disabled", false);
+		if($('#s_vendor_code').prop('disabled')==false){
+			$('#s_vendor_code').trigger('change');
+		}
+		if($('#s_vendor_code').prop('disabled')==true){
+			$('#s_vendor_code, #s_vendor_name').prop("disabled", false);
+			//Disable Itself after Activating Vendor Section
+			$('#l_auction_id').prop("disabled", true);
+		}
 		var auction_id = $(this).val();
+		lotting['auction_id'] = auction_id;
 		var auction_venue = $(this).find('option:selected').data('auction-venue');
 		var auction_date = $(this).find('option:selected').data('auction-date');
 		var auction_time = $(this).find('option:selected').data('auction-time');
@@ -235,6 +252,18 @@
 	       		var content = '';
 	       		data.forEach(rows =>{
 	       			// console.log(rows);
+	       			var sold = 0;
+	       			if (!Array.isArray(rows["sale"]) || !rows["sale"].length) {
+					  var delete_button = '<span class="remove_lot"><i class="fa fa-trash" aria-hidden="true"></i></span>'; 
+					}
+					else{
+						var delete_button = '';
+						rows["sale"].forEach(sale =>{
+							sold += Number(sale['quantity']);
+						});
+					}
+					var left_quantity = Number(rows["quantity"]) - sold;
+
 	       			content += '<tr class="lotting_body" data-vendor-id="'+rows["vendor_id"]+'" data-lotting-id="'+rows["id"]+'">';
 	       			content += '<td class="vendor_code" data-row-id="'+row_id+'">'+rows["vendor_code"]+'</td>';
 	       			content += '<td class="vendor_name">'+rows["first_name"]+' '+rows["last_name"]+'</td>';
@@ -242,22 +271,10 @@
 	       			content += '<td class="item_no">'+rows["item_no"]+'</td>';
 	       			content += '<td class="description">'+rows["description"]+'</td>';
 	       			content += '<td class="quantity">'+rows["quantity"]+'</td>';
+	       			content += '<td class="left_quantity">'+left_quantity+'</td>';
 	       			content += '<td class="reserve">'+rows["reserve"]+'</td>';
-
-	       			if (!Array.isArray(rows["sale"]) || !rows["sale"].length) {
-					  var sold = 'None';
-					  var delete_button = '<div class="remove_lot"><i class="fa fa-trash" aria-hidden="true"></i></div>'; 
-					}
-					else{
-						var sold = 0;
-						var delete_button = '';
-						rows["sale"].forEach(sale =>{
-							sold += Number(sale['quantity']);
-						});
-					}
-
 	       			content += '<td class="sold">'+sold+'</td>';
-	       			content += '<td>'+delete_button+'</td>';
+	       			content += '<td><span class="edit_lot"><i class="fa fa-edit" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;'+delete_button+'</td>';
 	       			content += '</tr>';
 	       			row_id++;
 	       		});
@@ -294,31 +311,25 @@
            		var length = data['vendor_stocks'].length;
            		var content = '';
            		for(i=0; i<length;i++){
-           			
            			var stock_id = data['vendor_stocks'][i]["id"];  			
            			var row_id = i+1;
-           			
+           			var auction_quantity = 0;
+           			if (Array.isArray(data['vendor_stocks'][i]["lotting"]) || data['vendor_stocks'][i]["lotting"].length) {
+					  	data['vendor_stocks'][i]["lotting"].forEach(rows =>{
+					  		auction_quantity += rows['quantity'];
+					  	});
+					}
+					var available_quantity = data['vendor_stocks'][i]["quantity"] - auction_quantity;
+
            			content += '<tr class="stocks_body" data-vendor-id="'+data['vendor_stocks'][i]["vendor_id"]+'" data-stock-id="'+stock_id+'">';
            			content += '<td data-row-id="'+row_id+'">'+row_id+'</td>';
            			content += '<td class="form_no">'+data['vendor_stocks'][i]["form_no"]+'</td>';
            			content += '<td class="item_no">'+data['vendor_stocks'][i]["item_no"]+'</td>';
            			content += '<td class="description">'+data['vendor_stocks'][i]["description"]+'</td>';
            			content += '<td class="quantity">'+data['vendor_stocks'][i]["quantity"]+'</td>';
-  					var sold = 0;
-           			if (Array.isArray(data['vendor_stocks'][i]["lotting"]) || data['vendor_stocks'][i]["lotting"].length) {
-					  console.log( data['vendor_stocks'][i]["lotting"]);
-					  data['vendor_stocks'][i]["lotting"].forEach(rows =>{
-					  	if (Array.isArray(rows['sale']) || rows['sale'].length) {
-					  		rows['sale'].forEach(sale=>{
-					  			sold +=  sale['quantity'];
-					  		});
-					  	}
-					  });
-					}
-					var available_quantity = data['vendor_stocks'][i]["quantity"] - sold;
-           			content += '<td class="sold">'+sold+'</td>';
+           			content += '<td class="auction_quantity">'+auction_quantity+'</td>';
            			content += '<td class="available_quantity">'+available_quantity+'</td>';
-           			content += '<td class="commission">'+data['vendor_stocks'][i]["commission"]+'</td>';
+           			content += '<td class="commission">'+data['vendor_stocks'][i]["commission"]+'%</td>';
            			content += '<td class="reserve">'+data['vendor_stocks'][i]["reserve"]+'</td>';
            			content += '<td>'+(data['added_stocks'].includes(stock_id) ? 'Added': '<div class="add_stock"><i class="fa fa-plus-circle" aria-hidden="true"></i></div>')+'</td>';
            			content += '</tr>';
@@ -328,14 +339,16 @@
         });
 	});
 
-	$('#s_vendor_name').on('change', function() {
+	$('#s_vendor_name').on('change', function(e) {
+		e.preventDefault();
 		var oldval = $('#s_vendor_code').val();
 		var newval = this.value;
 		if(oldval!=newval)
 	  		$('#s_vendor_code').val(this.value).trigger('change');
 	});
 
-	$('body').on('click','.add_stock',function(){
+	$('body').on('click','.add_stock',function(e){
+		e.preventDefault();
     	const vendor_id = $(this).parents('.stocks_body').data('vendor-id');
     	const stock_id = $(this).parents('.stocks_body').data('stock-id');
     	const vendor_code = $('#s_vendor_code option[value="'+vendor_id+'"]').text();
@@ -361,6 +374,7 @@
 	});
 
 	$('body').on('click','.add_lot',function(e){
+		e.preventDefault();
 		swal({
 		  title: "Are you sure?",
 		  text: "Please have a check if you are not sure ! ",
@@ -400,7 +414,23 @@
                		$('.confirm_input').val('');
                		$('.alert-danger').hide();
                		$('.alert-success').show().html('LOT ADDED SUCCESSFULLY');
-               		$('.lot_table').append('<tr class="lotting_body" data-vendor-id="'+vendor_id+'"><td class="vendor_code">'+vendor_code+'</td><td class="vendor_name">'+vendor_name+'</td><td class="lot_no">'+lot_no+'</td><td class="form_no">'+form_no+'</td><td class="item_no">'+item_no+'</td><td class="description">'+description+'</td><td class="quantity">'+quantity+'</td><td class="reserve">'+reserve+'</td><td>None</td><td><div class="remove_lot"><i class="fa fa-trash" aria-hidden="true"></i></div></td></tr>');
+               		var content = '';
+               		content += '<tr class="lotting_body" data-vendor-id="'+vendor_id+'">';
+               		content += '<td class="vendor_code">'+vendor_code+'</td>';
+               		content += '<td class="vendor_name">'+vendor_name+'</td>';
+               		content += '<td class="lot_no">'+lot_no+'</td>';
+               		content += '<td class="form_no">'+form_no+'</td>';
+               		content += '<td class="item_no">'+item_no+'</td>';
+               		content += '<td class="description">'+description+'</td>';
+               		content += '<td class="quantity">'+quantity+'</td>';
+               		content += '<td class="left_quantity">'+quantity+'</td>';
+               		content += '<td class="reserve">'+reserve+'</td>';
+               		content += '<td>0</td>';
+               		content += '<td><span class="edit_lot"><i class="fa fa-edit" aria-hidden="true"></i></span>&nbsp;&nbsp;&nbsp;';
+               		content += '<span class="remove_lot"><i class="fa fa-trash" aria-hidden="true"></i></span></td>';
+               		content += '</tr>';
+
+               		$('.lot_table').append(content);
 				},
 				error: function(response){
 					$.each(response.responseJSON, function(index, val){
@@ -427,7 +457,8 @@
 		$('.add_lot').prop("disabled", false);
 	});
 
-	$('body').on('click','.remove_lot',function(){
+	$('body').on('click','.remove_lot',function(e){
+		e.preventDefault();
 		swal({
 		  title: "Are you sure?",
 		  text: "Once deleted, you will not be able to recover this data!",
@@ -441,6 +472,7 @@
 		  	const vendor_id = $(this).parents('.lotting_body').data('vendor-id');
 			const form_no = $(this).closest('tr').children('td.form_no').text();
 			const item_no = $(this).closest('tr').children('td.item_no').text();
+			const auction_id = $('#l_auction_id').val();
 			$.ajax({
                type:'post',
                url:'{{ url("/remove_lot_from_auction") }}',
@@ -448,7 +480,8 @@
                data:{
 					vendor_id: vendor_id,
 					form_no: form_no,
-					item_no: item_no                 
+					item_no: item_no,                 
+					auction_id: auction_id,                 
               	},
                success:function(data) {
                		console.log(data); 
@@ -459,6 +492,96 @@
 		    swal("Lot has been removed from Auction", {
 		      icon: "success",
 		    });
+		  } 
+		});		
+	});
+		
+
+	$('body').on('click','.edit_lot',function(e){
+		e.preventDefault();
+		swal({
+		  title: "Do You Want to Edit?",
+		  text: "Only Quantity, Reserved Quantity and Lot no can be edited!",
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
+		  	const vendor_id = $(this).parents('.lotting_body').data('vendor-id');
+		  	const vendor_code = $(this).closest('tr').children('td.vendor_code').text();
+		  	const form_no = $(this).closest('tr').children('td.form_no').text();
+		  	const item_no = $(this).closest('tr').children('td.item_no').text();
+		  	const description = $(this).closest('tr').children('td.description').text();
+		  	const quantity = $(this).closest('tr').children('td.quantity').text();
+		  	const reserve = $(this).closest('tr').children('td.reserve').text();
+		  	const lot_no = $(this).closest('tr').children('td.lot_no').text();
+	
+			$('#s_vendor_code').val(vendor_id).trigger('change');
+			$('#l_vendor_code').val(vendor_code);
+			$('#l_vendor_id').val(vendor_id);
+			$('#l_form_no').val(form_no);
+			$('#l_item_no').val(item_no);
+			$('#l_description').val(description);
+			$('#l_quantity').val(quantity).prop('disabled',false);
+			$('#l_reserve').val(reserve).prop('disabled',false);
+			$('#l_lot_no').val(lot_no);
+			$('.add_lot').html('Update').removeClass('add_lot').addClass('update_lot').prop('disabled',false);
+		  } 
+		});		
+	});
+
+	$('body').on('click','.update_lot',function(e){
+		e.preventDefault();
+		swal({
+		  title: "Do You Want to Update?",
+		  text: "Please Check data carefully before updating!",
+		  buttons: true,
+		})
+		.then((updateLot) => {
+		  if (updateLot) {
+		  	var auction_id = $('#l_auction_id').val();
+			var vendor_id = $('#l_vendor_id').val();
+	    	var vendor_code = $('#l_vendor_code').val();
+	    	var vendor_name = $('#l_vendor_name').val();
+	    	var lot_no = $('#l_lot_no').val();
+	    	var form_no = $('#l_form_no').val();
+	    	var item_no = $('#l_item_no').val();
+	    	var description = $('#l_description').val();
+	    	var quantity = $('#l_quantity').val();
+	    	var reserve = $('#l_reserve').val();
+	    	$.ajax({
+               type:'post',
+               url:'{{ url("/update_lot") }}',
+               dataType: 'json',
+               data:{
+					auction_id: auction_id,
+					vendor_id: vendor_id,
+					lot_no: lot_no,
+					form_no: form_no,
+					item_no: item_no,
+					description: description,
+					quantity: quantity,
+					reserve: reserve                
+              	},
+               success:function(response) {
+               		console.log(response);
+               		$('#l_auction_id').trigger('change');
+               		$('#s_vendor_code').trigger('change');
+               		$('.confirm_input').val('');
+               		$('.alert-danger').hide();
+               		$('.alert-success').show().html('LOT UPDATED SUCCESSFULLY');
+				},
+				error: function(response){
+					$.each(response.responseJSON, function(index, val){
+						// console.log(index+":"+val);
+						$('.alert-success').hide();
+						$('.alert-danger').show().html(val);
+						
+					});
+				}
+            });	
+			
 		  } 
 		});		
 	});

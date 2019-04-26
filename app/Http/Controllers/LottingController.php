@@ -108,8 +108,7 @@ class LottingController extends Controller
         $added_stocks = Lotting::where('auction_id',$auction_id)->pluck('stock_id')->toArray();
         return response()->json([
                                 'vendor_stocks'=>$vendor_stocks, 
-                                'added_stocks'=>$added_stocks,
-                                'test'=>$request->all()]);
+                                'added_stocks'=>$added_stocks]);
     }
 
     public function ajax_get_auction_stocks(Request $request)
@@ -137,7 +136,7 @@ class LottingController extends Controller
 
     public function ajax_remove_lot_from_auction(Request $request)
     {
-        $Remove_lot = Lotting::where('vendor_id',$request->vendor_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->delete();
+        $Remove_lot = Lotting::where('vendor_id',$request->vendor_id)->where('auction_id',$request->auction_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->delete();
         if($Remove_lot)
             return json_encode('Deleted');
         return response()->json(['error'=>'Data Could Not be deleted'],401);
@@ -172,19 +171,107 @@ class LottingController extends Controller
 
         // Check for Duplicate Entries
         $existing_lot = Lotting::where('auction_id','=',$request->auction_id)->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->get();
+
         // If Entry already exists then throw 401 error
         if(count($existing_lot)){
             return response()->json(['error'=>'This Item Already Exists in this Auction, You may want to edit it instead'],401);
         }
 
         // Check if Quantity is greater than available stocks
-        $check_stock_quantity = Stock::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->pluck('quantity')->toArray();
-        if($request->quantity > $check_stock_quantity[0])
-            return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
+        // $check_stock_quantity = Stock::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->pluck('quantity')->toArray();
+        
+        $check_stock_quantity = Stock::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->with(['lotting','lotting.sale'])->first();
 
+        $auction_quantity = 0;
+
+        if(count($check_stock_quantity->lotting)){
+            foreach($check_stock_quantity->lotting as $auction){
+                $auction_quantity += $auction->quantity;
+            }
+        }
+
+        $available_quantity =  $check_stock_quantity->quantity - $auction_quantity;
+        if($request->quantity > $available_quantity){
+            return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
+        }
 
         $lot = Lotting::create($request->all());
         return response()->json(['success'=>'Lotting has been added successfully']);
+    }
+
+    public function ajax_update_lot(Request $request)
+    {
+        $rule = ['auction_id' => 'required',
+                'vendor_id' => 'required',
+                'form_no' => 'required',
+                'item_no' => 'required',
+                'lot_no' => 'required',
+                'quantity' => 'required',
+                'reserve' => 'required',
+                'description' => 'required'
+                ];
+        $msg = ['auction_id.required' => 'Please select Auction First',
+                'vendor_id.required' => 'Vendor ID Empty',
+                'form_no.required' => 'Form No is Empty',
+                'item_no.required' => 'Item No is Empty',
+                'description.required' => 'Description',
+                'lot_no.required' => 'Please Enter Lot Number',
+                'quantity.required' => 'Please Enter Quantity',
+                'reserve.required' => 'Please Enter Reserve',
+                ];
+        $validate = Validator::make($request->all(), $rule, $msg);
+        if($validate->fails()){
+            return response($validate->errors(),401);
+        }
+
+        // Check for Lotting Entries
+        $existing_lot = Lotting::where('auction_id','=',$request->auction_id)->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->with(['sale']);
+
+
+        // If Entry already exists then Update
+        if($existing_lot->exists()){
+            $existing_lot_quantity = $existing_lot->first()->quantity;
+            $auction_quantity = 0;
+            $auction_sale = 0;
+
+            //Check if auction already has sold some items
+            if(count($existing_lot->first()->sale)){
+               foreach($existing_lot->first()->sale as $sales){
+                    $auction_sale += $sales->quantity;
+                } 
+            }
+
+            if($request->quantity < $auction_sale){
+                return response()->json(['error'=>'Selected quantity is lesser than already sold stocks'],401);
+            }
+
+
+            // Check if Quantity is greater than available stocks
+            $check_stock_quantity = Stock::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->with(['lotting','lotting.sale'])->first();
+
+            
+
+            if(count($check_stock_quantity->lotting)){
+                foreach($check_stock_quantity->lotting as $auction){
+                    $auction_quantity += $auction->quantity;
+                }
+            }
+
+            $available_quantity =  $check_stock_quantity->quantity - $auction_quantity + $existing_lot_quantity;
+
+            // return json_encode($auction_sale);
+            if($request->quantity > $available_quantity){
+                return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
+            }
+
+
+            $existing_lot = $existing_lot->update(['quantity'=>$request->quantity,
+                                                   'reserve'=>$request->reserve, 
+                                                   'lot_no'=>$request->lot_no]);
+            return response()->json(['success'=>'Lotting updated successfully']);
+        }
+
+        return response()->json(['error'=>'Not Found'],401);
     }
 
 }

@@ -37,7 +37,7 @@
 					<tr>
 						<th>{{$count}}</th>
 						<th>{{$invoice_sum->invoice_id}}</th>
-						<th>{{$invoice_sum->invoice_id}}</th>
+						<th>{{$invoice_sum->buyer_code}}</th>
 						<th>{{$invoice_sum->quantity_sum}}</th>
 						<th>$ {{$invoice_sum->total_sum}}</th>
 						<th>$ {{$invoice_sum->discount_sum}}</th>

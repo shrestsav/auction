@@ -263,6 +263,11 @@
             <!-- /.box-body -->
           </div>
         </div>
+        <div class="col-md-12" style="text-align: center;">
+        	<a class="btn btn-app" onclick="location.reload();">
+                <i class="fa fa-repeat" style="font-size: 30px;"></i> 
+             </a>
+        </div>
 
     
       </div>
@@ -320,6 +325,7 @@
 				}
 		    });
 		});
+
 		$('body').on('click','.add_items',function(e){
 			e.preventDefault();
 			const vendor_id = $(this).parents('.items_body').data('vendor-id');
@@ -352,8 +358,8 @@
 			if(oldval!=newval)
 		  		$('#a_buyer_name').val(this.value).trigger('change');
 		  	$("#a_invoice_no").prop("readonly", false);
-
 		});
+
 		$('#a_buyer_name').on('change', function(e) {
 			e.preventDefault();
 			var oldval = $('#a_buyer_code').val();
@@ -396,21 +402,27 @@
 		});
 
 		// Calculations
-		$('#a_rate').on('change',function(e){
+		$('body').on('change','#a_quantity',function(e){
+			e.preventDefault();
+			$('#a_rate').trigger('change');
+		});
+		$('body').on('change','#a_rate',function(e){
 			e.preventDefault();
 			const quantity = $('#a_quantity').val();
 			const rate =  $('#a_rate').val();
 			$('#a_total').val(quantity*rate);
 			$("#a_discount").prop("readonly", false); 
+			$('#a_discount').trigger('change');
 		});
-		$('#a_discount').on('change',function(e){
+		$('body').on('change','#a_discount',function(e){
 			e.preventDefault();
 			const total = $('#a_total').val();
 			const discount =  $('#a_discount').val();
 			$('#a_net_total').val(total-discount);
 			$("#a_buyers_premium").prop("readonly", false); 
+			$('#a_buyers_premium').trigger('change');
 		});
-		$('#a_buyers_premium').on('change',function(e){
+		$('body').on('change','#a_buyers_premium',function(e){
 			e.preventDefault();
 			const net_total = $('#a_net_total').val();
 			const buyers_premium =  $('#a_buyers_premium').val();
