@@ -2,9 +2,7 @@
 
 @section('content')
 
-    <!-- Main content -->
     <section class="content">
-      <!-- /.row -->
       <div class="row">
       	<div class="col-md-12">
           @if ($errors->any())
@@ -23,7 +21,6 @@
 	      @endif
         </div>
       	<div class="col-md-12">
-          <!-- general form elements -->
           <div class="box box-success collapsed-box">
             <div class="box-header with-border">
               <h3 class="box-title">Add Stock</h3>
@@ -32,7 +29,6 @@
                 </button>
               </div>
             </div>
-            <!-- /.box-header -->
             <div class="box-body">
             	<form role="form" method="POST" action="{{route('stocks.store')}}">
             	@csrf
@@ -46,7 +42,6 @@
 			                  @endforeach
 			                </select>
 		                </div>
-
 		            </div>
 	              	<div class="col-md-5">
 		                <div class="form-group">
@@ -90,7 +85,6 @@
 		                  <input type="number" name="quantity" class="form-control" id="s_quantity" placeholder="Quantity" required>
 		                </div>
 		            </div>
-
 		            <div class="col-md-2">
 		                <div class="form-group">
 		                  <label for="s_reserve">Reserve</label>
@@ -110,25 +104,21 @@
 			        </div>    
             	</form>
             </div>
-            <!-- /.box-body -->
           </div>
         </div>
         <div class="col-xs-12">
           <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title">List of Stocks</h3>
-
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
                   <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
                   <div class="input-group-btn">
                     <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
 	                <tr>
@@ -143,8 +133,22 @@
 		                <th>Date</th>
 		                <th>Action</th>
 	                </tr>
-	            <?php $count=1; ?>
+	            @php
+	            	$count=1; 
+	            @endphp
                 @foreach($stocks as $stock)
+                	@php
+                		$sold = 0;
+            			if(count($stock->lotting)){
+            				foreach($stock->lotting as $lotting){
+            					if(count($lotting->sale)){
+                					foreach($lotting->sale as $sale){
+                						$sold += $sale->quantity;
+                					}
+            					}
+            				}
+            			}
+            		@endphp
 	                <tr>
                 		<td>{{$count}}</td>
                 		<td>{{$stock->vendor_code}}</td>
@@ -152,25 +156,23 @@
                 		<td>{{$stock->item_no}}</td>
                 		<td>{{$stock->description}}</td>
                 		<td>{{$stock->quantity}}</td>
+                		<td>{{$sold}}</td>
                 		<td>{{$stock->reserve}}</td>
-                		<td>{{$stock->sold}}</td>
                 		<td>{{$stock->date}}</td>
                 		<td>		
 							<a href="{{url('stocks/'.$stock->id.'/edit')}}"><i class="fa fa-pencil"></i></a>
 						</td>
 	                </tr>
-	              <?php $count++; ?>
+	              @php 
+	              	$count++; 
+	              @endphp
                 @endforeach
               </table>
             </div>
-            <!-- /.box-body -->
           </div>
-          <!-- /.box -->
         </div>
       </div>
     </section>
-    <!-- /.content -->
-
 
 @endsection
 @push('scripts')

@@ -12,8 +12,19 @@ class Lotting extends Model
     {
     	return $this->belongsTo(Stock::class);
     }
+
     public function sale()
     {
     	return $this->hasMany(Sale::class);
+    }
+
+    public function auction()
+    {
+    	return $this->belongsTo(Auction::class);
+    }
+
+    public function vendor()
+    {
+    	return $this->belongsTo(Vendor::class);
     }
 }

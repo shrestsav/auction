@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Vendor;
 use App\State;
 use App\Stock;
+use App\PaymentMethod;
 
 class VendorController extends Controller
 {
@@ -23,7 +24,9 @@ class VendorController extends Controller
     {   
         $vendors = Vendor::with(['stock.lotting.sale'])->get();
         $states = State::all();
-        return view('backend.pages.vendors',compact('vendors','states'));
+        $payment_methods = State::pluck('name');
+        // return $payment_methods;
+        return view('backend.pages.vendors',compact('vendors','states','payment_methods'));
     }
 
     /**

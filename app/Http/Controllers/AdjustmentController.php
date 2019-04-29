@@ -13,6 +13,7 @@ class AdjustmentController extends Controller
         $payment_methods = PaymentMethod::all();
     	return view('backend.pages.adjustments',compact('states','payment_methods'));
     }
+
     public function set_state(Request $request){
     	$validatedData = $request->validate([
         'name' => 'required',
@@ -20,6 +21,7 @@ class AdjustmentController extends Controller
     	$state = State::Create($request->all());
     	return back()->with('message','State Created Successfully');
 	}
+    
     public function set_payment_method(Request $request){
         $validatedData = $request->validate([
         'name' => 'required',

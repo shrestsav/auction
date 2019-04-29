@@ -12,4 +12,9 @@ class Vendor extends Model
     {
     	return $this->hasMany(Stock::class);
     }
+
+    public function lottings()
+    {
+    	return $this->hasMany(Lotting::class);
+    }
 }

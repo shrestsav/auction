@@ -20,11 +20,16 @@ class LottingController extends Controller
     {   
         $auctions =  Auction::all();
         $stocks = Stock::all();
-        $vendor_with_stocks_id = Stock::select('vendor_id')->get()->toArray();        
-        $vendors_with_stocks = Vendor::whereIn('id', $vendor_with_stocks_id)->get();
-
+        $vendors_with_stocks = Vendor::select('vendors.id',
+                                               'vendors.vendor_code',
+                                               'vendors.first_name',
+                                               'vendors.last_name')
+                                        ->join('stocks','stocks.vendor_id','vendors.id')
+                                        ->groupBy('vendors.id','vendors.first_name','vendors.last_name')
+                                        ->get();
         //Stocks which are already added in auctions
         $added_stocks = Lotting::pluck('stock_id')->toArray();
+
         return view('backend.pages.lotting',compact('auctions','stocks','vendors_with_stocks','added_stocks'));
     }
 
@@ -108,7 +113,8 @@ class LottingController extends Controller
         $added_stocks = Lotting::where('auction_id',$auction_id)->pluck('stock_id')->toArray();
         return response()->json([
                                 'vendor_stocks'=>$vendor_stocks, 
-                                'added_stocks'=>$added_stocks]);
+                                'added_stocks'=>$added_stocks
+                                ]);
     }
 
     public function ajax_get_auction_stocks(Request $request)
@@ -123,8 +129,7 @@ class LottingController extends Controller
                                        'lottings.item_no',
                                        'lottings.description',
                                        'lottings.quantity',
-                                       'lottings.reserve',
-                                       'lottings.sold')
+                                       'lottings.reserve')
                                     ->where('auction_id',$request->auction_id)
                                     ->join('vendors','lottings.vendor_id','=','vendors.id')
                                     ->with(['sale'])
@@ -178,8 +183,6 @@ class LottingController extends Controller
         }
 
         // Check if Quantity is greater than available stocks
-        // $check_stock_quantity = Stock::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->pluck('quantity')->toArray();
-        
         $check_stock_quantity = Stock::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->with(['lotting','lotting.sale'])->first();
 
         $auction_quantity = 0;
@@ -210,6 +213,7 @@ class LottingController extends Controller
                 'reserve' => 'required',
                 'description' => 'required'
                 ];
+                
         $msg = ['auction_id.required' => 'Please select Auction First',
                 'vendor_id.required' => 'Vendor ID Empty',
                 'form_no.required' => 'Form No is Empty',
@@ -219,7 +223,9 @@ class LottingController extends Controller
                 'quantity.required' => 'Please Enter Quantity',
                 'reserve.required' => 'Please Enter Reserve',
                 ];
+
         $validate = Validator::make($request->all(), $rule, $msg);
+
         if($validate->fails()){
             return response($validate->errors(),401);
         }
@@ -245,11 +251,8 @@ class LottingController extends Controller
                 return response()->json(['error'=>'Selected quantity is lesser than already sold stocks'],401);
             }
 
-
             // Check if Quantity is greater than available stocks
             $check_stock_quantity = Stock::where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->with(['lotting','lotting.sale'])->first();
-
-            
 
             if(count($check_stock_quantity->lotting)){
                 foreach($check_stock_quantity->lotting as $auction){
@@ -259,15 +262,14 @@ class LottingController extends Controller
 
             $available_quantity =  $check_stock_quantity->quantity - $auction_quantity + $existing_lot_quantity;
 
-            // return json_encode($auction_sale);
             if($request->quantity > $available_quantity){
                 return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
             }
 
-
             $existing_lot = $existing_lot->update(['quantity'=>$request->quantity,
                                                    'reserve'=>$request->reserve, 
                                                    'lot_no'=>$request->lot_no]);
+
             return response()->json(['success'=>'Lotting updated successfully']);
         }
 

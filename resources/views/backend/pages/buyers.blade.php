@@ -2,12 +2,9 @@
 
 @section('content')
 
-   <!-- Main content -->
     <section class="content">
-      <!-- /.row -->
       <div class="row">
       	<div class="col-md-12">
-          <!-- general form elements -->
           @if ($errors->any())
 		    <div class="alert alert-danger">
 		        <ul>
@@ -30,9 +27,7 @@
                 </button>
               </div>
             </div>
-            <!-- /.box-header -->
             <div class="box-body">
-	            <!-- form start -->
 	            <form role="form" method="POST" action="{{route('buyers.store')}}">
 	            	@csrf
 	              	<div class="col-md-2">
@@ -95,7 +90,6 @@
 		            <div class="col-md-3">
 		                <div class="form-group">
 		                  <label for="b_state">State *</label>
-		                  {{-- <input type="text" name="state" class="form-control" id="b_state" placeholder="State" required> --}}
 		                  <select name="state" class="form-control select2" id="b_state" style="width: 100%;" required>
 			                  <option hidden disabled selected value>Select State</option>
 			                  @foreach($states as $state)
@@ -147,25 +141,13 @@
 		            </div>
 	            </form>
             </div>
-            <!-- /.box-body -->
           </div>
         </div>
         <div class="col-xs-12">
           <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title">List of buyers</h3>
-{{-- 
-              <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div> --}}
             </div>
-            <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
 	                <tr>
@@ -175,9 +157,8 @@
 	                  <th>Mobile</th>
 	                  <th>comments</th>
 	                  <th>Action</th>
-
 	                </tr>
-                @foreach($buyers as $buyer)
+                  @foreach($buyers as $buyer)
 	                <tr>
 	                  <td>{{$buyer->buyer_code}}</td>
 	                  <td>{{$buyer->first_name}} {{$buyer->last_name}}</td>
@@ -185,90 +166,70 @@
 	                  <td><span class="label label-success">{{$buyer->mobile}}</span></td>
 	                  <td>{{$buyer->comments}}</td>
 	                  <td>
-
-	                  	@foreach($buyers_with_purchases as $buyers_with_purchase)
-		                  	@if($buyers_with_purchase->buyer_id==$buyer->id)
-			                  	<a href="#" data-toggle="modal" data-target="#buyer_purchases_{{$buyer->id}}">
-			                  		<i class="fa fa-dot-circle-o"></i>
-			                  	</a>
-		                  	@endif
-	                  	@endforeach
+	                  	@if(count($buyer->purchases))
+	                  		<a href="#" data-toggle="modal" data-target="#buyer_purchases_{{$buyer->id}}">
+		                  		<i class="fa fa-dot-circle-o"></i>
+		                  	</a>
+		                  	<div class="modal fade buyer_purchases_modal" id="buyer_purchases_{{$buyer->id}}">
+						      <div class="modal-dialog">
+						        <div class="modal-content">
+						          <div class="modal-header">
+						            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						              <span aria-hidden="true">&times;</span></button>
+						            <h4 class="modal-title">Purchases</h4>
+						          </div>
+						          <div class="modal-body">
+						            <table class="table table-hover buyer_purchases_table" data-buyer-id="{{$buyer->id}}">
+						                <tr>
+						                	<th>S.No</th>
+							                <th>Invoice No</th>
+							                <th>Form No</th>
+							                <th>Item No</th>
+							                <th>Description</th>
+							                <th>Rate</th>
+							                <th>Quantity</th>
+							                <th>Discount</th>
+							                <th>BP Amount</th>
+							                <th>Action</th>
+						                </tr>
+						            @php 
+						            	$count=1; 
+						            @endphp
+						            @foreach($buyer->purchases as $purchase)
+						                <tr data-vendor-id="{{$purchase->vendor_id}}">
+						                  <td>{{$count}}</td>
+						                  <td class="invoice_id">{{$purchase->invoice_id}}</td>
+						                  <td class="form_no">{{$purchase->form_no}}</td>
+						                  <td class="item_no">{{$purchase->item_no}}</td>
+						                  <td class="lot_no">{{$purchase->lot_no}}</td>
+						                  <td class="rate">{{$purchase->rate}}</td>
+						                  <td class="quantity">{{$purchase->quantity}}</td>
+						                  <td class="discount">{{$purchase->discount}}</td>
+						                  <td class="buyers_premium_amount">{{round($purchase->buyers_premium_amount,6)}}</td>
+						                  <td>
+						                  	&nbsp; &nbsp; 
+						                  	<a href="#" class="remove_purchase"><i class="fa fa-remove"></i></a>
+						                  </td>
+						                </tr>
+						                @php  
+						                	$count++; 
+						                @endphp
+						            @endforeach
+						          </table>
+						          </div>
+						        </div>
+						      </div>
+						    </div>
+	                  	@endif
 	                  </td>
 	                </tr>
-                @endforeach
+                  @endforeach
               </table>
             </div>
-            <!-- /.box-body -->
           </div>
-          <!-- /.box -->
         </div>
       </div>
     </section>
-    <!-- /.content -->
-
-
- @foreach($buyers_with_purchases as $buyers_with_purchase)
- 	<?php $BuyerId = $buyers_with_purchase->buyer_id; ?>
- 	
-	<div class="modal fade buyer_purchases_modal" id="buyer_purchases_{{$BuyerId}}">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Purchases</h4>
-          </div>
-          <div class="modal-body">
-            <table class="table table-hover buyer_purchases_table" data-buyer-id="{{$BuyerId}}">
-                <tr>
-                	<th>S.No</th>
-	                <th>Invoice No</th>
-	                <th>Form No</th>
-	                <th>Item No</th>
-	                <th>Description</th>
-	                <th>Rate</th>
-	                <th>Quantity</th>
-	                <th>Discount</th>
-	                <th>BP Amount</th>
-	                <th>Action</th>
-                </tr>
-            <?php $count=1; ?>
-            @foreach($purchases as $purchase)
-            	@if($purchase->buyer_id==$BuyerId)
-	                <tr data-vendor-id="{{$purchase->vendor_id}}">
-	                  <td>{{$count}}</td>
-	                  <td class="invoice_id">{{$purchase->invoice_id}}</td>
-	                  <td class="form_no">{{$purchase->form_no}}</td>
-	                  <td class="item_no">{{$purchase->item_no}}</td>
-	                  <td class="lot_no">{{$purchase->lot_no}}</td>
-	                  <td class="rate">{{$purchase->rate}}</td>
-	                  <td class="quantity">{{$purchase->quantity}}</td>
-	                  <td class="discount">{{$purchase->discount}}</td>
-	                  <td class="buyers_premium_amount">{{round($purchase->buyers_premium_amount,6)}}</td>
-	                  <td>
-	                  	{{-- <a href="#"><i class="fa fa-pencil"></i></a>  --}}
-	                  	&nbsp; &nbsp; 
-	                  	<a href="#" class="remove_purchase"><i class="fa fa-remove"></i></a>
-	                  </td>
-	                </tr>
-	                <?php  $count++; ?>
-	            @endif
-	        
-            @endforeach
-
-          </table>
-          </div>
-          {{-- <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div> --}}
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
- @endforeach
-
 
 @endsection
 @push('scripts')
@@ -279,10 +240,6 @@
 		  function hide1(){
 		    $('.b_buyers_premium_rate').hide();
 		  }
-		
-		  	$('.remove_purchase').on('click',function(){
-		  		
-			  });
 			  	
 		  $('body').on('click','.remove_purchase',function(e){
 			e.preventDefault();

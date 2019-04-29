@@ -19,11 +19,8 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::select('id','auction_no','venue','date','time')->get();
-        $auction_with_stocks = Lotting::groupBy('auction_id')->pluck('auction_id')->toArray();
-        $stocks = Lotting::join('vendors','vendors.id','lottings.vendor_id')->orderBy('auction_id')->get();
-        // return($stocks);
-        return view('backend.pages.auctions',compact('auctions','auction_with_stocks','stocks'));
+        $auctions = Auction::with('lottings','lottings.vendor','lottings.sale')->get();
+        return view('backend.pages.auctions',compact('auctions'));
     }
 
     /**
@@ -49,6 +46,7 @@ class AuctionController extends Controller
         'date' => 'required',
         'time' => 'required',
         ]);
+
         // Generate Auction Code
         $Ids = Auction::all();
         
@@ -118,17 +116,6 @@ class AuctionController extends Controller
     {
         $remove_sale = Sale::where('buyer_id',$request->buyer_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->where('invoice_id',$request->invoice_id)->delete();
 
-        //This is useless
-        //ReUpdate Sold attributes in Stocks and Lottings table
-        $stocks = Stock::where('vendor_id',$request->vendor_id)
-                            ->where('form_no',$request->form_no)
-                            ->where('item_no',$request->item_no)
-                            ->decrement('sold',$request->quantity);
-        $lottings = Lotting::where('vendor_id',$request->vendor_id)
-                            ->where('form_no',$request->form_no)
-                            ->where('item_no',$request->item_no)
-                            ->decrement('sold',$request->quantity);
-
         if($remove_sale)
             return json_encode('Deleted');
         return response()->json(['error'=>'Data Could Not be deleted'],401);
@@ -174,7 +161,6 @@ class AuctionController extends Controller
         // Check for Duplicate Entries
         $existing_item = Sale::where('auction_id','=',$request->auction_id)->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->where('buyer_id','=',$request->buyer_id)->where('invoice_id','=',$request->invoice_id)->get();
 
-        // If Entry already exists then throw 401 error
         if(count($existing_item)){
             return response()->json(['error'=>'You have already added the item, You may want to edit it instead'],401);
         }
@@ -185,7 +171,6 @@ class AuctionController extends Controller
             return response()->json(['error'=>'You cannot Used this invoice number'],401);
 
         // Check for Left Item
-        // $stocks = Lotting::select('quantity','sold')->where('vendor_id','=',$request->vendor_id)->where('form_no','=',$request->form_no)->where('item_no','=',$request->item_no)->get()->toArray();
         $stocks = Lotting::select('id','quantity')->where('id','=',$request->lotting_id)->with(['sale'])->first();
         $total_sale = 0;
         if(count($stocks->sale)){
@@ -200,27 +185,7 @@ class AuctionController extends Controller
             return response()->json(['error'=>'Selected quantity is higher than available stocks'],401);
 
         $item = Sale::create($request->all());
-        
 
-        //Thinking of removing this because it is covered by sales table where quantity is sale
-        // Update Stocks Sold Attribute in Stock and Lotting Table
-        $stocks = Stock::where('vendor_id',$request->vendor_id)
-                            ->where('form_no',$request->form_no)
-                            ->where('item_no',$request->item_no);
-        $lottings = Lotting::where('vendor_id',$request->vendor_id)
-                            ->where('form_no',$request->form_no)
-                            ->where('item_no',$request->item_no);
-        $stocks_sold = $stocks->first()->sold;
-        $lottings_sold = $lottings->first()->sold;
-        if($stocks_sold)
-            $stocks->increment('sold',$request->quantity);
-        else
-            $stocks->update(['sold'=>$request->quantity]);
-
-        if($lottings_sold)
-            $lottings->increment('sold',$request->quantity);
-        else
-            $lottings->update(['sold'=>$request->quantity]);
         return response()->json(['success'=>'Item has been added successfully']);
     }
 

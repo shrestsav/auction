@@ -7,11 +7,8 @@
 
 @section('content')
 
-    <!-- Main content -->
     <section class="content">
-      <!-- /.row -->
       <div class="row">
-
       	<div class="col-md-4">
           @if ($errors->any())
             <div class="alert alert-danger">
@@ -22,7 +19,6 @@
                 </ul>
             </div>
           @endif
-          <!-- general form elements -->
           <div class="box box-success collapsed-box">
             <div class="box-header with-border">
               <h3 class="box-title">Add Auction</h3>
@@ -31,7 +27,6 @@
                 </button>
               </div>
             </div>
-            <!-- /.box-header -->
             <div class="box-body">
             	<form role="form" method="POST" action="{{route('auctions.store')}}">
             	   @csrf
@@ -53,7 +48,6 @@
                       <input type="date" name="date" class="form-control" id="a_date" placeholder=" Date" required>
                     </div>
                   </div>
-    				      <!-- time Picker -->
 		              <div class="bootstrap-timepicker">
 		                <div class="form-group">
 		                  <label>Time picker:</label>
@@ -65,31 +59,18 @@
 		                  </div>
 		                </div>
 		              </div>
-			   
 			        	<div class="box-footer">
 		              		<button type="submit" class="btn btn-primary">Submit</button>
 		            </div>    
             	</form>
             </div>
-            <!-- /.box-body -->
           </div>
         </div>
         <div class="col-md-8">
           <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title">Auctions</h3>
-
-{{--               <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div> --}}
             </div>
-            <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
 	                <tr>
@@ -106,81 +87,78 @@
 	                  <td>{{$auction->date}}</td>
                     <td><span class="label label-success">{{$auction->time}}</span></td>
 	                  <td>
-                        @if(in_array($auction->id, $auction_with_stocks))
-                          <a href="#" data-toggle="modal" data-target="#auction_stocks_{{$auction->id}}">
-                            <i class="fa fa-dot-circle-o"></i>
-                          </a>
-                        @endif
+                      @if(count($auction->lottings))
+                        <a href="#" data-toggle="modal" data-target="#auction_stocks_{{$auction->id}}">
+                          <i class="fa fa-dot-circle-o"></i>
+                        </a>
+                        {{-- Modal Popup --}}
+                        <div class="modal fade auction_stocks_modal" id="auction_stocks_{{$auction->id}}">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">{{$auction->auction_no}} Stocks</h4>
+                              </div>
+                              <div class="modal-body">
+                                <table class="table table-hover buyer_purchases_table" data-buyer-id="{{$auction->id}}">
+                                    <tr>
+                                      <th>S.No</th>
+                                      <th>Vendor Code</th>
+                                      <th>Form No</th>
+                                      <th>Item No</th>
+                                      <th>Description</th>
+                                      <th>Quantity</th>
+                                      <th>Sold</th>
+                                      <th>Left</th>
+                                    </tr>
+                                    @php 
+                                      $count = 1;
+                                    @endphp
+                                  @foreach($auction->lottings as $stock)
+                                    @php
+                                      $sold = 0; 
+                                      if(count($stock->sale)){
+                                        foreach($stock->sale as $sale){
+                                          $sold += $sale->quantity;
+                                        }
+                                      }
+                                    @endphp
+                                    <tr>
+                                      <td>{{$count}}</td>
+                                      <td class="vendor_code">{{$stock->vendor->vendor_code}}</td>
+                                      <td class="form_no">{{$stock->form_no}}</td>
+                                      <td class="item_no">{{$stock->item_no}}</td>
+                                      <td class="description">{{$stock->description}}</td>
+                                      <td class="quantity">{{$stock->quantity}}</td>
+                                      <td class="sold">{{$sold}}</td>
+                                      <td class="left_quantity">{{$stock->quantity - $sold}}</td>
+                                    </tr>
+                                      @php 
+                                        $count++; 
+                                      @endphp
+                                  @endforeach
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      @endif
+                    </td>
 	                </tr>
                 @endforeach
               </table>
             </div>
-            <!-- /.box-body -->
           </div>
-          <!-- /.box -->
         </div>
       </div>
     </section>
-    <!-- /.content -->
-
- @foreach($auctions as $auction)
-  @if(in_array($auction->id, $auction_with_stocks))
-  <div class="modal fade auction_stocks_modal" id="auction_stocks_{{$auction->id}}">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">{{$auction->auction_no}} Stocks</h4>
-          </div>
-          <div class="modal-body">
-            <table class="table table-hover buyer_purchases_table" data-buyer-id="{{$auction->id}}">
-                <tr>
-                  <th>S.No</th>
-                  <th>Vendor Code</th>
-                  <th>Form No</th>
-                  <th>Item No</th>
-                  <th>Description</th>
-                  <th>Quantity</th>
-                  <th>Sold</th>
-                  <th>Available</th>
-                </tr>
-                <?php $count=1; ?>
-            @foreach($stocks as $stock)
-              @if($auction->id==$stock->auction_id)
-                  <tr>
-                    <td>{{$count}}</td>
-                    <td class="invoice_id">{{$stock->vendor_code}}</td>
-                    <td class="form_no">{{$stock->form_no}}</td>
-                    <td class="item_no">{{$stock->item_no}}</td>
-                    <td class="description">{{$stock->description}}</td>
-                    <td class="quantity">{{$stock->quantity}}</td>
-                    <td class="quantity">{{$stock->sold}}</td>
-                    <td class="quantity">{{$stock->quantity - $stock->sold}}</td>
-                  </tr>
-                  <?php $count++; ?>
-              @endif
-              
-            @endforeach
-
-          </table>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-  @endif
- @endforeach
-
-
 
 @endsection
 @push('scripts')
-  <!-- bootstrap time picker -->
+
   <script src="{{ asset('backend/js/bootstrap-timepicker.min.js') }}"></script>
   <script type="text/javascript">
-    //Timepicker
     $('.timepicker').timepicker({
       showInputs: false
     })

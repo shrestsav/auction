@@ -16,13 +16,9 @@ class BuyerController extends Controller
      */
     public function index()
     {
-        // return 'fasdf';
-        $buyers = Buyer::select('id','buyer_code','first_name','last_name','address','mobile','comments')->get();
+        $buyers = Buyer::with('purchases')->get();
         $states = State::all();
-        $purchases = Sale::join('lottings','lottings.id','sales.lotting_id')->orderBy('buyer_id')->get();
-        // return $purchases;
-        $buyers_with_purchases = Sale::select('buyer_id')->groupBy('buyer_id')->get();
-        return view('backend.pages.buyers',compact('buyers','states','purchases','buyers_with_purchases'));
+        return view('backend.pages.buyers',compact('buyers','states'));
     }
 
     /**
@@ -44,14 +40,14 @@ class BuyerController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-        'buyer_code' => 'required|unique:buyers',
-        'first_name' => 'required',
-        'last_name' => 'required',
-        'buyers_premium' => 'required',
-        'address' => 'required',
-        'suburb' => 'required',
-        'state' => 'required',
-        'postcode' => 'required',
+            'buyer_code' => 'required|unique:buyers',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'buyers_premium' => 'required',
+            'address' => 'required',
+            'suburb' => 'required',
+            'state' => 'required',
+            'postcode' => 'required',
         ]);
 
         $buyer = Buyer::create($request->all());

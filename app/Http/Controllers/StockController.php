@@ -24,11 +24,12 @@ class StockController extends Controller
                                 'stocks.description',
                                 'stocks.quantity',
                                 'stocks.reserve',
-                                'stocks.sold',
                                 'stocks.date',
                                 'vendors.vendor_code')
                             ->join('vendors','stocks.vendor_id','=','vendors.id')
+                            ->with('lotting.sale')
                             ->get();
+        // return $stocks;
         return view('backend.pages.stocks',compact('vendors','stocks'));
     }
 
@@ -91,7 +92,6 @@ class StockController extends Controller
      */
     public function edit($id)
     {
-        
        $stocks = Stock::select(
                                 'stocks.id',
                                 'stocks.form_no',
@@ -100,7 +100,6 @@ class StockController extends Controller
                                 'stocks.commission',
                                 'stocks.quantity',
                                 'stocks.reserve',
-                                'stocks.sold',
                                 'stocks.date',
                                 'vendors.vendor_code')
                             ->join('vendors','stocks.vendor_id','=','vendors.id')
