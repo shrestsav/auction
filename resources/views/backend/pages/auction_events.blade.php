@@ -519,10 +519,10 @@
 
 			       		$('.added_items_div').show();
 	               		$('.alert-success').show().html('ITEM ADDED SUCCESSFULLY');
-	               		console.log(data);
+	               		console.log(data['sale_id']);
 	               		var row = '';
-	               		row += '<tr class="added_items_body" data-buyer-id="'+buyer_id+'" data-vendor-id="'+vendor_id+'" data-invoice-id="'+invoice_id+'">';
-	               		row += '<td class="vendor_code">S.No</td>';
+	               		row += '<tr class="added_items_body" data-sale-id="'+data['sale_id']+'" data-buyer-id="'+buyer_id+'" data-vendor-id="'+vendor_id+'" data-invoice-id="'+invoice_id+'">';
+	               		row += '<td class="vendor_code"></td>';
 	               		row += '<td class="invoice_id">'+invoice_id+'</td>';
 	               		row += '<td class="vendor_code">'+vendor_code+'</td>';
 	               		row += '<td class="item_no">'+item_no+'</td>';
@@ -556,48 +556,36 @@
 			e.preventDefault();
 			swal({
 			  title: "Are you sure?",
-			  text: "Once deleted, you will not be able to recover this data",
+			  text: "Once deleted, this item will be removed from the invoice",
 			  icon: "warning",
 			  buttons: true,
 			  dangerMode: true,
 			})
 			.then((willDelete) => {
 			  if (willDelete) {
-			  		const current_row = $(this).closest('tr');
-			  		const buyer_id = $(this).parents('.added_items_body').data('buyer-id');
-					const vendor_id = $(this).parents('.added_items_body').data('vendor-id');
-					const invoice_id = $(this).parents('.added_items_body').data('invoice-id');
-
-					const form_no = $(this).closest('tr').children('td.form_no').text();
-					const item_no = $(this).closest('tr').children('td.item_no').text();
-					const quantity = $(this).closest('tr').children('td.quantity').text();
-
-					$.ajax({
-					       type:'post',
-					       url:'{{ url("/remove_sale") }}',
-					       dataType: 'json',
-					       data:{
-								buyer_id: buyer_id,
-								vendor_id: vendor_id,
-								invoice_id: invoice_id,
-								form_no: form_no,
-								item_no: item_no,     
-								quantity: quantity     
-					      	},
-					       success:function(data) {
-					       		console.log(data);
-					       		$('#a_auction_id').trigger('change');
-					       		current_row.remove();
-					       		$('.added_items_table').sumtr({sumCells : '.price'});
-			 				},
-							error: function(response){
-								$.each(response.responseJSON, function(index, val){
-									console.log(index+":"+val);	
-								});
-							}
+		  		const current_row = $(this).closest('tr');
+		  		const sale_id = $(this).parents('.added_items_body').data('sale-id');
+				$.ajax({
+			       type:'post',
+			       url:'{{ url("/remove_sale") }}',
+			       dataType: 'json',
+			       data:{
+						sale_id: sale_id,    
+			      	},
+			       success:function(data) {
+				       	swal("Deleted!", {
+					      icon: "success",
 					    });
-			    swal("Deleted!", {
-			      icon: "success",
+			       		console.log(data);
+			       		$('#a_auction_id').trigger('change');
+			       		current_row.remove();
+			       		$('.added_items_table').sumtr({sumCells : '.price'});
+	 				},
+					error: function(response){
+						$.each(response.responseJSON, function(index, val){
+							console.log(index+":"+val);	
+						});
+					}
 			    });
 			  } 
 			});

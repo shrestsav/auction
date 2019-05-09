@@ -114,7 +114,7 @@ class AuctionController extends Controller
 
     public function ajax_remove_sale(Request $request)
     {
-        $remove_sale = Sale::where('buyer_id',$request->buyer_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->where('invoice_id',$request->invoice_id)->delete();
+        $remove_sale = Sale::find($request->sale_id)->delete();
 
         if($remove_sale)
             return json_encode('Deleted');
@@ -186,7 +186,7 @@ class AuctionController extends Controller
 
         $item = Sale::create($request->all());
 
-        return response()->json(['success'=>'Item has been added successfully']);
+        return response()->json(['success'=>'Item has been added successfully','sale_id'=>$item->id]);
     }
 
     public function ajax_check_invoice(Request $request){

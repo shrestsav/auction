@@ -5,6 +5,7 @@ use App;
 use App\Sale;
 use App\Vendor;
 use App\Buyer;
+use App\Auction;
 use Validator;
 
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ class ReportController extends Controller
 
         $vendors = Vendor::select('id','vendor_code','first_name','last_name')->get();
         $buyers = Buyer::select('id','buyer_code','first_name','last_name')->get();
+        $auctions = Auction::select('id','auction_no')->get();
 
     	$all_sales = Sale::select('sales.form_no as form_no',
 					    		'sales.item_no as item_no',
@@ -33,7 +35,7 @@ class ReportController extends Controller
     						->join('lottings','lottings.id','=','sales.lotting_id')
     						->get();
                             
-    	return view('backend.pages.total_sales',compact('all_sales','vendors','buyers'));
+    	return view('backend.pages.total_sales',compact('all_sales','vendors','buyers','auctions'));
     }
     public function invoices(Request $request){
 
@@ -110,6 +112,7 @@ class ReportController extends Controller
 
         $report = Sale::select('sales.form_no as form_no',
                             'sales.item_no as item_no',
+                            'sales.id as id',
                             'sales.invoice_id',
                             'sales.rate as rate',
                             'sales.quantity as quantity',
@@ -132,6 +135,10 @@ class ReportController extends Controller
         }
         elseif($request->type=='buyer_report'){
             $report = $report->where('sales.buyer_id','=',$request->buyer_id)
+                             ->get();
+        }
+        elseif($request->type=='auction_report'){
+            $report = $report->where('sales.auction_id','=',$request->auction_id)
                              ->get();
         }
         return response()->json($report);

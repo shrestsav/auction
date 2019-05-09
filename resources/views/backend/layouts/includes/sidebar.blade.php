@@ -62,7 +62,7 @@
         <li class="header">REPORTS</li>
 
         <li class="@if ($title === 'Total Sale') active @endif"><a href="{{route('reports.sales')}}"><i class="fa fa-shopping-cart text-yellow"></i><span>Total Sale</span></a></li>
-        <li class="@if ($title === 'Invoices') active @endif"><a href="{{route('reports.invoices')}}"><i class="fa fa-print text-aqua"></i><span>Invoices</span></a></li>
+        <li class="@if ($title === 'Invoices') active @endif"><a href="{{route('reports.invoices')}}"><i class="fa fa-print text-aqua"></i><span>Print Invoices</span></a></li>
       </ul>
     </section>
     <!-- /.sidebar -->

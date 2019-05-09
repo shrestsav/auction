@@ -4,6 +4,10 @@
 		tr>td, tr>th{
 			text-align: center;
 		}
+		.remove_item:hover{
+			cursor: pointer;
+			color: red;
+		}
 	</style>
 @endpush
 @section('content')
@@ -21,57 +25,65 @@
             </div>
             <div class="box-body">
             	<div class="col-md-6">
-            		<button type="button" class="btn btn-success" id="toggle_vendor">Vendor</button>
-            		<button type="button" class="btn btn-success" id="toggle_buyer">Buyer</button>
+            		<button type="button" class="btn bg-olive btn-flat margin btn-lg" id="toggle_auction">Auction</button>
+            		<button type="button" class="btn bg-olive btn-flat margin btn-lg" id="toggle_vendor">Vendor</button>
+            		<button type="button" class="btn bg-olive btn-flat margin btn-lg" id="toggle_buyer">Buyer</button>
             	</div>
-            	<br><br><br>
-            	<form role="form" method="POST" action="{{route('stocks.store')}}">
-            		@csrf
-            		<div class="col-md-2 vendor_section" style="display:none;">
-		                <div class="form-group">
-		                  <label for="ts_vendor_code">Vendor Code</label>
-		                  <select name="vendor_id" class="form-control select2" id="ts_vendor_code" style="width: 100%;" required>
-			                  <option selected="selected" disabled>Vendor Code</option>
-			                  @foreach($vendors as $vendor)
-			                  	<option value="{{$vendor->id}}">{{$vendor->vendor_code}}</option>
-			                  @endforeach
-			                </select>
-		                </div>
-		            </div>
-	              	<div class="col-md-3 vendor_section" style="display:none;">
-		                <div class="form-group">
-		                  <label for="ts_vendor_name">Vendor</label>
-		                  <select class="form-control select2" id="ts_vendor_name" style="width: 100%;" required>
-			                  <option selected="selected" disabled>Select Vendor</option>
-			                  @foreach($vendors as $vendor)
-			                  	<option value="{{$vendor->id}}">{{$vendor->first_name}} {{$vendor->last_name}}</option>
-			                  @endforeach
-			              </select>
-		                </div>
-		            </div>
-		            <div class="col-md-2 buyer_section" style="display:none;">
-		                <div class="form-group">
-		                  <label for="ts_buyer_code">Buyer Code</label>
-		                  <select name="buyer_id" class="form-control select2" id="ts_buyer_code" style="width: 100%;" required>
-			                  <option selected="selected" disabled>Buyer Code</option>
-			                  @foreach($buyers as $buyer)
-			                  	<option value="{{$buyer->id}}">{{$buyer->buyer_code}}</option>
-			                  @endforeach
-			                </select>
-		                </div>
-		            </div>
-	              	<div class="col-md-3 buyer_section" style="display:none;">
-		                <div class="form-group">
-		                  <label for="ts_buyer_name">Buyer</label>
-		                  <select class="form-control select2" id="ts_buyer_name" style="width: 100%;" required>
-			                  <option selected="selected" disabled>Select Buyer</option>
-			                  @foreach($buyers as $buyer)
-			                  	<option value="{{$buyer->id}}">{{$buyer->first_name}} {{$buyer->last_name}}</option>
-			                  @endforeach
-			              </select>
-		                </div>
-		            </div>
-            	</form>
+        		<div class="col-md-2 vendor_section" style="display:none;">
+	                <div class="form-group">
+	                  <label for="ts_vendor_code">Vendor Code</label>
+	                  <select name="vendor_id" class="form-control select2" id="ts_vendor_code" style="width: 100%;" required>
+		                  <option selected="selected" disabled>Vendor Code</option>
+		                  @foreach($vendors as $vendor)
+		                  	<option value="{{$vendor->id}}">{{$vendor->vendor_code}}</option>
+		                  @endforeach
+		                </select>
+	                </div>
+	            </div>
+              	<div class="col-md-3 vendor_section" style="display:none;">
+	                <div class="form-group">
+	                  <label for="ts_vendor_name">Vendor</label>
+	                  <select class="form-control select2" id="ts_vendor_name" style="width: 100%;" required>
+		                  <option selected="selected" disabled>Select Vendor</option>
+		                  @foreach($vendors as $vendor)
+		                  	<option value="{{$vendor->id}}">{{$vendor->first_name}} {{$vendor->last_name}}</option>
+		                  @endforeach
+		              </select>
+	                </div>
+	            </div>
+	            <div class="col-md-3 auction_section" style="display:none;">
+	                <div class="form-group">
+	                  <label for="ts_auction_no">Auction</label>
+	                  <select class="form-control select2" id="ts_auction_no" style="width: 100%;" required>
+		                  <option selected="selected" disabled>Select Auction</option>
+		                  @foreach($auctions as $auction)
+		                  	<option value="{{$auction->id}}">{{$auction->auction_no}}</option>
+		                  @endforeach
+		              </select>
+	                </div>
+	            </div>
+	            <div class="col-md-2 buyer_section" style="display:none;">
+	                <div class="form-group">
+	                  <label for="ts_buyer_code">Buyer Code</label>
+	                  <select name="buyer_id" class="form-control select2" id="ts_buyer_code" style="width: 100%;" required>
+		                  <option selected="selected" disabled>Buyer Code</option>
+		                  @foreach($buyers as $buyer)
+		                  	<option value="{{$buyer->id}}">{{$buyer->buyer_code}}</option>
+		                  @endforeach
+		                </select>
+	                </div>
+	            </div>
+              	<div class="col-md-3 buyer_section" style="display:none;">
+	                <div class="form-group">
+	                  <label for="ts_buyer_name">Buyer</label>
+	                  <select class="form-control select2" id="ts_buyer_name" style="width: 100%;" required>
+		                  <option selected="selected" disabled>Select Buyer</option>
+		                  @foreach($buyers as $buyer)
+		                  	<option value="{{$buyer->id}}">{{$buyer->first_name}} {{$buyer->last_name}}</option>
+		                  @endforeach
+		              </select>
+	                </div>
+	            </div>
             </div>
           </div>
         </div>
@@ -147,6 +159,7 @@
 	                  <th>Stock Commission</th>
 	                  <th>Buyers Premium Amount</th>
 	                  <th>Grand Total</th>
+	                  <th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -163,15 +176,25 @@
 @endsection
 @push('scripts')
 	<script type="text/javascript">
-
+		
 		//Toggle Vendor or Buyer
 		$('#toggle_vendor').on('click',function(){
 			$('.vendor_section').show();
-			$('.buyer_section').hide();
+			$('.buyer_section, .auction_section').hide();
+			$(this).removeClass('bg-olive').addClass('bg-purple');
+			$('#toggle_buyer, #toggle_auction').removeClass('bg-purple').addClass('bg-olive');
 		});
 		$('#toggle_buyer').on('click',function(){
 			$('.buyer_section').show();
-			$('.vendor_section').hide();
+			$('.vendor_section, .auction_section').hide();
+			$(this).removeClass('bg-olive').addClass('bg-purple');
+			$('#toggle_vendor, #toggle_auction').removeClass('bg-purple').addClass('bg-olive');
+		});
+		$('#toggle_auction').on('click',function(){
+			$('.auction_section').show();
+			$('.vendor_section, .buyer_section').hide();
+			$(this).removeClass('bg-olive').addClass('bg-purple');
+			$('#toggle_buyer, #toggle_vendor').removeClass('bg-purple').addClass('bg-olive');
 		});
 		//Drop down vendor
 		$('#ts_vendor_code').on('change', function() {
@@ -195,32 +218,7 @@
 					vendor_id: newval              
 		      	},
 		       success:function(response) {
-		       		$('.ajax_report_table tbody').html('');
-               		console.log(response);
-               		var content = '';
-               		response.forEach(function(report){
-               			content += '<tr>';
-               			content += '<td>'+report.invoice_id+'</td>';
-               			content += '<td>'+report.vendor_code+'</td>';
-						content += '<td>'+report.auction_no+'</td>';
-						content += '<td>'+report.buyer_code+'</td>';
-						content += '<td>'+report.form_no+'</td>';
-						content += '<td>'+report.item_no+'</td>';
-						content += '<td>'+report.description+'</td>';
-						content += '<td>'+report.quantity+'</td>';
-						content += '<td>$ '+report.rate+'</td>';
-						content += '<td>$ '+report.discount+'</td>';
-						content += '<td>'+report.commission+' %</td>';
-						content += '<td>$ '+parseFloat(report.buyers_premium_amount)+'</td>';
-
-						var grand_total = (Number(report.quantity) * Number(report.rate))-Number(report.discount)+Number(report.buyers_premium_amount); 
-					
-						content += '<td>$ '+grand_total+'</td>';
-						content += '</tr>';
-               		});
-               		$('.ajax_report_table tbody').append(content);
-               		$('.reports_container').show();
-               		
+		       		showReport(response);
  				},
 				error: function(response){
 					console.log(response);
@@ -249,32 +247,7 @@
 					buyer_id: newval              
 		      	},
 		       success:function(response) {
-		       		$('.ajax_report_table tbody').html('');
-               		console.log(response);
-               		var content = '';
-               		response.forEach(function(report){
-               			content += '<tr>';
-               			content += '<td>'+report.invoice_id+'</td>';
-               			content += '<td>'+report.vendor_code+'</td>';
-						content += '<td>'+report.auction_no+'</td>';
-						content += '<td>'+report.buyer_code+'</td>';
-						content += '<td>'+report.form_no+'</td>';
-						content += '<td>'+report.item_no+'</td>';
-						content += '<td>'+report.description+'</td>';
-						content += '<td>'+report.quantity+'</td>';
-						content += '<td>$ '+report.rate+'</td>';
-						content += '<td>$ '+report.discount+'</td>';
-						content += '<td>'+report.commission+' %</td>';
-						content += '<td>$ '+parseFloat(report.buyers_premium_amount)+'</td>';
-
-						var grand_total = (Number(report.quantity) * Number(report.rate))-Number(report.discount)+Number(report.buyers_premium_amount); 
-					
-						content += '<td>$ '+grand_total+'</td>';
-						content += '</tr>';
-               		});
-               		$('.ajax_report_table tbody').append(content);
-               		$('.reports_container').show();
-               		
+		       		showReport(response);
  				},
 				error: function(response){
 					console.log(response);
@@ -283,6 +256,99 @@
 
 		});
 
+		$('#ts_auction_no').on('change', function() {
+			var newval = this.value;
 
+		  	$.ajax({
+		       type:'post',
+		       url:'{{ route("reports.ajax_invoice_report") }}',
+		       dataType: 'json',
+		       data:{
+		       	 	type: 'auction_report',
+					auction_id: newval              
+		      	},
+		       success:function(response) {
+		       		showReport(response);
+               		console.log(response);
+ 				},
+				error: function(response){
+					console.log(response);
+				}
+		    });
+		});
+
+		$('body').on('click','.remove_item',function(e){
+			e.preventDefault();
+			swal({
+			  title: "Are you sure?",
+			  text: "Once deleted, this item will be removed from the invoice",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+		  		const current_row = $(this).closest('tr');
+		  		const sale_id = $(this).parents('tr').data('sale-id');
+				$.ajax({
+			       type:'post',
+			       url:'{{ url("/remove_sale") }}',
+			       dataType: 'json',
+			       data:{
+						sale_id: sale_id,    
+			      	},
+			       success:function(data) {
+				       	swal("Deleted!", {
+					      icon: "success",
+					    });
+			       		console.log(data);
+			       		$('#a_auction_id').trigger('change');
+			       		current_row.remove();
+			       		$('.added_items_table').sumtr({sumCells : '.price'});
+	 				},
+					error: function(response){
+						$.each(response.responseJSON, function(index, val){
+							console.log(index+":"+val);	
+						});
+					}
+			    });
+			  } 
+			});
+		});
+
+		function showReport(data){
+			$('.ajax_report_table tbody').html('');
+			var content = '';
+			if(data && data.length){
+				data.forEach(function(report){
+	       			content += '<tr data-sale-id="'+report.id+'">';
+	       			content += '<td>'+report.invoice_id+'</td>';
+	       			content += '<td>'+report.vendor_code+'</td>';
+					content += '<td>'+report.auction_no+'</td>';
+					content += '<td>'+report.buyer_code+'</td>';
+					content += '<td>'+report.form_no+'</td>';
+					content += '<td>'+report.item_no+'</td>';
+					content += '<td>'+report.description+'</td>';
+					content += '<td>'+report.quantity+'</td>';
+					content += '<td>$ '+report.rate+'</td>';
+					content += '<td>$ '+report.discount+'</td>';
+					content += '<td>'+report.commission+' %</td>';
+					content += '<td>$ '+parseFloat(report.buyers_premium_amount)+'</td>';
+
+					var grand_total = (Number(report.quantity) * Number(report.rate))-Number(report.discount)+Number(report.buyers_premium_amount); 
+				
+					content += '<td>$ '+grand_total+'</td>';
+					content += '<td><div class="remove_item"><i class="fa fa-window-close text-red" aria-hidden="true"></i></div></td>';
+					content += '</tr>';
+	       		});
+			}
+			else{
+				content += '<tr><td>No sales record found</td></tr>';
+			}
+
+       		$('.ajax_report_table tbody').append(content);
+       		$('.reports_container').show();
+		}
+		
 	</script>
 @endpush

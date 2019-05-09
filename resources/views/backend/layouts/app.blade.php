@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="{{ asset('backend/css/AdminLTE.min.css') }}">
   {{-- Theme Color CSS --}}
   <link rel="stylesheet" href="{{ asset('backend/css/skin-purple.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('backend/css/dataTables.bootstrap.min.css') }}">
   {{-- CUSTOM CSS BY SHRESTSAV --}}
   <link rel="stylesheet" href="{{ asset('backend/css/style.css') }}">
   <style type="text/css" media="print">
@@ -85,48 +86,48 @@
 <script src="{{ asset('backend/js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('backend/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('backend/js/sweetalert.min.js') }}"></script>
+<script src="{{ asset('backend/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('backend/js/dataTables.bootstrap.min.js') }}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-  $.widget.bridge('uibutton', $.ui.button);
-
-// SET AJAX CSRF TOKEN
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-
+  var SITE_URL = '{{url('/')}}/';
   
+    $.widget.bridge('uibutton', $.ui.button);
 
-  $(function () {
-      $('.select2').select2();
-  });
-
-
-  $('.sidebar-toggle').on('click',function(){
-    if($('body').hasClass("sidebar-collapse")){
-      sidebar_state='';
-    }
-    else{
-      sidebar_state='sidebar-collapse';
-    }
-    
-    $.ajax({
-      url: "{{ url('/set_sidebar') }}",
-      method: 'post',
-      data: {
-         id: '{{ Auth::user()->id }}',
-         theme_sidebar: sidebar_state
-      },
-      success: function(response){
-         console.log(response);
+    // SET AJAX CSRF TOKEN
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
 
+  $(document).ready( function () {
+    $('.select2').select2();
 
+    $('.sidebar-toggle').on('click',function(){
+      if($('body').hasClass("sidebar-collapse")){
+        sidebar_state='';
+      }
+      else{
+        sidebar_state='sidebar-collapse';
+      }
+      
+      $.ajax({
+        url: "{{ url('/set_sidebar') }}",
+        method: 'post',
+        data: {
+           id: '{{ Auth::user()->id }}',
+           theme_sidebar: sidebar_state
+        },
+        success: function(response){
+           console.log(response);
+        }
+      });
+    });
+
+    $('.datatable').DataTable();
 
   });
-
 </script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{ asset('backend/js/bootstrap.min.js') }}"></script>

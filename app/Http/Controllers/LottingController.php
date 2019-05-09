@@ -141,7 +141,7 @@ class LottingController extends Controller
 
     public function ajax_remove_lot_from_auction(Request $request)
     {
-        $Remove_lot = Lotting::where('vendor_id',$request->vendor_id)->where('auction_id',$request->auction_id)->where('form_no',$request->form_no)->where('item_no',$request->item_no)->delete();
+        $Remove_lot = Lotting::find($request->lotting_id)->delete();
         if($Remove_lot)
             return json_encode('Deleted');
         return response()->json(['error'=>'Data Could Not be deleted'],401);
@@ -199,7 +199,7 @@ class LottingController extends Controller
         }
 
         $lot = Lotting::create($request->all());
-        return response()->json(['success'=>'Lotting has been added successfully']);
+        return response()->json(['success'=>'Lotting has been added successfully','lotting_id'=>$lot->id]);
     }
 
     public function ajax_update_lot(Request $request)

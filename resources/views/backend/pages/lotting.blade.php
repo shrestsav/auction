@@ -205,24 +205,10 @@
 
 <script type="text/javascript">
 
-	//Experimental Feature
-	var lotting = {
-					'auction_id':null,
-					'vendor_id':null,
-					'vendor_code':null,
-					'form_no':null,
-					'item_no':null,
-					'description':null,
-					'quantity':null,
-					'reserve':null,
-					'lot_no':null,
-					'description':null,
-				  };
-
 	//CSRF TOKEN HAS BEEN SENT IN HEADER FILE IN APP BLADE
 	$('body').on('change','#l_auction_id',function(){
 		if($('#s_vendor_code').prop('disabled')==false){
-			$('#s_vendor_code').trigger('change');
+			// $('#s_vendor_code').trigger('change');
 		}
 		if($('#s_vendor_code').prop('disabled')==true){
 			$('#s_vendor_code, #s_vendor_name').prop("disabled", false);
@@ -230,7 +216,6 @@
 			$('#l_auction_id').prop("disabled", true);
 		}
 		var auction_id = $(this).val();
-		lotting['auction_id'] = auction_id;
 		var auction_venue = $(this).find('option:selected').data('auction-venue');
 		var auction_date = $(this).find('option:selected').data('auction-date');
 		var auction_time = $(this).find('option:selected').data('auction-time');
@@ -239,7 +224,7 @@
 		$('#l_time').val(auction_time);
 		$.ajax({
 	       type:'post',
-	       url:'{{ url("/get_auction_stocks") }}',
+	       url: SITE_URL+'get_auction_stocks',
 	       dataType: 'json',
 	       data:{
 				auction_id:auction_id                 
@@ -289,7 +274,6 @@
 	       }
 	    });
 	});
-
 	$('body').on('change','#s_vendor_code',function(){
 		var oldval = $('#s_vendor_name').val();
 		var newval = this.value;
@@ -298,7 +282,7 @@
 	  		$('#s_vendor_name').val(this.value).trigger('change');
 		$.ajax({
            type:'post',
-           url:'{{ url("/get_vendor_stocks") }}',
+           url: SITE_URL+'get_vendor_stocks',
            dataType: 'json',
            data:{
 				id:newval,
@@ -395,7 +379,7 @@
 	    	var reserve = $('#l_reserve').val();
 	    	$.ajax({
                type:'post',
-               url:'{{ url("/save_new_lot") }}',
+               url:SITE_URL+'save_new_lot',
                dataType: 'json',
                data:{
 					auction_id: auction_id,
@@ -415,7 +399,7 @@
                		$('.alert-danger').hide();
                		$('.alert-success').show().html('LOT ADDED SUCCESSFULLY');
                		var content = '';
-               		content += '<tr class="lotting_body" data-vendor-id="'+vendor_id+'">';
+               		content += '<tr class="lotting_body" data-vendor-id="'+vendor_id+'" data-lotting-id="'+response['lotting_id']+'">';
                		content += '<td class="vendor_code">'+vendor_code+'</td>';
                		content += '<td class="vendor_name">'+vendor_name+'</td>';
                		content += '<td class="lot_no">'+lot_no+'</td>';
@@ -459,6 +443,10 @@
 
 	$('body').on('click','.remove_lot',function(e){
 		e.preventDefault();
+		var lotting_id = $(this).parents('.lotting_body').data('lotting-id');
+		var sel_vendor_id = $('#s_vendor_code').val();
+		const vendor_id = $(this).parents('.lotting_body').data('vendor-id');
+		const auction_id = $('#l_auction_id').val();
 		swal({
 		  title: "Are you sure?",
 		  text: "Once deleted, you will not be able to recover this data!",
@@ -468,29 +456,22 @@
 		})
 		.then((willDelete) => {
 		  if (willDelete) {
-		  	// const lotting_id = $(this).parents('.lotting_body').data('lotting-id');
-		  	const vendor_id = $(this).parents('.lotting_body').data('vendor-id');
-			const form_no = $(this).closest('tr').children('td.form_no').text();
-			const item_no = $(this).closest('tr').children('td.item_no').text();
-			const auction_id = $('#l_auction_id').val();
 			$.ajax({
                type:'post',
-               url:'{{ url("/remove_lot_from_auction") }}',
+               url: SITE_URL+'remove_lot_from_auction',
                dataType: 'json',
                data:{
-					vendor_id: vendor_id,
-					form_no: form_no,
-					item_no: item_no,                 
-					auction_id: auction_id,                 
+					lotting_id: lotting_id,               
               	},
                success:function(data) {
                		console.log(data); 
-               		$('#l_auction_id').trigger('change');
-               		$('#s_vendor_code').trigger('change');
+               		$('#l_auction_id').val(auction_id).trigger('change');
+               		if(sel_vendor_id==vendor_id)
+               			$('#s_vendor_code').trigger('change');
                }
             });
 		    swal("Lot has been removed from Auction", {
-		      icon: "success",
+		      	icon: "success",
 		    });
 		  } 
 		});		
@@ -552,7 +533,7 @@
 	    	var reserve = $('#l_reserve').val();
 	    	$.ajax({
                type:'post',
-               url:'{{ url("/update_lot") }}',
+               url: SITE_URL+'update_lot',
                dataType: 'json',
                data:{
 					auction_id: auction_id,
@@ -581,7 +562,6 @@
 					});
 				}
             });	
-			
 		  } 
 		});		
 	});
