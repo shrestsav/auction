@@ -18,6 +18,7 @@ class CreateVendorsTable extends Migration
             $table->string('vendor_code')->unique();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('company')->nullable();
             $table->date('joined_date')->useCurrent();
             $table->string('abn')->nullable();
             $table->string('gst_status');
@@ -27,8 +28,6 @@ class CreateVendorsTable extends Migration
             $table->string('suburb');
             $table->string('state');
             $table->integer('postcode')->unsigned();
-            $table->string('telephone_home')->nullable();
-            $table->string('telephone_work')->nullable();
             $table->string('mobile')->nullable();
             $table->string('email')->nullable();
             $table->text('comments')->nullable();

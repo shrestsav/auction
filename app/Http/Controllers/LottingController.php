@@ -25,8 +25,12 @@ class LottingController extends Controller
                                                'vendors.first_name',
                                                'vendors.last_name')
                                         ->join('stocks','stocks.vendor_id','vendors.id')
-                                        ->groupBy('vendors.id','vendors.first_name','vendors.last_name')
+                                        ->groupBy('vendors.id',
+                                                  'vendors.first_name',
+                                                  'vendors.vendor_code',
+                                                  'vendors.last_name')
                                         ->get();
+                                        
         //Stocks which are already added in auctions
         $added_stocks = Lotting::pluck('stock_id')->toArray();
 

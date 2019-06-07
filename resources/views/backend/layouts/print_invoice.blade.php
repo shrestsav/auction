@@ -122,16 +122,17 @@
     <article>
       <h1>Recipient</h1>
       <address >
-        <p>{{$buyer_info[0]->buyer_code}}</p>
-        <p>{{$buyer_info[0]->first_name}} {{$buyer_info[0]->last_name}}</p>
-        <p>{{$buyer_info[0]->address}}</p>
-        <p>{{$buyer_info[0]->state}}</p>
-        <p>{{$buyer_info[0]->mobile}}</p>
+        <p>{{$buyer_info->buyer_code}}</p>
+        <p>{{$buyer_info->first_name}} {{$buyer_info->last_name}}</p>
+        <p>{{$buyer_info->address}}</p>
+        <p>{{$buyer_info->state}}</p>
+        <p>{{$buyer_info->mobile}}</p>
+        <p>{{$buyer_info->company}}asd</p>
       </address>
       <table class="meta">
         <tr>
           <th><span >Invoice No</span></th>
-          <td><span >{{$invoice_id}}</span></td>
+          <td><span >{{$invoices[0]->invoice_id}}</span></td>
         </tr>
         <tr>
           <th><span >Date</span></th>

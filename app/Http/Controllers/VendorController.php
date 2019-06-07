@@ -85,7 +85,24 @@ class VendorController extends Controller
      */
     public function edit($id)
     {
-        //
+        $states = State::all();
+        $payment_methods = State::pluck('name');
+        $vendor = Vendor::find($id);
+
+        $view = view('backend.modals.render.edit_vendor')
+                    ->with([
+                        'vendor' => $vendor,
+                        'states' => $states,
+                        'payment_methods' => $payment_methods,
+                    ])
+                    ->render();
+
+        $response = [
+           'status' => true,
+           'title' => $vendor->first_name.' '.$vendor->first_name,
+           'html' => $view
+        ];
+       return response()->json($response);
     }
 
     /**
@@ -96,8 +113,12 @@ class VendorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {   
+        unset($request['_method']);
+        unset($request['_token']);
+        $update = Vendor::where('id',$id)->update($request->all());
+        if($update)
+            return back()->with('message','Update Successfull');
     }
 
     /**

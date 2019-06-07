@@ -19,12 +19,23 @@
   {{-- Theme Color CSS --}}
   <link rel="stylesheet" href="{{ asset('backend/css/skin-purple.min.css') }}">
   <link rel="stylesheet" href="{{ asset('backend/css/dataTables.bootstrap.min.css') }}">
+  {{-- Bootstrap Notify CSS --}}
+  <link rel="stylesheet" href="{{ asset('backend/css/animate.css') }}">
+
   {{-- CUSTOM CSS BY SHRESTSAV --}}
   <link rel="stylesheet" href="{{ asset('backend/css/style.css') }}">
   <style type="text/css" media="print">
     .printer{
       display:none;
       }
+    [data-notify="progressbar"] {
+      margin-bottom: 0px;
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      width: 100%;
+      height: 5px;
+    }
   </style>
   
 
@@ -84,13 +95,34 @@
 <script src="{{ asset('backend/js/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('backend/js/jquery-ui.min.js') }}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{{ asset('backend/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('backend/js/bootstrap-notify.min.js') }}"></script>
+<script src="{{ asset('backend/js/validator.min.js') }}"></script>
 <script src="{{ asset('backend/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('backend/js/sweetalert.min.js') }}"></script>
 <script src="{{ asset('backend/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('backend/js/dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ asset('backend/js/custom.js') }}"></script>
+
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   var SITE_URL = '{{url('/')}}/';
+
+  //Notify
+  @if($errors->any())
+    @foreach ($errors->all() as $error)
+      showNotify('danger','{{$error}}')
+    @endforeach
+  @endif
+
+  @if(\Session::has('error'))
+    showNotify('danger','{{\Session::get("error")}}')
+  @endif
+
+  @if(\Session::has('message'))
+    showNotify('success','{{\Session::get("message")}}')
+  @endif
   
     $.widget.bridge('uibutton', $.ui.button);
 
@@ -128,11 +160,12 @@
     $('.datatable').DataTable();
 
   });
+
 </script>
-<!-- Bootstrap 3.3.7 -->
-<script src="{{ asset('backend/js/bootstrap.min.js') }}"></script>
+
 <!-- AdminLTE App -->
 <script src="{{ asset('backend/js/adminlte.min.js') }}"></script>
+
 
 @stack('scripts')
 

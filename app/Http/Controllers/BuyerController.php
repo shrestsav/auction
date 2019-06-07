@@ -74,7 +74,22 @@ class BuyerController extends Controller
      */
     public function edit($id)
     {
-        //
+        $states = State::all();
+        $buyer = Buyer::find($id);
+
+        $view = view('backend.modals.render.edit_buyer')
+                    ->with([
+                        'buyer' => $buyer,
+                        'states' => $states,
+                    ])
+                    ->render();
+
+        $response = [
+           'status' => true,
+           'title' => $buyer->first_name.' '.$buyer->first_name,
+           'html' => $view
+        ];
+       return response()->json($response);
     }
 
     /**
@@ -86,7 +101,11 @@ class BuyerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        unset($request['_method']);
+        unset($request['_token']);
+        $update = Buyer::where('id',$id)->update($request->all());
+        if($update)
+            return back()->with('message','Update Successfull');
     }
 
     /**

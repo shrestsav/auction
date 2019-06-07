@@ -42,7 +42,7 @@
           <ul class="treeview-menu">
             <li class="@if ($title === 'Vendors') active @endif">
               <a href="{{route('vendors.index')}}"><i class="fa fa-circle-o text-blue"></i> 
-                <span>List All</span>
+                <span>Add / List All</span>
               </a>
             </li>
             <li class="@if ($title === 'Stocks') active @endif">

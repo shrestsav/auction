@@ -14,27 +14,27 @@ class ReportController extends Controller
 {
     public function total_sales(Request $request){
 
-        $vendors = Vendor::select('id','vendor_code','first_name','last_name')->get();
-        $buyers = Buyer::select('id','buyer_code','first_name','last_name')->get();
-        $auctions = Auction::select('id','auction_no')->get();
+      $vendors = Vendor::select('id','vendor_code','first_name','last_name')->get();
+      $buyers = Buyer::select('id','buyer_code','first_name','last_name')->get();
+      $auctions = Auction::select('id','auction_no')->get();
 
-    	$all_sales = Sale::select('sales.form_no as form_no',
-					    		'sales.item_no as item_no',
-					    		'sales.invoice_id',
-					    		'sales.rate as rate',
-					    		'sales.quantity as quantity',
-					    		'sales.discount as discount',
-					    		'sales.buyers_premium_amount as buyers_premium_amount',
-					    		'vendors.vendor_code',
-					    		'auctions.auction_no',
-					    		'buyers.buyer_code',
-					    		'lottings.description as description')
-					    	->join('vendors','vendors.id','=','sales.vendor_id')
-    						->join('buyers','buyers.id','=','sales.buyer_id')
-    						->join('auctions','auctions.id','=','sales.auction_id')
-    						->join('lottings','lottings.id','=','sales.lotting_id')
-    						->get();
-                            
+  	  $all_sales = Sale::select('sales.form_no as form_no',
+				    		'sales.item_no as item_no',
+				    		'sales.invoice_id',
+				    		'sales.rate as rate',
+				    		'sales.quantity as quantity',
+				    		'sales.discount as discount',
+				    		'sales.buyers_premium_amount as buyers_premium_amount',
+				    		'vendors.vendor_code',
+				    		'auctions.auction_no',
+				    		'buyers.buyer_code',
+				    		'lottings.description as description')
+				    	->join('vendors','vendors.id','=','sales.vendor_id')
+  						->join('buyers','buyers.id','=','sales.buyer_id')
+  						->join('auctions','auctions.id','=','sales.auction_id')
+  						->join('lottings','lottings.id','=','sales.lotting_id')
+  						->get();
+                          
     	return view('backend.pages.total_sales',compact('all_sales','vendors','buyers','auctions'));
     }
     public function invoices(Request $request){
@@ -76,16 +76,16 @@ class ReportController extends Controller
     }
 
     public function print_invoice(Request $request){
-
-        $buyer_info = Sale::select('buyers.buyer_code','buyers.first_name','buyers.last_name','buyers.address','buyers.state','buyers.mobile')
-                            ->join('buyers','buyers.id','sales.buyer_id')
-                            ->where('invoice_id',$request->invoice_id)
-                            ->groupBy('buyers.buyer_code','buyers.first_name','buyers.last_name','buyers.address','buyers.state','buyers.mobile')
-                            ->get();
-
-        $invoice_id = $request->invoice_id;
-
-        $invoices = Sale::select('vendors.vendor_code','sales.item_no','lottings.description','sales.quantity','sales.rate','sales.discount','sales.buyers_premium_amount',
+        
+        $buyer_info = Sale::where('invoice_id',$request->invoice_id)->first()->buyer;
+        $invoices = Sale::select('vendors.vendor_code',
+                                 'sales.item_no',
+                                 'sales.invoice_id',
+                                 'lottings.description',
+                                 'sales.quantity',
+                                 'sales.rate',
+                                 'sales.discount',
+                                 'sales.buyers_premium_amount',
                                  \DB::raw('((sales.quantity*sales.rate)-sales.discount) as net_total'),
                                  \DB::raw('((sales.quantity*sales.rate)-sales.discount+sales.buyers_premium_amount) as grand_total'))
                           ->join('lottings','lottings.id','sales.lotting_id')
@@ -95,7 +95,6 @@ class ReportController extends Controller
                           ->get();
 
         return view('backend.layouts.print_invoice',compact('invoices','buyer_info','invoice_id'));
-        
     }
     public function ajax_invoice_report(Request $request){
         $rule = [

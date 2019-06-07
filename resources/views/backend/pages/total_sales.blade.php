@@ -15,7 +15,7 @@
     <section class="content">
       <div class="row">
        	<div class="col-md-12">
-          <div class="box box-success">
+          <div class="box box-purple box-solid">
             <div class="box-header with-border">
               <h3 class="box-title">Sales Report</h3>
               <div class="box-tools pull-right">
@@ -25,9 +25,9 @@
             </div>
             <div class="box-body">
             	<div class="col-md-6">
-            		<button type="button" class="btn bg-olive btn-flat margin btn-lg" id="toggle_auction">Auction</button>
-            		<button type="button" class="btn bg-olive btn-flat margin btn-lg" id="toggle_vendor">Vendor</button>
-            		<button type="button" class="btn bg-olive btn-flat margin btn-lg" id="toggle_buyer">Buyer</button>
+            		<button type="button" class="btn bg-purple btn-flat margin btn-lg" id="toggle_auction">Auction</button>
+            		<button type="button" class="btn bg-purple btn-flat margin btn-lg" id="toggle_vendor">Vendor</button>
+            		<button type="button" class="btn bg-purple btn-flat margin btn-lg" id="toggle_buyer">Buyer</button>
             	</div>
         		<div class="col-md-2 vendor_section" style="display:none;">
 	                <div class="form-group">
@@ -181,20 +181,20 @@
 		$('#toggle_vendor').on('click',function(){
 			$('.vendor_section').show();
 			$('.buyer_section, .auction_section').hide();
-			$(this).removeClass('bg-olive').addClass('bg-purple');
-			$('#toggle_buyer, #toggle_auction').removeClass('bg-purple').addClass('bg-olive');
+			$(this).removeClass('bg-purple').addClass('bg-olive');
+			$('#toggle_buyer, #toggle_auction').removeClass('bg-olive').addClass('bg-purple');
 		});
 		$('#toggle_buyer').on('click',function(){
 			$('.buyer_section').show();
 			$('.vendor_section, .auction_section').hide();
-			$(this).removeClass('bg-olive').addClass('bg-purple');
-			$('#toggle_vendor, #toggle_auction').removeClass('bg-purple').addClass('bg-olive');
+			$(this).removeClass('bg-purple').addClass('bg-olive');
+			$('#toggle_vendor, #toggle_auction').removeClass('bg-olive').addClass('bg-purple');
 		});
 		$('#toggle_auction').on('click',function(){
 			$('.auction_section').show();
 			$('.vendor_section, .buyer_section').hide();
-			$(this).removeClass('bg-olive').addClass('bg-purple');
-			$('#toggle_buyer, #toggle_vendor').removeClass('bg-purple').addClass('bg-olive');
+			$(this).removeClass('bg-purple').addClass('bg-olive');
+			$('#toggle_buyer, #toggle_vendor').removeClass('bg-olive').addClass('bg-purple');
 		});
 		//Drop down vendor
 		$('#ts_vendor_code').on('change', function() {

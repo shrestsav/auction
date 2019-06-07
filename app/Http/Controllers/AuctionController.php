@@ -57,7 +57,7 @@ class AuctionController extends Controller
         $request->merge(['auction_no' => 'A'.$id]);
         $auction = Auction::create($request->all());
 
-        return back();
+        return back()->with('message','New Auction Created');
     }
 
     /**

@@ -24,7 +24,6 @@ class StockController extends Controller
                                 'stocks.description',
                                 'stocks.quantity',
                                 'stocks.reserve',
-                                'stocks.date',
                                 'vendors.vendor_code')
                             ->join('vendors','stocks.vendor_id','=','vendors.id')
                             ->with('lotting.sale')
@@ -59,7 +58,6 @@ class StockController extends Controller
             'quantity' => 'required',
             'description' => 'required',
             'reserve' => 'required',
-            'date' => 'required',
         ]);
 
         //Check for Existing form_no and item_no
@@ -100,11 +98,10 @@ class StockController extends Controller
                                 'stocks.commission',
                                 'stocks.quantity',
                                 'stocks.reserve',
-                                'stocks.date',
                                 'vendors.vendor_code')
                             ->join('vendors','stocks.vendor_id','=','vendors.id')
+                            ->where('stocks.id',$id)
                             ->first();
-
         return view('backend.pages.stocks.edit_stocks',compact('stocks'));
 
     }
@@ -119,7 +116,6 @@ class StockController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'date' => 'required',
             'form_no' => 'required',
             'item_no' => 'required',
             'commission' => 'required',
@@ -128,8 +124,7 @@ class StockController extends Controller
             'description' => 'required'
         ]);
         $stocks = Stock::where('id',$id)
-                       ->update(['date' => $request->date, 
-                                'form_no' => $request->form_no,
+                       ->update(['form_no' => $request->form_no,
                                 'item_no' => $request->item_no,
                                 'commission' => $request->commission,
                                 'quantity' => $request->quantity,

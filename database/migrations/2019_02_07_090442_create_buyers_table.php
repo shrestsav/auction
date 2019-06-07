@@ -18,6 +18,7 @@ class CreateBuyersTable extends Migration
             $table->string('buyer_code')->unique();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('company')->nullable();
             $table->string('contact_type')->nullable();
             $table->tinyInteger('buyers_premium')->default(0)->comment('0: no, 1: yes');
             $table->integer('buyers_premium_rate')->unsigned()->nullable();
@@ -25,8 +26,6 @@ class CreateBuyersTable extends Migration
             $table->string('suburb');
             $table->string('state');
             $table->integer('postcode')->unsigned();
-            $table->string('telephone_home')->nullable();
-            $table->string('telephone_work')->nullable();
             $table->string('mobile')->nullable();
             $table->string('email')->nullable();
             $table->text('comments')->nullable();

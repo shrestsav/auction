@@ -21,6 +21,7 @@ Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
 	Route::post('set_sidebar','HomeController@ajax_set_sidebar');
+
 	Route::resource('vendors','VendorController');
 	Route::resource('buyers','BuyerController');
 	Route::resource('auctions','AuctionController');

@@ -18,7 +18,7 @@
           </div> --}}
           <!-- /.box -->
           <!-- DONUT CHART -->
-          <div class="box box-danger">
+          <div class="box box-purple">
             {{-- <div class="box-header with-border">
               <h3 class="box-title">Donut Chart</h3>
 

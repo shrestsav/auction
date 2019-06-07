@@ -10,20 +10,11 @@
     <section class="content">
       <div class="row">
       	<div class="col-md-4">
-          @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-          @endif
-          <div class="box box-success collapsed-box">
+          <div class="box box-purple box-solid{{--  collapsed-box --}}">
             <div class="box-header with-border">
               <h3 class="box-title">Add Auction</h3>
               <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
               </div>
             </div>
@@ -60,14 +51,14 @@
 		                </div>
 		              </div>
 			        	<div class="box-footer">
-		              		<button type="submit" class="btn btn-primary">Submit</button>
+		              		<button type="submit" class="btn btn-purple">Submit</button>
 		            </div>    
             	</form>
             </div>
           </div>
         </div>
         <div class="col-md-8">
-          <div class="box box-primary">
+          <div class="box box-purple">
             <div class="box-header">
               <h3 class="box-title">Auctions</h3>
             </div>
@@ -85,7 +76,7 @@
 	                  <td>{{$auction->auction_no}}</td>
 	                  <td>{{$auction->venue}}</td>
 	                  <td>{{$auction->date}}</td>
-                    <td><span class="label label-success">{{$auction->time}}</span></td>
+                    <td><span class="label bg-purple">{{$auction->time}}</span></td>
 	                  <td>
                       @if(count($auction->lottings))
                         <a href="#" data-toggle="modal" data-target="#auction_stocks_{{$auction->id}}">

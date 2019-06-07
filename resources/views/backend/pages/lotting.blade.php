@@ -29,7 +29,7 @@
 	      	<div class="alert alert-success" style="display: none;"></div>
 	    </div>
       	<div class="col-md-12">
-          <div class="box box-success">
+          <div class="box box-purple box-solid">
             <div class="box-header with-border">
               <h3 class="box-title">Add Lotting</h3>
               <div class="box-tools pull-right">
