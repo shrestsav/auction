@@ -128,7 +128,7 @@ class AuctionController extends Controller
                 'auction_id' => 'required',
                 'vendor_id' => 'required',
                 'buyer_id' => 'required',
-                'invoice_id' => 'required',
+                'invoice_id' => 'required|max:10',
                 'form_no' => 'required',
                 'item_no' => 'required',
                 'lot_no' => 'required',
