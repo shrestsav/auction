@@ -1,4 +1,4 @@
-@extends('backend.layouts.app',['title'=>'Add Auction'])
+@extends('backend.layouts.app',['title'=>'Auctions'])
 
 @push('styles')
   <!-- Bootstrap time Picker -->
@@ -134,6 +134,10 @@
                             </div>
                           </div>
                         </div>
+                      @else
+                        <a href="#" data-auction-id="{{$auction->id}}" class="delete_auction">
+                          <i class="fa fa-trash"></i>
+                        </a>
                       @endif
                     </td>
 	                </tr>
@@ -152,6 +156,42 @@
   <script type="text/javascript">
     $('.timepicker').timepicker({
       showInputs: false
+    })
+
+    $('.delete_auction').on('click',function(e){
+      e.preventDefault();
+      const me = $(this);
+      swal({
+        title: "Are you sure?",
+        text: "Once deleted, this item will be removed from the invoice",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          const auction_id = $(this).data('auction-id');
+          $.ajax({
+            type:'DELETE',
+            url: SITE_URL + 'auctions/' + auction_id,
+            dataType: 'json',
+            data:{
+              auction_id: auction_id,    
+            },
+            success:function(data) {
+              console.log(data)
+              swal("Deleted!", {
+                icon: "success",
+              });
+              me.parent().parent().remove();
+              // location.reload();
+              
+            },
+            error: function(response){
+            }
+          });
+        } 
+      });
     })
   </script>
 @endpush

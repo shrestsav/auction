@@ -102,7 +102,9 @@ class AuctionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deletes = Auction::destroy($id);
+        if($deletes)
+            return json_encode('Auction has been deleted');
     }
 
     public function auction_event(Request $request)
