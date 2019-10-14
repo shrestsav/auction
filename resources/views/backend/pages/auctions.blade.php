@@ -51,7 +51,7 @@
 		                </div>
 		              </div>
 			        	<div class="box-footer">
-		              		<button type="submit" class="btn btn-purple">Submit</button>
+		              <button type="submit" class="btn btn-purple">Submit</button>
 		            </div>    
             	</form>
             </div>
@@ -64,6 +64,7 @@
             </div>
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
+                <thead>
 	                <tr>
 	                  <th>Auction No</th>
 	                  <th>Venue</th>
@@ -71,6 +72,7 @@
                     <th>Time</th>
 	                  <th>Stocks</th>
 	                </tr>
+                </thead>
                 @foreach($auctions as $auction)
 	                <tr>
 	                  <td>{{$auction->auction_no}}</td>
@@ -92,7 +94,8 @@
                                 <h4 class="modal-title">{{$auction->auction_no}} Stocks</h4>
                               </div>
                               <div class="modal-body">
-                                <table class="table table-hover buyer_purchases_table" data-buyer-id="{{$auction->id}}">
+                                <table class="table table-hover buyer_purchases_table datatable_with_print" data-buyer-id="{{$auction->id}}">
+                                  <thead>
                                     <tr>
                                       <th>S.No</th>
                                       <th>Vendor Code</th>
@@ -103,9 +106,11 @@
                                       <th>Sold</th>
                                       <th>Left</th>
                                     </tr>
+                                  </thead>
                                     @php 
                                       $count = 1;
                                     @endphp
+                                    <tbody>
                                   @foreach($auction->lottings as $stock)
                                     @php
                                       $sold = 0; 
@@ -115,20 +120,23 @@
                                         }
                                       }
                                     @endphp
-                                    <tr>
-                                      <td>{{$count}}</td>
-                                      <td class="vendor_code">{{$stock->vendor->vendor_code}}</td>
-                                      <td class="form_no">{{$stock->form_no}}</td>
-                                      <td class="item_no">{{$stock->item_no}}</td>
-                                      <td class="description">{{$stock->description}}</td>
-                                      <td class="quantity">{{$stock->quantity}}</td>
-                                      <td class="sold">{{$sold}}</td>
-                                      <td class="left_quantity">{{$stock->quantity - $sold}}</td>
-                                    </tr>
+                                    
+                                      <tr>
+                                        <td>{{$count}}</td>
+                                        <td class="vendor_code">{{$stock->vendor->vendor_code}}</td>
+                                        <td class="form_no">{{$stock->form_no}}</td>
+                                        <td class="item_no">{{$stock->item_no}}</td>
+                                        <td class="description">{{$stock->description}}</td>
+                                        <td class="quantity">{{$stock->quantity}}</td>
+                                        <td class="sold">{{$sold}}</td>
+                                        <td class="left_quantity">{{$stock->quantity - $sold}}</td>
+                                      </tr>
+                                    
                                       @php 
                                         $count++; 
                                       @endphp
                                   @endforeach
+                                  </tbody>
                                 </table>
                               </div>
                             </div>
@@ -153,6 +161,8 @@
 @push('scripts')
 
   <script src="{{ asset('backend/js/bootstrap-timepicker.min.js') }}"></script>
+  <script src="{{ asset('backend/js/dataTables.buttons.min.js') }}"></script>
+  <script src="{{ asset('backend/js/buttons.print.min.js') }}"></script>
   <script type="text/javascript">
     $('.timepicker').timepicker({
       showInputs: false
@@ -193,5 +203,51 @@
         } 
       });
     })
+
+    $(document).ready(function() {
+      $('.datatable_with_print').DataTable( {
+          dom: 'Bfrtip',
+          buttons: [
+            {
+              extend: 'print',
+              title: '',
+              customize: function(win) {
+                $(win.document.body).css('font-size', '5pt');
+                $(win.document.body).css('margin', '0px');
+                $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
+              }
+            }
+          ],
+
+      });
+
+
+
+
+    // DatatableButtons = function() {
+    //   var e, a = $(".datatable_with_print");
+    //   a.length && (e = {
+    //     lengthChange: !1,
+    //     dom: "Bfrtip",
+    //     buttons: ["copy", "print"],
+    //     language: {
+    //       paginate: {
+    //         previous: "<i class='fas fa-angle-left'>",
+    //         next: "<i class='fas fa-angle-right'>"
+    //       }
+    //     }
+    //   }, a.on("init.dt", function() {
+    //       $(".dt-buttons .btn").removeClass("btn-secondary").addClass("btn-sm btn-default")
+    //   }).DataTable(e))
+    // }();
+
+
+
+
+
+
+
+
+    });
   </script>
 @endpush

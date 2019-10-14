@@ -35,6 +35,27 @@
       width: 100%;
       height: 5px;
     }
+    @media print {
+    .d - print - none {
+        display: none!important
+    }.d - print - inline {
+        display: inline!important
+    }.d - print - inline - block {
+        display: inline - block!important
+    }.d - print - block {
+        display: block!important
+    }.d - print - table {
+        display: table!important
+    }.d - print - table - row {
+        display: table - row!important
+    }.d - print - table - cell {
+        display: table - cell!important
+    }.d - print - flex {
+        display: flex!important
+    }.d - print - inline - flex {
+        display: inline - flex!important
+    }
+}
   </style>
   
 
@@ -133,6 +154,7 @@
     });
 
   $(document).ready( function () {
+    $('.datatable').DataTable();
     $('.select2').select2();
 
     $('.sidebar-toggle').on('click',function(){
@@ -156,7 +178,7 @@
       });
     });
 
-    $('.datatable').DataTable();
+    
 
   });
 
