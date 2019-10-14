@@ -148,6 +148,7 @@
 	                <tr>
 					  <th>Invoice No</th>
 					  <th>Vendor Code</th>
+					  <th>Vendor Commission (%)</th>
 					  <th>Auction No</th>
 					  <th>Buyer Code</th>
 	                  <th>Form No</th>
@@ -237,7 +238,6 @@
 			var newval = this.value;
 			if(oldval!=newval)
 		  		$('#ts_buyer_code').val(this.value).trigger('change');
-
 		  	$.ajax({
 		       type:'post',
 		       url:'{{ route("reports.ajax_invoice_report") }}',
@@ -324,6 +324,7 @@
 	       			content += '<tr data-sale-id="'+report.id+'">';
 	       			content += '<td>'+report.invoice_id+'</td>';
 	       			content += '<td>'+report.vendor_code+'</td>';
+	       			content += '<td>'+report.v_commission+' %</td>';
 					content += '<td>'+report.auction_no+'</td>';
 					content += '<td>'+report.buyer_code+'</td>';
 					content += '<td>'+report.form_no+'</td>';
@@ -345,7 +346,6 @@
 			else{
 				content += '<tr><td>No sales record found</td></tr>';
 			}
-
        		$('.ajax_report_table tbody').append(content);
        		$('.reports_container').show();
 		}

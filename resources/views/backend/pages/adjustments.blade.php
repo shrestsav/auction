@@ -81,13 +81,13 @@
                   <tr>
                     <th>S.No</th>
                     <th>{{$module_name}}</th>
-                    <th>Action</th>
+                    {{-- <th>Action</th> --}}
                   </tr>
                 @foreach(${$module['passed_variable']} as $data)
                   <tr>
                     <td>{{$data->id}}</td>
                     <td>{{$data->name}}</td>
-                    <td><i class="fa fa-pencil"></i> &nbsp; &nbsp; <i class="fa fa-remove"></i></td>
+                    {{-- <td><i class="fa fa-pencil"></i> &nbsp; &nbsp; <i class="fa fa-remove"></i></td> --}}
                   </tr>
                 @endforeach
               </table>

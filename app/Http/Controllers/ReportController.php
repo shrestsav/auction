@@ -75,8 +75,9 @@ class ReportController extends Controller
     	return view('backend.pages.all_invoice',compact('invoices','unique_invoices','invoices_sum'));
     }
 
-    public function print_invoice(Request $request){
-        
+    public function print_invoice(Request $request)
+    {
+        $invoice_id = $request->invoice_id;
         $buyer_info = Sale::where('invoice_id',$request->invoice_id)->first()->buyer;
         $invoices = Sale::select('vendors.vendor_code',
                                  'sales.item_no',
@@ -118,6 +119,7 @@ class ReportController extends Controller
                             'sales.discount as discount',
                             'sales.buyers_premium_amount as buyers_premium_amount',
                             'vendors.vendor_code',
+                            'vendors.commission as v_commission',
                             'auctions.auction_no',
                             'buyers.buyer_code',
                             'stocks.commission',

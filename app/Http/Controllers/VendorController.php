@@ -24,7 +24,7 @@ class VendorController extends Controller
     {   
         $vendors = Vendor::with(['stock.lotting.sale'])->get();
         $states = State::all();
-        $payment_methods = State::pluck('name');
+        $payment_methods = PaymentMethod::pluck('name');
         // return $payment_methods;
         return view('backend.pages.vendors',compact('vendors','states','payment_methods'));
     }

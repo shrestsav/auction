@@ -26,15 +26,15 @@
 			'id'		=> 'b_company',
 			'type'	=> 'text',
 			'col' 	=> '3',
-			'req' 	=> true,
+			'req' 	=> false,
 		],
-		'Contact Type' => [
-			'name'	=> 'contact_type',
-			'id'		=> 'b_contact_type',
-			'type'	=> 'text',
-			'col' 	=> '3',
-			'req' 	=> true,
-		],
+		// 'Contact Type' => [
+		// 	'name'	=> 'contact_type',
+		// 	'id'		=> 'b_contact_type',
+		// 	'type'	=> 'text',
+		// 	'col' 	=> '3',
+		// 	'req' 	=> true,
+		// ],
 		'Address *' => [
 			'name'	=> 'address',
 			'id'		=> 'b_address',

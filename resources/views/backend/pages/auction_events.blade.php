@@ -170,12 +170,13 @@
 								<input type="number" class="form-control confirm_input" id="a_total" placeholder="Total" required readonly>
 							</div>
 						</div>
-						<div class="col-md-2">
-							<div class="form-group">
-								<label for="a_discount">Discount</label>
-								<input type="number" class="form-control confirm_input" id="a_discount" placeholder="Discount" required readonly>
-							</div>
-						</div>
+						{{-- Easy fix to remove discount as it will take lot of time to remove it completely --}}
+						{{-- <div class="col-md-2"> --}}
+							{{-- <div class="form-group"> --}}
+								{{-- <label for="a_discount">Discount</label> --}}
+								<input type="hidden" class="form-control confirm_input" id="a_discount" placeholder="Discount" value="0" required readonly>
+							{{-- </div> --}}
+						{{-- </div> --}}
 						<div class="col-md-2">
 							<div class="form-group">
 								<label for="a_net_total">Net Total</label>
